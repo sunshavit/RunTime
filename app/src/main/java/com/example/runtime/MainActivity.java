@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 
-                    userNameTv.setText(user.getDisplayName()+"logged in");
+                    userNameTv.setText(user.getDisplayName()+" logged in");
 
                     //read the user database.
 
