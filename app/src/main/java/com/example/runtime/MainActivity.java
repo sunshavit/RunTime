@@ -19,9 +19,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
 
-public class MainActivity extends AppCompatActivity implements SignUp1Fragment.OnNext1Listener,WelcomeFragment.OnRegisterClick ,SignUp2Fragment.OnNext2Listener,SignUp3Fragment.OnSignUpLastListener {
+
+public class MainActivity extends AppCompatActivity implements WelcomeFragment.OnRegisterClick
+        ,SignUp2Fragment.OnNext2Listener,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener {
 // where to do the user authentication
     // local time and local date requier sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
@@ -37,14 +38,20 @@ public class MainActivity extends AppCompatActivity implements SignUp1Fragment.O
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseDatabase firebaseDatabase ;
-    private FirebaseStorage firebaseStorage;
+
+
+   // private FirebaseStorage firebaseStorage;
+    RegisterClass registerClass;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        registerClass = RegisterClass.getInstance();
+        registerClass.setSignUpListener(this);
+       // registerClass.setSignInListener(this);
 //        Button signUp=findViewById(R.id.sign_up);
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -148,10 +155,10 @@ public class MainActivity extends AppCompatActivity implements SignUp1Fragment.O
 //                else{
 //
                 }
-
+/*
     @Override
     public void onClickNext1(String email,String password) {
-            firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            *//*firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
@@ -159,8 +166,8 @@ public class MainActivity extends AppCompatActivity implements SignUp1Fragment.O
                     }
                     else Toast.makeText(MainActivity.this,"enter again",Toast.LENGTH_LONG).show();
                 }
-            });
-    }
+            });*//*
+    }*/
 
     @Override
     public void onSignInClick() {
@@ -192,6 +199,17 @@ public class MainActivity extends AppCompatActivity implements SignUp1Fragment.O
     protected void onStop() {
         super.onStop();
         firebaseAuth.removeAuthStateListener(authStateListener);
+    }
+
+    @Override
+    public void onSuccessSignUp(String userId) {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp2Fragment(),SIGNUP2TAG).commit();
+        Toast.makeText(this, "welcome" + userId, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFailedSignUp(String problem) {
+        Toast.makeText(this, problem, Toast.LENGTH_SHORT).show();
     }
 }
 

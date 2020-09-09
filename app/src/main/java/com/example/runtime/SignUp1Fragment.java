@@ -17,22 +17,22 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class SignUp1Fragment extends Fragment {
 
-    interface OnNext1Listener{
+    /*interface OnNext1Listener{
         void onClickNext1(String email , String password);
-    }
+    }*/
     SignUpVM viewModel;
-    OnNext1Listener callBackMainActivity;
+    //OnNext1Listener callBackMainActivity;
 
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        try {
+        /*try {
             callBackMainActivity= (OnNext1Listener) context;
         }
         catch (ClassCastException e){
             throw new ClassCastException("Activity must implement OnNextListener");
-        }
+        }*/
         viewModel= new ViewModelProvider(getActivity()).get(SignUpVM.class);
     }
 
@@ -50,12 +50,10 @@ public class SignUp1Fragment extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(viewModel.setDataNext1(fullNameEt.getText().toString(),passwordEt.getText().toString(),passwordConfirmEt.getText().toString(),emailEt.getText().toString())){
-                    callBackMainActivity.onClickNext1(emailEt.getText().toString(),passwordEt.getText().toString());
+                if(!viewModel.setDataNext1(fullNameEt.getText().toString(),passwordEt.getText().toString(),passwordConfirmEt.getText().toString(),emailEt.getText().toString())){
+                    Toast.makeText(getActivity(),"passwords not identical",Toast.LENGTH_LONG).show();
                 }
-                else {
-                    Toast.makeText(getActivity(),"enter again",Toast.LENGTH_LONG).show();
-                }
+
             }
         });
         return root;

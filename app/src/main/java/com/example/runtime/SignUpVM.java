@@ -15,7 +15,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class SignUpVM extends ViewModel {
+public class SignUpVM extends ViewModel  {
     private String fullName;
     private String email;
     private String password;
@@ -28,9 +28,15 @@ public class SignUpVM extends ViewModel {
     private String partnerLevel;
     private String partnerGender;
     private Uri userImage;
+
+
+
+
+
+    RegisterClass registerClass = RegisterClass.getInstance();
    // private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase firebaseDatabase ;
-    private FirebaseStorage firebaseStorage;
+   // private FirebaseStorage firebaseStorage;
   //  boolean isSuccess;
 
 
@@ -50,10 +56,11 @@ public class SignUpVM extends ViewModel {
 //                }
 //            });
 //            if (isSuccess)
+            registerClass.signUpUser(email, password);
             return true;
 //        }
         }
-            return false;
+        return false;
 
     }
 
@@ -73,11 +80,6 @@ public class SignUpVM extends ViewModel {
         this.partnerLevel = partnerLevel;
 
     }
-
-
-
-
-
 
 
 }
