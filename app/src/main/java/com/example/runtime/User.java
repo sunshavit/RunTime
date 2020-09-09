@@ -12,20 +12,18 @@ public class User {
     private String runningLevel;
     private Location location;
     private boolean isOnline;
-    private String profileImage;
 
 
     public User() {
     }
 
-    public User(String fullName, String gender, LocalDate birthDate, String runningLevel, Location location, boolean isOnline, String profileImage) {
+    public User(String fullName, String gender, LocalDate birthDate, String runningLevel, Location location, boolean isOnline) {
         this.fullName = fullName;
         this.gender = gender;
         this.birthDate = birthDate;
         this.runningLevel = runningLevel;
         this.location = location;
         this.isOnline = isOnline;
-        this.profileImage = profileImage;
     }
 
     public String getFullName() {
@@ -76,11 +74,4 @@ public class User {
         isOnline = online;
     }
 
-    public String getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
 }

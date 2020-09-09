@@ -96,7 +96,9 @@ public class SignUp3Fragment extends Fragment {
                 ageFrom =Integer.parseInt(editTextFrom.getText().toString());
                 ageTo =Integer.parseInt(editTextTo.getText().toString());
                 viewModel.setDataNext3(ageFrom,ageTo,gender,level);
+
                 callBack.onSignUpLast();
+
             }
         });
 

@@ -18,19 +18,26 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class MainActivity extends AppCompatActivity implements SignUp1Fragment.OnNext1Listener,WelcomeFragment.OnRegisterClick ,SignUp2Fragment.OnNext2Listener,SignUp3Fragment.OnSignUpLastListener {
-
+// where to do the user authentication
+    // local time and local date requier sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
 //    FirebaseAuth.AuthStateListener authStateListener;
 //    String userName;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
     final String WELCOMEFRAGMENTTAG="welcomefregmenttag";
     final String SIGNUP1TAG="signup1tag";
     final String SIGNUP2TAG="signup2tag";
     final String SIGNUP3TAG="signup3tag";
     private boolean isFirstFragment=true;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private FirebaseDatabase firebaseDatabase ;
+    private FirebaseStorage firebaseStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +46,22 @@ public class MainActivity extends AppCompatActivity implements SignUp1Fragment.O
 
 
 //        Button signUp=findViewById(R.id.sign_up);
-          fragmentManager = getSupportFragmentManager();
-          fragmentTransaction = fragmentManager.beginTransaction().add(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG);
-          fragmentTransaction.commit();
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null) {
+                    //sign up / sign out
+                }
+                else{
+                    //sign out
+                }
+            }
+        };
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction().add(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG);
+        fragmentTransaction.commit();
 
 //        Button signIn=findViewById(R.id.sign_in);
 //        Button signOut=findViewById(R.id.sign_out);
@@ -130,8 +150,16 @@ public class MainActivity extends AppCompatActivity implements SignUp1Fragment.O
                 }
 
     @Override
-    public void onClickNext1() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp2Fragment(),SIGNUP2TAG).commit();
+    public void onClickNext1(String email,String password) {
+            firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
+                        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp2Fragment(),SIGNUP2TAG).commit();
+                    }
+                    else Toast.makeText(MainActivity.this,"enter again",Toast.LENGTH_LONG).show();
+                }
+            });
     }
 
     @Override
@@ -153,24 +181,22 @@ public class MainActivity extends AppCompatActivity implements SignUp1Fragment.O
     public void onSignUpLast() {
         Toast.makeText(MainActivity.this,"sun shavit",Toast.LENGTH_LONG).show();
     }
-};
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(authStateListener);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseAuth.removeAuthStateListener(authStateListener);
+    }
+}
 
 
 
 
-
-
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        firebaseAuth.addAuthStateListener(authStateListener);
-//
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        firebaseAuth.removeAuthStateListener(authStateListener);
-//    }
 
 

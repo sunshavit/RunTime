@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 public class SignUp1Fragment extends Fragment {
 
     interface OnNext1Listener{
-        void onClickNext1();
+        void onClickNext1(String email , String password);
     }
     SignUpVM viewModel;
     OnNext1Listener callBackMainActivity;
@@ -51,7 +51,7 @@ public class SignUp1Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(viewModel.setDataNext1(fullNameEt.getText().toString(),passwordEt.getText().toString(),passwordConfirmEt.getText().toString(),emailEt.getText().toString())){
-                    callBackMainActivity.onClickNext1();
+                    callBackMainActivity.onClickNext1(emailEt.getText().toString(),passwordEt.getText().toString());
                 }
                 else {
                     Toast.makeText(getActivity(),"enter again",Toast.LENGTH_LONG).show();
