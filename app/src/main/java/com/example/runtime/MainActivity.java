@@ -21,8 +21,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class MainActivity extends AppCompatActivity implements WelcomeFragment.OnRegisterClick
-        ,SignUp2Fragment.OnNext2Listener,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener {
+public class MainActivity extends AppCompatActivity implements WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
+        ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener {
 // where to do the user authentication
     // local time and local date requier sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
@@ -40,8 +40,10 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
     private FirebaseDatabase firebaseDatabase ;
 
 
-   // private FirebaseStorage firebaseStorage;
+
+    // private FirebaseStorage firebaseStorage;
     RegisterClass registerClass;
+    DataBaseClass dataBaseClass;
 
 
     @Override
@@ -50,7 +52,9 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
         setContentView(R.layout.activity_main);
 
         registerClass = RegisterClass.getInstance();
+        dataBaseClass = DataBaseClass.getInstance();
         registerClass.setSignUpListener(this);
+        dataBaseClass.setCallBackCreate(this);
        // registerClass.setSignInListener(this);
 //        Button signUp=findViewById(R.id.sign_up);
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -179,10 +183,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
         fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp1Fragment(),SIGNUP1TAG).commit();
     }
 
-    @Override
-    public void onClickNext2() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).commit();
-    }
+
 
     @Override
     public void onSignUpLast() {
@@ -209,6 +210,16 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     @Override
     public void onFailedSignUp(String problem) {
+        Toast.makeText(this, problem, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSuccessCreate() {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).commit();
+    }
+
+    @Override
+    public void onFailedCreate(String problem) {
         Toast.makeText(this, problem, Toast.LENGTH_SHORT).show();
     }
 }

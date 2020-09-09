@@ -8,21 +8,21 @@ import java.util.Date;
 public class User {
     private String fullName;
     private String gender;
-    private LocalDate birthDate;
+   // private LocalDate birthDate;
     private String runningLevel;
-    private Location location;
+   // private Location location;
     private boolean isOnline;
 
 
     public User() {
     }
 
-    public User(String fullName, String gender, LocalDate birthDate, String runningLevel, Location location, boolean isOnline) {
+    public User(String fullName, String gender, LocalDate birthDate, String runningLevel, boolean isOnline) {
         this.fullName = fullName;
         this.gender = gender;
-        this.birthDate = birthDate;
+       // this.birthDate = birthDate;
         this.runningLevel = runningLevel;
-        this.location = location;
+        //this.location = location;
         this.isOnline = isOnline;
     }
 
@@ -42,13 +42,13 @@ public class User {
         this.gender = gender;
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
+//    public LocalDate getBirthDate() {
+//        return birthDate;
+//    }
+//
+//    public void setBirthDate(LocalDate birthDate) {
+//        this.birthDate = birthDate;
+//    }
 
     public String getRunningLevel() {
         return runningLevel;
@@ -58,13 +58,13 @@ public class User {
         this.runningLevel = runningLevel;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
+//    public Location getLocation() {
+//        return location;
+//    }
+//
+//    public void setLocation(Location location) {
+//        this.location = location;
+//    }
 
     public boolean isOnline() {
         return isOnline;

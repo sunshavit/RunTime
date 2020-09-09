@@ -1,5 +1,6 @@
 package com.example.runtime;
 
+import android.location.Location;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
@@ -28,16 +29,9 @@ public class SignUpVM extends ViewModel  {
     private String partnerLevel;
     private String partnerGender;
     private Uri userImage;
+    private RegisterClass registerClass = RegisterClass.getInstance();
+    private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
 
-
-
-
-
-    RegisterClass registerClass = RegisterClass.getInstance();
-   // private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private FirebaseDatabase firebaseDatabase ;
-   // private FirebaseStorage firebaseStorage;
-  //  boolean isSuccess;
 
 
     public boolean setDataNext1(String fullName , String password ,String passwordConfirm , String email) {
@@ -45,20 +39,10 @@ public class SignUpVM extends ViewModel  {
         this.password = password;
         this.passwordConfirm = passwordConfirm;
         this.fullName = fullName;
-//        isSuccess=false;
         if (password.equals(passwordConfirm)) {
-//            firebaseAuth.createUserWithEmailAndPassword(this.email,this.password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                @Override
-//                public void onComplete(@NonNull Task<AuthResult> task) {
-//                    if(task.isSuccessful()){
-//                        isSuccess=true;
-//                    }
-//                }
-//            });
-//            if (isSuccess)
+
             registerClass.signUpUser(email, password);
             return true;
-//        }
         }
         return false;
 
@@ -69,6 +53,7 @@ public class SignUpVM extends ViewModel  {
         this.birthDate = birthDate;
         this.gender = gender;
         this.runningLevel = runningLevel;
+        dataBaseClass.createUser(new User(this.fullName,this.gender,this.birthDate,this.runningLevel,true));
 
 
     }

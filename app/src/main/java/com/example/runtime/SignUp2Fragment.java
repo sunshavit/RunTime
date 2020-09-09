@@ -33,7 +33,6 @@ import java.util.Date;
 public class SignUp2Fragment extends Fragment {
 
     private SignUpVM viewModel;
-    private OnNext2Listener callBack;
     private String gender;
     private String level;
     private LocalDate localDate;
@@ -41,19 +40,11 @@ public class SignUp2Fragment extends Fragment {
     private Uri filePath;
     private ImageView imageViewProfile;
 
-    interface OnNext2Listener{
-        void onClickNext2();
-    }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        try {
-            callBack = (OnNext2Listener) context;
-        }
-        catch (ClassCastException e){
-            throw new ClassCastException("Activity must implement OnNextListener");
-        }
         viewModel= new ViewModelProvider(getActivity()).get(SignUpVM.class);
     }
 
@@ -158,7 +149,6 @@ public class SignUp2Fragment extends Fragment {
 
 
                 viewModel.setDataNext2(filePath,localDate,gender,level);
-                callBack.onClickNext2();
             }
         });
 
