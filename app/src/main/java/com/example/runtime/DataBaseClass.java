@@ -1,10 +1,12 @@
 package com.example.runtime;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +50,7 @@ public class DataBaseClass {
         firebaseDatabase = FirebaseDatabase.getInstance();
         registerClass = RegisterClass.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
     }
 
     static DataBaseClass getInstance(){
@@ -88,11 +91,16 @@ public class DataBaseClass {
 
     public void saveProfilePicture(Uri imageUri){
         if(imageUri!=null){
-            storageReference=storageReference.child("profileImages/"+RegisterClass.getInstance().getUserId());
-            storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            StorageReference reference = storageReference.child("profileImages/"+RegisterClass.getInstance().getUserId());
+            reference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
+                    callBackImage.onSuccessImage();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    callBackImage.onFailedImage();
                 }
             });
         }

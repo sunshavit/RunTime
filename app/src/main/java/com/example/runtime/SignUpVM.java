@@ -70,5 +70,9 @@ public class SignUpVM extends ViewModel  {
 
     }
 
+    public void saveProfileImage(Uri imageUri){
+        dataBaseClass.saveProfilePicture(imageUri);
+    }
+
 
 }

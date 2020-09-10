@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +40,8 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
     final int PICK_IMAGE_REQUEST=1;
     private Uri filePath;
     private ImageView imageViewProfile;
+    private DataBaseClass dataBaseClass;
+
 
 
 
@@ -46,19 +49,22 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel= new ViewModelProvider(getActivity()).get(SignUpVM.class);
+        dataBaseClass = DataBaseClass.getInstance();
+        dataBaseClass.setCallBackImage(this);
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST
                 && resultCode == getActivity().RESULT_OK
                 && data != null
                 && data.getData() != null) {
             filePath = data.getData();
-            super.onActivityResult(requestCode, resultCode, data);
+            viewModel.saveProfileImage(filePath);
         }
-    }
+       }
 
     @Override
     public void onSuccessImage() {
@@ -67,7 +73,7 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
 
     @Override
     public void onFailedImage() {
-
+        Toast.makeText(getActivity(),"enter again",Toast.LENGTH_LONG).show();
     }
 
     @Nullable
