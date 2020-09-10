@@ -1,12 +1,17 @@
 package com.example.runtime;
 
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class DataBaseClass {
     private FirebaseDatabase firebaseDatabase;
@@ -14,6 +19,7 @@ public class DataBaseClass {
     private FirebaseStorage firebaseStorage;
     private final String USERSTABLE = "users";
     private DatabaseReference databaseReference;
+    private StorageReference storageReference;
 
     private static DataBaseClass dataBaseClass = null;
 
@@ -22,7 +28,20 @@ public class DataBaseClass {
         void onFailedCreate(String problem);
     }
 
-    private OnUserCreateListener callBackCreate;
+    interface OnUserPreferenceCreateListener {
+        void onSuccessPreferenceCreate();
+        void onFailedPreferenceCreate();
+    }
+
+    interface OnSaveImageListener{
+        void onSuccessImage();
+        void onFailedImage();
+    }
+
+
+     private OnUserCreateListener callBackCreate;
+     private OnUserPreferenceCreateListener callBackPreferenceCreate;
+     private OnSaveImageListener callBackImage;
 
 
     private DataBaseClass(){
@@ -36,6 +55,7 @@ public class DataBaseClass {
             dataBaseClass=new DataBaseClass();
         }
         return dataBaseClass;
+
     }
 
     public void createUser(User user){
@@ -52,7 +72,44 @@ public class DataBaseClass {
         });
     }
 
+    public void createPreferences(UserPreferences userPreferences){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference databaseReference1 = databaseReference.child("user_preferences");
+        databaseReference1.child(registerClass.getUserId()).setValue(userPreferences).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                    callBackPreferenceCreate.onSuccessPreferenceCreate();
+                else
+                    callBackPreferenceCreate.onFailedPreferenceCreate();
+            }
+        });
+    }
+
+    public void saveProfilePicture(Uri imageUri){
+        if(imageUri!=null){
+            storageReference=storageReference.child("profileImages/"+RegisterClass.getInstance().getUserId());
+            storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                }
+            });
+        }
+
+    }
+
+
+
     public void setCallBackCreate(OnUserCreateListener callBackCreate) {
         this.callBackCreate = callBackCreate;
+    }
+
+    public void setCallBackPreferenceCreate(OnUserPreferenceCreateListener callBackPreferenceCreate) {
+        this.callBackPreferenceCreate = callBackPreferenceCreate;
+    }
+
+    public void setCallBackImage(OnSaveImageListener callBackImage) {
+        this.callBackImage = callBackImage;
     }
 }

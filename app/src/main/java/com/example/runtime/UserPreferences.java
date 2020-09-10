@@ -9,6 +9,13 @@ public class UserPreferences {
     public UserPreferences() {
     }
 
+    public UserPreferences(int fromAge, int toAge, String gender, String runingLevel) {
+        this.fromAge = fromAge;
+        this.toAge = toAge;
+        this.gender = gender;
+        this.runingLevel = runingLevel;
+    }
+
     public int getFromAge() {
         return fromAge;
     }

@@ -22,9 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity implements WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
-        ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener {
+        ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener {
 // where to do the user authentication
-    // local time and local date requier sdk 26
+    // local time and local date require sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
 //    FirebaseAuth.AuthStateListener authStateListener;
 //    String userName;
@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
         dataBaseClass = DataBaseClass.getInstance();
         registerClass.setSignUpListener(this);
         dataBaseClass.setCallBackCreate(this);
+        dataBaseClass.setCallBackPreferenceCreate(this);
+
        // registerClass.setSignInListener(this);
 //        Button signUp=findViewById(R.id.sign_up);
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -221,6 +223,16 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
     @Override
     public void onFailedCreate(String problem) {
         Toast.makeText(this, problem, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSuccessPreferenceCreate() {
+        //move to home fragment;
+    }
+
+    @Override
+    public void onFailedPreferenceCreate() {
+
     }
 }
 

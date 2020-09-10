@@ -30,7 +30,7 @@ import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 
-public class SignUp2Fragment extends Fragment {
+public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveImageListener{
 
     private SignUpVM viewModel;
     private String gender;
@@ -56,10 +56,20 @@ public class SignUp2Fragment extends Fragment {
                 && data != null
                 && data.getData() != null) {
             filePath = data.getData();
-            Glide.with(getActivity()).load(filePath).into(imageViewProfile);
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    @Override
+    public void onSuccessImage() {
+        Glide.with(getActivity()).load(filePath).into(imageViewProfile);
+    }
+
+    @Override
+    public void onFailedImage() {
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -146,8 +156,6 @@ public class SignUp2Fragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-
-
                 viewModel.setDataNext2(filePath,localDate,gender,level);
             }
         });
@@ -155,7 +163,8 @@ public class SignUp2Fragment extends Fragment {
 
 
 
-
         return root;
     }
+
+
 }

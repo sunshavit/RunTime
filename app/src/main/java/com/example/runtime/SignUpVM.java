@@ -56,6 +56,7 @@ public class SignUpVM extends ViewModel  {
         dataBaseClass.createUser(new User(this.fullName,this.gender,this.birthDate,this.runningLevel,true));
 
 
+
     }
 
     public void setDataNext3(int startAge , int endAge , String partnerGender , String partnerLevel){
@@ -63,6 +64,9 @@ public class SignUpVM extends ViewModel  {
         this.endAge = endAge;
         this.partnerGender = partnerGender;
         this.partnerLevel = partnerLevel;
+
+        UserPreferences userPreferences=new UserPreferences(startAge,endAge,partnerGender,partnerLevel);
+        dataBaseClass.createPreferences(userPreferences);
 
     }
 

@@ -24,6 +24,7 @@ public class SignUp3Fragment extends Fragment {
     private int ageFrom;
     private String gender;
     private String level;
+
     interface OnSignUpLastListener{
         void onSignUpLast();
     }
