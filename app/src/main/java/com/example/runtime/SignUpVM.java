@@ -1,9 +1,12 @@
 package com.example.runtime;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,6 +56,8 @@ public class SignUpVM extends ViewModel  {
         this.birthDate = birthDate;
         this.gender = gender;
         this.runningLevel = runningLevel;
+
+
         dataBaseClass.createUser(new User(this.fullName,this.gender,this.birthDate,this.runningLevel,true));
 
 

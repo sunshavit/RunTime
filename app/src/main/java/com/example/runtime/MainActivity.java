@@ -1,11 +1,17 @@
 package com.example.runtime;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -75,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction().add(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG);
         fragmentTransaction.commit();
+
 
 //        Button signIn=findViewById(R.id.sign_in);
 //        Button signOut=findViewById(R.id.sign_out);
@@ -206,9 +213,34 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     @Override
     public void onSuccessSignUp(String userId) {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp2Fragment(),SIGNUP2TAG).commit();
-        Toast.makeText(this, "welcome" + userId, Toast.LENGTH_SHORT).show();
-    }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION}, 1000);
+        } else {
+            fragmentManager.beginTransaction().replace(R.id.rootLayout, new SignUp2Fragment(), SIGNUP2TAG).commit();
+            Toast.makeText(this, "welcome" + userId, Toast.LENGTH_SHORT).show();
+        }
+        }
+
+
+//    private void getLocationUpdates() {
+//        CurrentLocationListener.getInstance(getApplicationContext()).observe(this, new Observer<Location>() {
+//            @Override
+//            public void onChanged(@Nullable Location location) {
+//                if (location != null) {
+//                    Log.d(MainActivity.class.getSimpleName(),
+//                            "Location Changed " + location.getLatitude() + " : " + location.getLongitude());
+//                    Toast.makeText(MainActivity.this, "Location Changed", Toast.LENGTH_SHORT).show();
+//                    builder.append(location.getLatitude()).append(" : ").append(location.getLongitude()).append("\n");
+//                    textView.setText(builder.toString());
+//                }
+//            }
+//        });
+//    }
 
     @Override
     public void onFailedSignUp(String problem) {
@@ -217,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     @Override
     public void onSuccessCreate() {
+
         fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).commit();
     }
 
