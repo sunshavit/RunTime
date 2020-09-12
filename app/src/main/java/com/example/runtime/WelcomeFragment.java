@@ -14,8 +14,8 @@ import androidx.fragment.app.Fragment;
 public class WelcomeFragment extends Fragment {
 
     interface OnRegisterClick{
-        public void onSignInClick();
-        public void onSignUpClick();
+        void onSignInClick();
+        void onSignUpClick();
     }
 
     OnRegisterClick callBack;

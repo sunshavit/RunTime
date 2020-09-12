@@ -18,17 +18,20 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class SignUpVM extends ViewModel  {
     private String fullName;
     private String email;
     private String password;
     private String passwordConfirm;
-    private LocalDate birthDate;
     private String gender;
     private String runningLevel;
     private int startAge;
     private int endAge;
+    private int year;
+    private int month;
+    private int dayOfMonth;
     private String partnerLevel;
     private String partnerGender;
     private Uri userImage;
@@ -51,14 +54,18 @@ public class SignUpVM extends ViewModel  {
 
     }
 
-    public void setDataNext2(Uri userImage , LocalDate birthDate , String gender , String runningLevel){
+
+
+
+    public void setDataNext2(Uri userImage ,int year,int month,int dayOfMonth, String gender , String runningLevel){
         this.userImage = userImage;
-        this.birthDate = birthDate;
+        this.year=year;
+        this.month=month;
+        this.dayOfMonth=dayOfMonth;
         this.gender = gender;
         this.runningLevel = runningLevel;
 
-
-        dataBaseClass.createUser(new User(this.fullName,this.gender,this.birthDate,this.runningLevel,true));
+        dataBaseClass.createUser(new User(this.fullName,this.gender,this.year,this.month,this.dayOfMonth,this.runningLevel,false,0,0));
 
 
 

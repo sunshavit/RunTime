@@ -107,6 +107,18 @@ public class DataBaseClass {
 
     }
 
+    public void updateActive(boolean isActive){
+        DatabaseReference users=databaseReference.child("user");
+        DatabaseReference specificUser=users.child(registerClass.getUserId());
+        specificUser.child("active").setValue(isActive);
+    }
+
+    public void updateLocation(double longitude,double latitude){
+        DatabaseReference users=databaseReference.child("user");
+        DatabaseReference specificUser=users.child(registerClass.getUserId());
+        specificUser.child("longitude").setValue(longitude);
+        specificUser.child("latitude").setValue(latitude);
+    }
 
 
     public void setCallBackCreate(OnUserCreateListener callBackCreate) {

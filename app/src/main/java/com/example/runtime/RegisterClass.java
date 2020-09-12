@@ -1,5 +1,7 @@
 package com.example.runtime;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,7 +23,7 @@ public class RegisterClass {
 
     interface SignInStatusListener{
         void onSuccessSignIn(String userId);
-        void onFailedSignIn();
+        void onFailedSignIn(String problem);
     }
 
     interface SignOutListener{
@@ -29,13 +31,14 @@ public class RegisterClass {
     }
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+   // private FirebaseAuth.AuthStateListener authStateListener;
 
     private static RegisterClass registerClass = null;
 
     private SignUpStatusListener signUpCallback;
     private SignInStatusListener signInCallback;
     private SignOutListener signOutCallback;
-    private FirebaseAuth.AuthStateListener authStateListener;
+
 
     public void setSignUpListener (SignUpStatusListener callback){
         signUpCallback = callback;
@@ -69,7 +72,7 @@ public class RegisterClass {
                 if(task.isSuccessful()){
                     FirebaseUser user;
                     user = firebaseAuth.getCurrentUser();
-                    signUpCallback.onSuccessSignUp(user.getUid());
+                    signUpCallback.onSuccessSignUp(user.getDisplayName());
                 } else{
                     userRegisterFailed(task);
                 }
@@ -87,7 +90,7 @@ public class RegisterClass {
                     user = firebaseAuth.getCurrentUser();
                     signInCallback.onSuccessSignIn(user.getUid());
                 }else{
-                    signInCallback.onFailedSignIn();
+                    signInCallback.onFailedSignIn(task.getException().getMessage());
                 }
             }
         });
@@ -97,6 +100,29 @@ public class RegisterClass {
     public void signOut(){
         firebaseAuth.signOut();
         signOutCallback.onSignOut();
+    }
+
+  /*  public void stateListener(){
+        authStateListener=new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user=firebaseAuth.getCurrentUser();
+                if(user!=null) { //sign up or sign in
+
+                }
+                else { //sign out
+
+                }
+
+            }
+        };
+    }*/
+
+    public void addStateListener(FirebaseAuth.AuthStateListener authStateListener){
+        firebaseAuth.addAuthStateListener(authStateListener);    }
+
+    public void removeStateListener(FirebaseAuth.AuthStateListener authStateListener){
+        firebaseAuth.removeAuthStateListener(authStateListener);
     }
 
     private void userRegisterFailed(Task<AuthResult> task){

@@ -1,29 +1,71 @@
 package com.example.runtime;
 
-import android.location.Location;
-
-import java.time.LocalDate;
-import java.util.Date;
-
 public class User {
     private String fullName;
     private String gender;
-   // private LocalDate birthDate;
+    private int year;
+    private int month;
+    private int dayOfMonth;
     private String runningLevel;
-   // private Location location;
-    private boolean isOnline;
+    private boolean isActive;
+    private double longitude;
+    private double latitude;
+
 
 
     public User() {
     }
 
-    public User(String fullName, String gender, LocalDate birthDate, String runningLevel, boolean isOnline) {
+    public User(String fullName, String gender, int year,int month,int dayOfMonth, String runningLevel, boolean isOnline, double longitude,double latitude) {
         this.fullName = fullName;
         this.gender = gender;
-       // this.birthDate = birthDate;
+        this.year=year;
+        this.month=month;
+        this.dayOfMonth=dayOfMonth;
         this.runningLevel = runningLevel;
-        //this.location = location;
-        this.isOnline = isOnline;
+        this.isActive = isOnline;
+        this.longitude=longitude;
+        this.latitude=latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(int dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
     }
 
     public String getFullName() {
@@ -66,12 +108,12 @@ public class User {
 //        this.location = location;
 //    }
 
-    public boolean isOnline() {
-        return isOnline;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setOnline(boolean online) {
-        isOnline = online;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
 }

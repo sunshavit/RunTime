@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,13 +31,16 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveImageListener{
 
     private SignUpVM viewModel;
     private String gender;
     private String level;
-    private LocalDate localDate;
+    int yearOfBirth;
+    int monthOfBirth;
+    int dayOfMonthOfBirth;
     final int PICK_IMAGE_REQUEST=1;
     private Uri filePath;
     private ImageView imageViewProfile;
@@ -87,7 +91,10 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
         RadioGroup radioGroupLevel = root.findViewById(R.id.levelGroup);
         Button buttonNext = root.findViewById(R.id.nextButton);
 
-        final Calendar calendar = Calendar.getInstance();
+        final TextView ageView=root.findViewById(R.id.age);
+
+       // final Calendar calendar = Calendar.getInstance();
+
 
         imageViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +116,29 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
         editTextDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Calendar calendar=Calendar.getInstance();
+                int year1=calendar.get(calendar.YEAR);
+                int month1=calendar.get(calendar.MONTH);
+                int dayOfMonth1=calendar.get(calendar.DAY_OF_MONTH);
+
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                        yearOfBirth=year;
+                        monthOfBirth=month+1;
+                        dayOfMonthOfBirth=dayOfMonth;
+                        editTextDate.setText(dayOfMonth+"/"+month+1+'/'+year);
+
+                    }
+                },year1,month1,dayOfMonth1);
+                datePickerDialog.show();
+
+
+
+
+         /*  DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -117,7 +146,7 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
                         editTextDate.setText(dayOfMonth+"/"+month+"/"+year);
                     }
                 },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.show();
+                datePickerDialog.show();*/
             }
         });
 
@@ -162,15 +191,15 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
 
             @Override
             public void onClick(View v) {
-                viewModel.setDataNext2(filePath,localDate,gender,level);
+                viewModel.setDataNext2(filePath,yearOfBirth,monthOfBirth,dayOfMonthOfBirth,gender,level);
             }
         });
 
-
-
-
         return root;
     }
+
+
+
 
 
 }

@@ -9,36 +9,42 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
-        android:id="@+id/profileImageIV"/>
-
-     <EditText
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:hint="date of birth"
-         android:focusable="false"
-         android:id="@+id/dateET"/>
-
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/genderGroup">
-
-        <RadioButton
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="male"
-            android:id="@+id/maleRB"/>
+            android:src="@mipmap/ic_launcher"
+            android:id="@+id/profileImageIV"/>
 
-        <RadioButton
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="female"
-            android:id="@+id/femaleRB"/>
-    </RadioGroup>
+            android:hint="date of birth"
+            android:focusable="false"
+            android:id="@+id/dateET"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:id="@+id/age"/>
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/genderGroup">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="male"
+                android:id="@+id/maleRB"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="female"
+                android:id="@+id/femaleRB"/>
+        </RadioGroup>
 
         <RadioGroup
             android:layout_width="wrap_content"

@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -28,8 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity implements WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
-        ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener {
-// where to do the user authentication
+        ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,RegisterClass.SignInStatusListener {
+    // where to do the user authentication
     // local time and local date require sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
 //    FirebaseAuth.AuthStateListener authStateListener;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
     final String SIGNUP1TAG="signup1tag";
     final String SIGNUP2TAG="signup2tag";
     final String SIGNUP3TAG="signup3tag";
+    final String HOME_TAG="homeTag";
     private boolean isFirstFragment=true;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -62,19 +65,25 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
         registerClass.setSignUpListener(this);
         dataBaseClass.setCallBackCreate(this);
         dataBaseClass.setCallBackPreferenceCreate(this);
+        registerClass.setSignInListener(this);
 
-       // registerClass.setSignInListener(this);
-//        Button signUp=findViewById(R.id.sign_up);
-        authStateListener = new FirebaseAuth.AuthStateListener() {
+        //registerClass.stateListener();
+
+
+
+        authStateListener=new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null) {
-                    //sign up / sign out
+
+                FirebaseUser user=firebaseAuth.getCurrentUser();
+                if(user!=null) { //sign up or sign in
+                    getLocationUpdates();
+                    Toast.makeText(MainActivity.this,user.getUid(),Toast.LENGTH_LONG).show();
                 }
-                else{
-                    //sign out
+                else { //sign out
+
                 }
+
             }
         };
 
@@ -83,108 +92,11 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
         fragmentTransaction.commit();
 
 
-//        Button signIn=findViewById(R.id.sign_in);
-//        Button signOut=findViewById(R.id.sign_out);
-//
-//        final EditText userNameEt=findViewById(R.id.full_name);
-//        final EditText passwordEt=findViewById(R.id.password);
-//        final EditText emailEt=findViewById(R.id.email);
-//
-//        final TextView userNameTv=findViewById(R.id.username);
-//
-//
-//        signUp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                userName=userNameEt.getText().toString();
-//                final String password=passwordEt.getText().toString();
-//                final String email=emailEt.getText().toString();
-//                firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if(task.isSuccessful()){
-//                            Toast.makeText(MainActivity.this,"sign up successful",Toast.LENGTH_SHORT).show();
-//                        }
-//                        else
-//                            Toast.makeText(MainActivity.this,"sign up field",Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-//            }
-//        });
-//
-//        signIn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String password=passwordEt.getText().toString();
-//                String email=emailEt.getText().toString();
-//
-//                firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if(task.isSuccessful()){
-//                            Toast.makeText(MainActivity.this,"sign in successful",Toast.LENGTH_SHORT).show();
-//                        }
-//                        else
-//                            Toast.makeText(MainActivity.this,"sign in field",Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-//            }
-//        });
-//
-//        signOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                firebaseAuth.signOut();
-//
-//            }
-//        });
-//
-//        authStateListener=new FirebaseAuth.AuthStateListener() {
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//
-//                final FirebaseUser user=firebaseAuth.getCurrentUser();
-//                if(user!=null){
-//                    if(userName!=null){//sign up
-//                        user.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(userName).build()).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                userName=null;
-//                                if(task.isSuccessful()){
-//                                    Toast.makeText(MainActivity.this,user.getDisplayName()+"welcome",Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        });
-//
-//                    }
-//
-//                    userNameTv.setText(user.getDisplayName()+" logged in");
-//
-//                    //read the user database.
-//
-//                }
-//                else{
-//
-                }
-/*
-    @Override
-    public void onClickNext1(String email,String password) {
-            *//*firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()){
-                        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp2Fragment(),SIGNUP2TAG).commit();
-                    }
-                    else Toast.makeText(MainActivity.this,"enter again",Toast.LENGTH_LONG).show();
-                }
-            });*//*
-    }*/
+    }
 
     @Override
     public void onSignInClick() {
-
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignInFragment(),SIGNUP1TAG).commit();
     }
 
     @Override
@@ -196,35 +108,27 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     @Override
     public void onSignUpLast() {
-        Toast.makeText(MainActivity.this,"sun shavit",Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this,"sign up successful",Toast.LENGTH_LONG).show();
     }
     @Override
     protected void onStart() {
         super.onStart();
-        firebaseAuth.addAuthStateListener(authStateListener);
+        registerClass.addStateListener(authStateListener);
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        firebaseAuth.removeAuthStateListener(authStateListener);
+       registerClass.removeStateListener(authStateListener);
     }
 
     @Override
     public void onSuccessSignUp(String userId) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new SignUp2Fragment(), SIGNUP2TAG).commit();
+        Toast.makeText(this, "welcome" + userId, Toast.LENGTH_SHORT).show();
 
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION}, 1000);
-        } else {
-            fragmentManager.beginTransaction().replace(R.id.rootLayout, new SignUp2Fragment(), SIGNUP2TAG).commit();
-            Toast.makeText(this, "welcome" + userId, Toast.LENGTH_SHORT).show();
-        }
-        }
+    }
 
 
 //    private void getLocationUpdates() {
@@ -260,12 +164,43 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     @Override
     public void onSuccessPreferenceCreate() {
-        //move to home fragment;
+        Toast.makeText(MainActivity.this,"hi",Toast.LENGTH_LONG).show();
+        //getLocationUpdates();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
     }
 
     @Override
     public void onFailedPreferenceCreate() {
 
+    }
+
+    @Override
+    public void onSuccessSignIn(String userId) {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+        Toast.makeText(MainActivity.this,"sign up successful",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFailedSignIn(String problem) {
+        Toast.makeText(MainActivity.this,problem,Toast.LENGTH_LONG).show();
+    }
+
+    public void getLocationUpdates(){
+        Toast.makeText(MainActivity.this,"fun",Toast.LENGTH_LONG).show();
+        CurrentLocationListener.getInstance(getApplicationContext()).observe(this, new Observer<Location>() {
+            @Override
+            public void onChanged(Location location) {
+                if(location!=null){
+                    Toast.makeText(MainActivity.this,location.toString(),Toast.LENGTH_LONG).show();
+                    double longitude=location.getLongitude();
+                    double latitude=location.getLatitude();
+                    dataBaseClass.updateLocation(longitude,latitude);
+
+                }
+                else
+                    Toast.makeText(MainActivity.this,"no location",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
 
