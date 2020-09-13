@@ -30,7 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity implements WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
-        ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,RegisterClass.SignInStatusListener {
+        ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
+        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener{
     // where to do the user authentication
     // local time and local date require sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseDatabase firebaseDatabase ;
+    private boolean isPreferencesCreated;
+    private boolean isUserListsCreated;
+
 
 
 
@@ -66,6 +70,11 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
         dataBaseClass.setCallBackCreate(this);
         dataBaseClass.setCallBackPreferenceCreate(this);
         registerClass.setSignInListener(this);
+        dataBaseClass.setCallBackUserLists(this);
+
+        //registerClass.stateListener();
+
+
 
         authStateListener=new FirebaseAuth.AuthStateListener() {
             @Override
@@ -83,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
             }
         };
 
-        //registerClass.stateListener();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction().add(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG);
         fragmentTransaction.commit();
@@ -110,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
     @Override
     protected void onStart() {
         super.onStart();
-
         registerClass.addStateListener(authStateListener);
 
     }
@@ -128,8 +135,20 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     }
 
+    @Override
+    public void onSuccessUserLists() {
+        isUserListsCreated=true;
+        moveToHomeFragment();
+    }
 
-//    private void getLocationUpdates() {
+    @Override
+    public void onFailedUserLists() {
+        isUserListsCreated=false;
+        moveToHomeFragment();
+
+    }
+
+    //    private void getLocationUpdates() {
 //        CurrentLocationListener.getInstance(getApplicationContext()).observe(this, new Observer<Location>() {
 //            @Override
 //            public void onChanged(@Nullable Location location) {
@@ -163,12 +182,14 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
     @Override
     public void onSuccessPreferenceCreate() {
         Toast.makeText(MainActivity.this,"hi",Toast.LENGTH_LONG).show();
+        isPreferencesCreated=true;
         //getLocationUpdates();
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+        //fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
     }
 
     @Override
     public void onFailedPreferenceCreate() {
+        isPreferencesCreated=false;
 
     }
 
@@ -199,6 +220,14 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
                     Toast.makeText(MainActivity.this,"no location",Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void moveToHomeFragment(){
+        if (isPreferencesCreated && isUserListsCreated){
+            fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+        }
+        else
+            Toast.makeText(MainActivity.this,"failed",Toast.LENGTH_LONG).show();
     }
 }
 

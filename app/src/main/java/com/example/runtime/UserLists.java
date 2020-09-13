@@ -15,6 +15,12 @@ public class UserLists {
         friendsRequests = new ArrayList<>();
         eventRequests = new ArrayList<>();
         managedEvent = new ArrayList<>();
+
+        myFriends.add("false");
+        myEvent.add("false");
+        friendsRequests.add("false");
+        eventRequests.add("false");
+        managedEvent.add("false");
     }
 
 

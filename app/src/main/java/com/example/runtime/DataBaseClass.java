@@ -40,10 +40,16 @@ public class DataBaseClass {
         void onFailedImage();
     }
 
+    interface OnUserListsListener{
+        void onSuccessUserLists();
+        void onFailedUserLists();
+    }
+
 
      private OnUserCreateListener callBackCreate;
      private OnUserPreferenceCreateListener callBackPreferenceCreate;
      private OnSaveImageListener callBackImage;
+     private OnUserListsListener callBackUserLists;
 
 
     private DataBaseClass(){
@@ -51,7 +57,6 @@ public class DataBaseClass {
         registerClass = RegisterClass.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
-        databaseReference = firebaseDatabase.getReference();
     }
 
     static DataBaseClass getInstance(){
@@ -63,7 +68,7 @@ public class DataBaseClass {
     }
 
     public void createUser(User user){
-        //databaseReference = firebaseDatabase.getReference();
+        databaseReference = firebaseDatabase.getReference();
         DatabaseReference databaseReference1 = databaseReference.child("user");
         databaseReference1.child(registerClass.getUserId()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -88,6 +93,22 @@ public class DataBaseClass {
                     callBackPreferenceCreate.onFailedPreferenceCreate();
             }
         });
+    }
+
+    public void createUserLists(UserLists userLists){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference databaseReference1=databaseReference.child("user_lists");
+        databaseReference1.child(registerClass.getUserId()).setValue(userLists).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                    callBackUserLists.onSuccessUserLists();
+                else
+                    callBackUserLists.onFailedUserLists();
+
+            }
+        });
+
     }
 
     public void saveProfilePicture(Uri imageUri){
@@ -132,5 +153,9 @@ public class DataBaseClass {
 
     public void setCallBackImage(OnSaveImageListener callBackImage) {
         this.callBackImage = callBackImage;
+    }
+
+    public void setCallBackUserLists(OnUserListsListener callBackUserLists) {
+        this.callBackUserLists = callBackUserLists;
     }
 }

@@ -2,6 +2,7 @@ package com.example.runtime;
 
 import android.content.Context;
 import android.location.Location;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 
@@ -25,13 +26,18 @@ public class CurrentLocationListener extends LiveData<Location> {
         return instance;
     }
 
-    private CurrentLocationListener(Context appContext) {
+    private CurrentLocationListener(final Context appContext) {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(appContext);
         mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if (location != null)
-                    setValue(location);
+                if (location != null){
+                    Toast.makeText(appContext,location.toString(),Toast.LENGTH_LONG).show();
+                    setValue(location);}
+                else{
+                    Toast.makeText(appContext,"nolocation",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
         createLocationRequest();
@@ -67,4 +73,5 @@ public class CurrentLocationListener extends LiveData<Location> {
         if (mLocationCallback != null)
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
+
 }

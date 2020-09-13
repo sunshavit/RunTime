@@ -78,7 +78,9 @@ public class SignUpVM extends ViewModel  {
         this.partnerLevel = partnerLevel;
 
         UserPreferences userPreferences=new UserPreferences(startAge,endAge,partnerGender,partnerLevel);
+        UserLists userLists=new UserLists();
         dataBaseClass.createPreferences(userPreferences);
+        dataBaseClass.createUserLists(userLists);
 
     }
 
