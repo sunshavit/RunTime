@@ -67,10 +67,6 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
         dataBaseClass.setCallBackPreferenceCreate(this);
         registerClass.setSignInListener(this);
 
-        //registerClass.stateListener();
-
-
-
         authStateListener=new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -87,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
             }
         };
 
+        //registerClass.stateListener();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction().add(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG);
         fragmentTransaction.commit();
@@ -113,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
     @Override
     protected void onStart() {
         super.onStart();
+
         registerClass.addStateListener(authStateListener);
 
     }

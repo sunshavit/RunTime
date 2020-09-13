@@ -51,6 +51,7 @@ public class DataBaseClass {
         registerClass = RegisterClass.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     static DataBaseClass getInstance(){
@@ -62,7 +63,7 @@ public class DataBaseClass {
     }
 
     public void createUser(User user){
-        databaseReference = firebaseDatabase.getReference();
+        //databaseReference = firebaseDatabase.getReference();
         DatabaseReference databaseReference1 = databaseReference.child("user");
         databaseReference1.child(registerClass.getUserId()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
