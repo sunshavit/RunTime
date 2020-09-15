@@ -9,8 +9,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -22,6 +25,7 @@ public class DataBaseClass {
     private final String USERSTABLE = "users";
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
+    private UserInstance user;
 
     private static DataBaseClass dataBaseClass = null;
 
@@ -57,6 +61,7 @@ public class DataBaseClass {
         registerClass = RegisterClass.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     static DataBaseClass getInstance(){
@@ -142,6 +147,15 @@ public class DataBaseClass {
         specificUser.child("latitude").setValue(latitude);
     }
 
+    public void getUser(ValueEventListener listener){
+        final DatabaseReference users = firebaseDatabase.getReference("user");
+        Log.d("sun","sun");
+        users.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
+    }
+
+    public void onCancelled(@NonNull DatabaseError error) {
+    }
+
 
     public void setCallBackCreate(OnUserCreateListener callBackCreate) {
         this.callBackCreate = callBackCreate;
@@ -158,4 +172,5 @@ public class DataBaseClass {
     public void setCallBackUserLists(OnUserListsListener callBackUserLists) {
         this.callBackUserLists = callBackUserLists;
     }
+
 }

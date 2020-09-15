@@ -1,14 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
+
+
+
+ <RelativeLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:id="@+id/rootHomeLayput">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
 
  <ToggleButton
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:id="@+id/active_btn"/>
 
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center"
+    android:textSize="30sp"
+    android:text="dfsfdsfsdfsd"
+       android:id="@+id/helloLabelMain"/>
 
-</LinearLayout>
+
+
+   <Button
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="10dp"
+       android:id="@+id/findNewRunnersBT"
+    android:text="Find new runners"/>
+
+   <Button
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="10dp"
+       android:id="@+id/findUpcomingEventsBT"
+       android:text="Find Upcoming Events"/>
+
+   <Button
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="10dp"
+       android:id="@+id/createNewEventBT"
+       android:text="create New Event"/>
+
+
+  </LinearLayout>
+
+ </RelativeLayout>
+
+
+</RelativeLayout>
