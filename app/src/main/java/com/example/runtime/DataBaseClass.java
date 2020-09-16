@@ -25,9 +25,14 @@ public class DataBaseClass {
     private final String USERSTABLE = "users";
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
-    private UserInstance user;
+
 
     private static DataBaseClass dataBaseClass = null;
+
+    interface OnGetUserImage{
+        void onSuccessGetImage(String uri);
+        void onFailedGetImage();
+    }
 
     interface OnUserCreateListener {
         void onSuccessCreate();
@@ -54,7 +59,7 @@ public class DataBaseClass {
      private OnUserPreferenceCreateListener callBackPreferenceCreate;
      private OnSaveImageListener callBackImage;
      private OnUserListsListener callBackUserLists;
-
+     private OnGetUserImage callBackGetImage;
 
     private DataBaseClass(){
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -147,6 +152,16 @@ public class DataBaseClass {
         specificUser.child("latitude").setValue(latitude);
     }
 
+    public void getImage(){
+        StorageReference reference = storageReference.child("profileImages/"+RegisterClass.getInstance().getUserId());
+        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                callBackGetImage.onSuccessGetImage(uri.toString());
+            }
+        });
+    }
+
     public void getUser(ValueEventListener listener){
         final DatabaseReference users = firebaseDatabase.getReference("user");
         Log.d("sun","sun");
@@ -173,4 +188,7 @@ public class DataBaseClass {
         this.callBackUserLists = callBackUserLists;
     }
 
+    public void setCallBackGetImage(OnGetUserImage callBackGetImage) {
+        this.callBackGetImage = callBackGetImage;
+    }
 }

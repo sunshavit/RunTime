@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBarFragm
     final String SIGNUP3TAG="signup3tag";
     final String HOME_TAG="homeTag";
     final String NAV_TAG = "nav";
+    final String PROFiLE_TAG = "profiletag";
     private boolean isFirstFragment=true;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBarFragm
                 break;
             case "profile":
                 Toast.makeText(this,"profile", Toast.LENGTH_LONG).show();
-                //fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new ProfileFragment(),PROFiLE_TAG).commit();
                 break;
             case "message":
                 Toast.makeText(this,"message", Toast.LENGTH_LONG).show();

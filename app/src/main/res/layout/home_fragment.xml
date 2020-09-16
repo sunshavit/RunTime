@@ -28,11 +28,15 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:gravity="center"
-    android:textSize="30sp"
-    android:text="dfsfdsfsdfsd"
+       android:textSize="30sp"
        android:id="@+id/helloLabelMain"/>
 
-
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:textSize="20sp"
+          android:id="@+id/locationText"/>
 
    <Button
        android:layout_width="match_parent"
@@ -54,6 +58,7 @@
        android:layout_marginTop="10dp"
        android:id="@+id/createNewEventBT"
        android:text="create New Event"/>
+
 
 
   </LinearLayout>
