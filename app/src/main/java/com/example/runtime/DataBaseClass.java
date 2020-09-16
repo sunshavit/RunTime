@@ -28,7 +28,13 @@ public class DataBaseClass {
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
 
+
     private static DataBaseClass dataBaseClass = null;
+
+    interface OnGetUserImage{
+        void onSuccessGetImage(String uri);
+        void onFailedGetImage();
+    }
 
     interface OnUserCreateListener {
         void onSuccessCreate();
@@ -55,7 +61,7 @@ public class DataBaseClass {
      private OnUserPreferenceCreateListener callBackPreferenceCreate;
      private OnSaveImageListener callBackImage;
      private OnUserListsListener callBackUserLists;
-
+     private OnGetUserImage callBackGetImage;
 
     private DataBaseClass(){
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -148,6 +154,25 @@ public class DataBaseClass {
         specificUser.child("latitude").setValue(latitude);
     }
 
+    public void getImage(){
+        StorageReference reference = storageReference.child("profileImages/"+RegisterClass.getInstance().getUserId());
+        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                callBackGetImage.onSuccessGetImage(uri.toString());
+            }
+        });
+    }
+
+    public void getUser(ValueEventListener listener){
+        final DatabaseReference users = firebaseDatabase.getReference("user");
+        Log.d("sun","sun");
+        users.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
+    }
+
+    public void onCancelled(@NonNull DatabaseError error) {
+    }
+
 
     public void setCallBackCreate(OnUserCreateListener callBackCreate) {
         this.callBackCreate = callBackCreate;
@@ -165,6 +190,7 @@ public class DataBaseClass {
         this.callBackUserLists = callBackUserLists;
     }
 
+
     public void retrieveAllUsersList(ValueEventListener listener){
         databaseReference = firebaseDatabase.getReference();
         databaseReference.child("user").addListenerForSingleValueEvent(listener);
@@ -177,16 +203,12 @@ public class DataBaseClass {
         userPreferenceTable.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
     }
 
-    public void retrieveUserDetails(ValueEventListener listener){
-
-        databaseReference = firebaseDatabase.getReference();
-        DatabaseReference usersTable = databaseReference.child("user");
-        usersTable.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
-
-    }
-
-    public StorageReference retrieveImageStorageReference (String UserId){
+      public StorageReference retrieveImageStorageReference (String UserId){
         storageReference = FirebaseStorage.getInstance().getReference().child("profileImages/"+ UserId);
         return storageReference;
+
+    public void setCallBackGetImage(OnGetUserImage callBackGetImage) {
+        this.callBackGetImage = callBackGetImage;
+
     }
 }

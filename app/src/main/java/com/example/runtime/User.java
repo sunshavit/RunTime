@@ -10,12 +10,17 @@ public class User {
     private boolean isActive;
     private double longitude;
     private double latitude;
+
     private String userId;
+
+   
+
 
 
 
     public User() {
     }
+
 
     public String getUserId() {
         return userId;
@@ -26,6 +31,8 @@ public class User {
     }
 
     public User(String userId, String fullName, String gender, int year, int month, int dayOfMonth, String runningLevel, boolean isOnline, double longitude, double latitude) {
+
+    
         this.fullName = fullName;
         this.gender = gender;
         this.year=year;
@@ -35,7 +42,10 @@ public class User {
         this.isActive = isOnline;
         this.longitude=longitude;
         this.latitude=latitude;
+
         this.userId = userId;
+
+       
     }
 
     public double getLongitude() {
@@ -90,17 +100,12 @@ public class User {
         return gender;
     }
 
+    
+
     public void setGender(String gender) {
         this.gender = gender;
     }
 
-//    public LocalDate getBirthDate() {
-//        return birthDate;
-//    }
-//
-//    public void setBirthDate(LocalDate birthDate) {
-//        this.birthDate = birthDate;
-//    }
 
     public String getRunningLevel() {
         return runningLevel;
@@ -110,13 +115,7 @@ public class User {
         this.runningLevel = runningLevel;
     }
 
-//    public Location getLocation() {
-//        return location;
-//    }
-//
-//    public void setLocation(Location location) {
-//        this.location = location;
-//    }
+
 
     public boolean isActive() {
         return isActive;
