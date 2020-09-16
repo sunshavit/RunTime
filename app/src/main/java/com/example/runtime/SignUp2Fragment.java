@@ -129,7 +129,7 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
                         yearOfBirth=year;
                         monthOfBirth=month+1;
                         dayOfMonthOfBirth=dayOfMonth;
-                        editTextDate.setText(dayOfMonth+"/"+month+1+'/'+year);
+                        editTextDate.setText(dayOfMonthOfBirth+"/"+monthOfBirth+'/'+yearOfBirth);
 
                     }
                 },year1,month1,dayOfMonth1);

@@ -57,6 +57,7 @@ public class DataBaseClass {
         registerClass = RegisterClass.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
+        databaseReference=firebaseDatabase.getReference();
     }
 
     static DataBaseClass getInstance(){

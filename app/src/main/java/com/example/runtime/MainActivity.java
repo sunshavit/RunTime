@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -195,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     @Override
     public void onSuccessSignIn(String userId) {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new CreateEventFragment(),HOME_TAG).commit();
         Toast.makeText(MainActivity.this,"sign up successful",Toast.LENGTH_LONG).show();
     }
 
@@ -229,6 +230,8 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
         else
             Toast.makeText(MainActivity.this,"failed",Toast.LENGTH_LONG).show();
     }
+
+
 }
 
 
