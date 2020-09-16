@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/nevHome"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Home"
+        />
+
+    <item
+        android:id="@+id/nevGroup"
+        android:icon="@drawable/ic_group_black_24dp"
+        android:title="Group"
+        />
+
+    <item
+        android:id="@+id/nevLocation"
+        android:icon="@drawable/ic_location_on_black_24dp"
+        android:title="Location"
+        />
+
+    <item
+        android:id="@+id/nevProfile"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="Profile"
+        />
+
+    <item
+        android:id="@+id/nevMessage"
+        android:icon="@drawable/ic_email_black_24dp"
+        android:title="Message"
+        />
+
+
+</menu>

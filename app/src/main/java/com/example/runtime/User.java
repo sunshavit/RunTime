@@ -10,13 +10,14 @@ public class User {
     private boolean isActive;
     private double longitude;
     private double latitude;
+    private String id;
 
 
 
     public User() {
     }
 
-    public User(String fullName, String gender, int year,int month,int dayOfMonth, String runningLevel, boolean isOnline, double longitude,double latitude) {
+    public User(String fullName, String gender, int year,int month,int dayOfMonth, String runningLevel, boolean isOnline, double longitude,double latitude, String id) {
         this.fullName = fullName;
         this.gender = gender;
         this.year=year;
@@ -26,6 +27,7 @@ public class User {
         this.isActive = isOnline;
         this.longitude=longitude;
         this.latitude=latitude;
+        this.id = id;
     }
 
     public double getLongitude() {
@@ -78,6 +80,14 @@ public class User {
 
     public String getGender() {
         return gender;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setGender(String gender) {
