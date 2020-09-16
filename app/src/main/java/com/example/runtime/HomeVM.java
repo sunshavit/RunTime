@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 public class HomeVM extends ViewModel {
-    private User user;
+
 
     private DataBaseClass dataBaseClass=DataBaseClass.getInstance();
 

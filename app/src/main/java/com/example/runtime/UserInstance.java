@@ -38,7 +38,7 @@ public class UserInstance {
 
 
     private UserInstance(){
-        dataBaseClass.getUser(valueEventListener);
+        this.user= new User();
     }
 
     public static UserInstance getInstance()

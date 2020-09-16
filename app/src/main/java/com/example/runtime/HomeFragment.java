@@ -74,6 +74,7 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root=inflater.inflate( R.layout.home_fragment,container,false);
         user = UserInstance.getInstance();
+        user.getUserFromDataBase();
         user.setCallBackUserGet(this);
         title = root.findViewById(R.id.helloLabelMain);
         locationtext = root.findViewById(R.id.locationText);

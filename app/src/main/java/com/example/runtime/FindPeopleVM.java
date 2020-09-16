@@ -96,15 +96,15 @@ public class FindPeopleVM extends ViewModel {
                         User user = snapshot1.getValue(User.class);
                         Log.d("tag", "inside first listener");
                         if(user != null){
-                            Log.d("tag", user.toString());
-                            Log.d("tag", user.getFullName());
+                            Log.d("tag1", user.toString());
+                            Log.d("tag1", user.getFullName());
                         }
 
                         usersFromDatabase.add(user);
 
                     }
-                    Log.d("tag", usersFromDatabase.get(3).getGender());
-                    Log.d("tag", usersFromDatabase.toString());
+                    Log.d("tag1", usersFromDatabase.get(0).getGender());
+                    Log.d("tag1", usersFromDatabase.toString());
                     getUserPreferences();
                 }
             }
@@ -154,8 +154,8 @@ public class FindPeopleVM extends ViewModel {
         Log.d("tag", "inside final function");
         Log.d("tag", userPreferences.getRuningLevel());
         Log.d("tag", currentUser.getFullName());
-        Log.d("tag", usersFromDatabase.get(2).getFullName());
-        Log.d("tag", usersFromDatabase.get(3).getFullName());
+        Log.d("tag", usersFromDatabase.get(0).getFullName());
+        Log.d("tag", usersFromDatabase.get(0).getFullName());
         //user location
         double longitude = currentUser.getLongitude();
         double latitude = currentUser.getLatitude();
