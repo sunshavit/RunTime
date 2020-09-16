@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     private boolean isPreferencesCreated;
     private boolean isUserListsCreated;
     private HomeFragment homeFragment = new HomeFragment();
+    private UserInstance userInstance;
 
 
 
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        userInstance = UserInstance.getInstance();
         registerClass = RegisterClass.getInstance();
         dataBaseClass = DataBaseClass.getInstance();
         registerClass.setSignUpListener(this);
@@ -249,6 +251,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
                     Toast.makeText(MainActivity.this,location.toString(),Toast.LENGTH_LONG).show();
                     double longitude=location.getLongitude();
                     double latitude=location.getLatitude();
+                    userInstance.getUser().setLongitude(longitude);
+                    userInstance.getUser().setLatitude(latitude);
                     dataBaseClass.updateLocation(longitude,latitude);
 
                 }

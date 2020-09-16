@@ -52,6 +52,7 @@ public class ProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage
 
     @Override
     public void onSuccessGetImage(String uri) {
+        Log.d("sun",uri);
         liveDataImage.setValue(uri);
     }
 

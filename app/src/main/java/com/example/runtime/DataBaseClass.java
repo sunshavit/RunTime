@@ -158,6 +158,7 @@ public class DataBaseClass {
         DatabaseReference specificUser = users.child(registerClass.getUserId());
         specificUser.child("longitude").setValue(longitude);
         specificUser.child("latitude").setValue(latitude);
+
     }
 
     public void getImage() {
@@ -210,8 +211,8 @@ public class DataBaseClass {
     }
 
     public StorageReference retrieveImageStorageReference(String UserId) {
-        storageReference = FirebaseStorage.getInstance().getReference().child("profileImages/" + UserId);
-        return storageReference;
+        StorageReference storageReference1 = FirebaseStorage.getInstance().getReference().child("profileImages/" + UserId);
+        return storageReference1;
     }
         public void setCallBackGetImage(OnGetUserImage callBackGetImage){
             this.callBackGetImage = callBackGetImage;

@@ -37,6 +37,7 @@ public class SignUpVM extends ViewModel  {
     private Uri userImage;
     private RegisterClass registerClass = RegisterClass.getInstance();
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
+    private UserInstance userInstance = UserInstance.getInstance();
 
 
 
@@ -66,7 +67,7 @@ public class SignUpVM extends ViewModel  {
         this.runningLevel = runningLevel;
 
 
-        dataBaseClass.createUser(new User(registerClass.getUserId(),this.fullName,this.gender,this.year,this.month,this.dayOfMonth,this.runningLevel,false,0,0));
+        dataBaseClass.createUser(new User(registerClass.getUserId(),this.fullName,this.gender,this.year,this.month,this.dayOfMonth,this.runningLevel,false,userInstance.getUser().getLongitude(),userInstance.getUser().getLatitude()));
 
         
 
