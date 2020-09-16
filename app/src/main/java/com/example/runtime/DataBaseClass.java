@@ -9,11 +9,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
 
 public class DataBaseClass {
     private FirebaseDatabase firebaseDatabase;
@@ -57,6 +62,7 @@ public class DataBaseClass {
         registerClass = RegisterClass.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     static DataBaseClass getInstance(){
@@ -157,5 +163,30 @@ public class DataBaseClass {
 
     public void setCallBackUserLists(OnUserListsListener callBackUserLists) {
         this.callBackUserLists = callBackUserLists;
+    }
+
+    public void retrieveAllUsersList(ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        databaseReference.child("user").addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveUserPreferences(ValueEventListener listener){
+        final UserPreferences[] userPreferences = new UserPreferences[1];
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userPreferenceTable = databaseReference.child("user_preferences");
+        userPreferenceTable.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveUserDetails(ValueEventListener listener){
+
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference usersTable = databaseReference.child("user");
+        usersTable.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
+
+    }
+
+    public StorageReference retrieveImageStorageReference (String UserId){
+        storageReference = FirebaseStorage.getInstance().getReference().child("profileImages/"+ UserId);
+        return storageReference;
     }
 }

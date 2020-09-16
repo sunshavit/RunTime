@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
@@ -19,6 +20,15 @@ import com.example.runtime.SignUpVM;
 public class HomeFragment extends Fragment {
 
     HomeVM viewModel;
+    findPeopleListener findPeopleCallback;
+
+    interface findPeopleListener{
+        void onFindPeopleClicked();
+    }
+
+    public void setFindPeopleCallback(findPeopleListener findPeopleCallback) {
+        this.findPeopleCallback = findPeopleCallback;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -41,10 +51,16 @@ public class HomeFragment extends Fragment {
         });
 
 
+        //temporary button
+
+        Button findPeopleButton = root.findViewById(R.id.findPeopleBtn);
+        findPeopleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findPeopleCallback.onFindPeopleClicked();
+            }
+        });
         return root;
-
-
-
 
     }
 }

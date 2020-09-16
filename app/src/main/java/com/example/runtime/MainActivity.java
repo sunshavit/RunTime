@@ -31,7 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
         ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
-        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener{
+        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener{
     // where to do the user authentication
     // local time and local date require sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
@@ -44,12 +44,14 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
     final String SIGNUP2TAG="signup2tag";
     final String SIGNUP3TAG="signup3tag";
     final String HOME_TAG="homeTag";
+    final String FIND_PEOPLE = "findPeople";
     private boolean isFirstFragment=true;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseDatabase firebaseDatabase ;
     private boolean isPreferencesCreated;
     private boolean isUserListsCreated;
+    private HomeFragment homeFragment = new HomeFragment();
 
 
 
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
         dataBaseClass.setCallBackPreferenceCreate(this);
         registerClass.setSignInListener(this);
         dataBaseClass.setCallBackUserLists(this);
+        homeFragment.setFindPeopleCallback(this);
 
         //registerClass.stateListener();
 
@@ -195,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     @Override
     public void onSuccessSignIn(String userId) {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
         Toast.makeText(MainActivity.this,"sign up successful",Toast.LENGTH_LONG).show();
     }
 
@@ -224,10 +227,15 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     public void moveToHomeFragment(){
         if (isPreferencesCreated && isUserListsCreated){
-            fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+            fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
         }
         else
             Toast.makeText(MainActivity.this,"failed",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFindPeopleClicked() {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new FindPeopleFragment(), FIND_PEOPLE).commit();
     }
 }
 
