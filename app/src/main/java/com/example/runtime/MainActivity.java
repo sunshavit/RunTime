@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
         ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
-        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener{
+        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener{
     // where to do the user authentication
     // local time and local date require sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
@@ -31,14 +31,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavBarFragm
     final String SIGNUP2TAG="signup2tag";
     final String SIGNUP3TAG="signup3tag";
     final String HOME_TAG="homeTag";
+
+    final String FIND_PEOPLE = "findPeople";
+
     final String NAV_TAG = "nav";
     final String PROFiLE_TAG = "profiletag";
+
     private boolean isFirstFragment=true;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseDatabase firebaseDatabase ;
     private boolean isPreferencesCreated;
     private boolean isUserListsCreated;
+    private HomeFragment homeFragment = new HomeFragment();
 
 
 
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBarFragm
         dataBaseClass.setCallBackPreferenceCreate(this);
         registerClass.setSignInListener(this);
         dataBaseClass.setCallBackUserLists(this);
+        homeFragment.setFindPeopleCallback(this);
 
         //registerClass.stateListener();
 
@@ -210,8 +216,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavBarFragm
 
     @Override
     public void onSuccessSignIn(String userId) {
+
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+
         fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),NAV_TAG).commit();
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+       
         Toast.makeText(MainActivity.this,"sign up successful",Toast.LENGTH_LONG).show();
 
     }
@@ -241,11 +250,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavBarFragm
 
     public void moveToHomeFragment(){
         if (isPreferencesCreated && isUserListsCreated){
-            fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+
+            fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+
+           
             fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),"nav").commit();
+
         }
         else
             Toast.makeText(MainActivity.this,"failed",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFindPeopleClicked() {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new FindPeopleFragment(), FIND_PEOPLE).commit();
     }
 }
 

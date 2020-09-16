@@ -18,6 +18,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+
 public class DataBaseClass {
     private FirebaseDatabase firebaseDatabase;
     private RegisterClass registerClass;
@@ -188,7 +190,25 @@ public class DataBaseClass {
         this.callBackUserLists = callBackUserLists;
     }
 
+
+    public void retrieveAllUsersList(ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        databaseReference.child("user").addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveUserPreferences(ValueEventListener listener){
+        final UserPreferences[] userPreferences = new UserPreferences[1];
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userPreferenceTable = databaseReference.child("user_preferences");
+        userPreferenceTable.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
+    }
+
+      public StorageReference retrieveImageStorageReference (String UserId){
+        storageReference = FirebaseStorage.getInstance().getReference().child("profileImages/"+ UserId);
+        return storageReference;
+
     public void setCallBackGetImage(OnGetUserImage callBackGetImage) {
         this.callBackGetImage = callBackGetImage;
+
     }
 }

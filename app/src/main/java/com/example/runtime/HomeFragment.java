@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -21,12 +22,25 @@ import com.example.runtime.SignUpVM;
 
 import java.util.Locale;
 
+
+    HomeVM viewModel;
+    findPeopleListener findPeopleCallback;
+
+    interface findPeopleListener{
+        void onFindPeopleClicked();
+    }
+
+    public void setFindPeopleCallback(findPeopleListener findPeopleCallback) {
+        this.findPeopleCallback = findPeopleCallback;
+    }
+
 public class HomeFragment extends Fragment implements UserInstance.OnGetUserListener {
 
     private HomeVM viewModel;
     private UserInstance user;
     private TextView title;
     private TextView locationtext;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -66,10 +80,24 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
 
             }
         });
+
+
+
+        //temporary button
+
+       
+
+
+
+
+        Button findPeopleButton = root.findViewById(R.id.findPeopleBtn);
+        findPeopleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findPeopleCallback.onFindPeopleClicked();
+            }
+        });
         return root;
-
-
-
 
 
     }

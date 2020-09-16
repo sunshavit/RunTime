@@ -24,6 +24,8 @@
      android:layout_height="wrap_content"
      android:id="@+id/active_btn"/>
 
+
+
    <TextView
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
@@ -42,7 +44,7 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:layout_marginTop="10dp"
-       android:id="@+id/findNewRunnersBT"
+       android:id="@+id/findPeopleBtn"
     android:text="Find new runners"/>
 
    <Button
@@ -64,6 +66,7 @@
   </LinearLayout>
 
  </RelativeLayout>
+
 
 
 </RelativeLayout>
