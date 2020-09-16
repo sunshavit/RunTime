@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class MainActivity extends AppCompatActivity implements BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
+public class MainActivity extends AppCompatActivity implements HomeFragment.CreateNewEventListener, BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
         ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
         RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener{
     // where to do the user authentication
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBarFragm
     final String SIGNUP2TAG="signup2tag";
     final String SIGNUP3TAG="signup3tag";
     final String HOME_TAG="homeTag";
+    final String CREATEEVENT_TAG="eventtag";
 
     final String FIND_PEOPLE = "findPeople";
 
@@ -99,6 +100,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavBarFragm
     }
 
     @Override
+    public void onCreateNewEvent() {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new CreateEventFragment(),CREATEEVENT_TAG).commit();
+    }
+
+    @Override
     public void onSignInClick() {
         fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignInFragment(),SIGNUP1TAG).commit();
     }
@@ -153,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBarFragm
         switch (page){
             case "home":
                 Toast.makeText(this,"home", Toast.LENGTH_LONG).show();
-                fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
                 break;
             case "group":
                 Toast.makeText(this,"group", Toast.LENGTH_LONG).show();

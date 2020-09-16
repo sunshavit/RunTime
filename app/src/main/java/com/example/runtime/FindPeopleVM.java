@@ -24,6 +24,8 @@ public class FindPeopleVM extends ViewModel {
     UserPreferences userPreferences;
 
 
+
+
     public void retrieveUsersList(){
 
         getAllUsersList();
@@ -138,25 +140,15 @@ public class FindPeopleVM extends ViewModel {
     }
 
     private void getCurrentUser() {
-        ValueEventListener listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    currentUser = snapshot.getValue(User.class);
-                    Log.d("tag", "inside third listener");
-                    findRelevantUsers();
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        //use sun's class
-        dataBaseClass.retrieveUserDetails(listener);
-
+        currentUser = UserInstance.getInstance().getUser();
+        findRelevantUsers();
     }
+
+        //use sun's class
+        //dataBaseClass.retrieveUserDetails(listener);
+
+
 
     private void findRelevantUsers() {
         Log.d("tag", "inside final function");

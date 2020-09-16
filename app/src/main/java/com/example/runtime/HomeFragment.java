@@ -23,8 +23,21 @@ import com.example.runtime.SignUpVM;
 import java.util.Locale;
 
 
-    HomeVM viewModel;
+
+
+public class HomeFragment extends Fragment implements UserInstance.OnGetUserListener {
+
+    private HomeVM viewModel;
+    private UserInstance user;
+    private TextView title;
+    private TextView locationtext;
+
     findPeopleListener findPeopleCallback;
+    CreateNewEventListener createnewEventCallBack;
+
+    interface CreateNewEventListener{
+        void onCreateNewEvent();
+    }
 
     interface findPeopleListener{
         void onFindPeopleClicked();
@@ -34,18 +47,17 @@ import java.util.Locale;
         this.findPeopleCallback = findPeopleCallback;
     }
 
-public class HomeFragment extends Fragment implements UserInstance.OnGetUserListener {
-
-    private HomeVM viewModel;
-    private UserInstance user;
-    private TextView title;
-    private TextView locationtext;
-
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel= new ViewModelProvider(getActivity()).get(HomeVM.class);
+        try {
+            createnewEventCallBack = (CreateNewEventListener) context;
+        }
+        catch (ClassCastException e){
+            throw new ClassCastException("Activity must implement CreateNewEventListener");
+        }
     }
 
     @Override
@@ -81,14 +93,14 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
             }
         });
 
+        Button buttonNewEvent = root.findViewById(R.id.createNewEventBT);
 
-
-        //temporary button
-
-       
-
-
-
+        buttonNewEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createnewEventCallBack.onCreateNewEvent();
+            }
+        });
 
         Button findPeopleButton = root.findViewById(R.id.findPeopleBtn);
         findPeopleButton.setOnClickListener(new View.OnClickListener() {

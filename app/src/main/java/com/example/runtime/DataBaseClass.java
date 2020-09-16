@@ -31,62 +31,67 @@ public class DataBaseClass {
 
     private static DataBaseClass dataBaseClass = null;
 
-    interface OnGetUserImage{
+    interface OnGetUserImage {
         void onSuccessGetImage(String uri);
+
         void onFailedGetImage();
     }
 
     interface OnUserCreateListener {
         void onSuccessCreate();
+
         void onFailedCreate(String problem);
     }
 
     interface OnUserPreferenceCreateListener {
         void onSuccessPreferenceCreate();
+
         void onFailedPreferenceCreate();
     }
 
-    interface OnSaveImageListener{
+    interface OnSaveImageListener {
         void onSuccessImage();
+
         void onFailedImage();
     }
 
-    interface OnUserListsListener{
+    interface OnUserListsListener {
         void onSuccessUserLists();
+
         void onFailedUserLists();
     }
 
 
-     private OnUserCreateListener callBackCreate;
-     private OnUserPreferenceCreateListener callBackPreferenceCreate;
-     private OnSaveImageListener callBackImage;
-     private OnUserListsListener callBackUserLists;
-     private OnGetUserImage callBackGetImage;
+    private OnUserCreateListener callBackCreate;
+    private OnUserPreferenceCreateListener callBackPreferenceCreate;
+    private OnSaveImageListener callBackImage;
+    private OnUserListsListener callBackUserLists;
+    private OnGetUserImage callBackGetImage;
 
-    private DataBaseClass(){
+    private DataBaseClass() {
         firebaseDatabase = FirebaseDatabase.getInstance();
         registerClass = RegisterClass.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
-        databaseReference=firebaseDatabase.getReference();
+        databaseReference = firebaseDatabase.getReference();
 
     }
 
-    static DataBaseClass getInstance(){
-        if(dataBaseClass == null){
-            dataBaseClass=new DataBaseClass();
+    static DataBaseClass getInstance() {
+        if (dataBaseClass == null) {
+            dataBaseClass = new DataBaseClass();
         }
         return dataBaseClass;
 
     }
 
-    public void createUser(User user){
+    public void createUser(User user) {
         databaseReference = firebaseDatabase.getReference();
         DatabaseReference databaseReference1 = databaseReference.child("user");
         databaseReference1.child(registerClass.getUserId()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
+                if (task.isSuccessful())
                     callBackCreate.onSuccessCreate();
                 else
                     callBackCreate.onFailedCreate(task.getException().getMessage());
@@ -94,13 +99,13 @@ public class DataBaseClass {
         });
     }
 
-    public void createPreferences(UserPreferences userPreferences){
+    public void createPreferences(UserPreferences userPreferences) {
         databaseReference = firebaseDatabase.getReference();
         DatabaseReference databaseReference1 = databaseReference.child("user_preferences");
         databaseReference1.child(registerClass.getUserId()).setValue(userPreferences).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
+                if (task.isSuccessful())
                     callBackPreferenceCreate.onSuccessPreferenceCreate();
                 else
                     callBackPreferenceCreate.onFailedPreferenceCreate();
@@ -108,13 +113,13 @@ public class DataBaseClass {
         });
     }
 
-    public void createUserLists(UserLists userLists){
+    public void createUserLists(UserLists userLists) {
         databaseReference = firebaseDatabase.getReference();
-        DatabaseReference databaseReference1=databaseReference.child("user_lists");
+        DatabaseReference databaseReference1 = databaseReference.child("user_lists");
         databaseReference1.child(registerClass.getUserId()).setValue(userLists).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
+                if (task.isSuccessful())
                     callBackUserLists.onSuccessUserLists();
                 else
                     callBackUserLists.onFailedUserLists();
@@ -124,9 +129,9 @@ public class DataBaseClass {
 
     }
 
-    public void saveProfilePicture(Uri imageUri){
-        if(imageUri!=null){
-            StorageReference reference = storageReference.child("profileImages/"+RegisterClass.getInstance().getUserId());
+    public void saveProfilePicture(Uri imageUri) {
+        if (imageUri != null) {
+            StorageReference reference = storageReference.child("profileImages/" + RegisterClass.getInstance().getUserId());
             reference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -142,21 +147,21 @@ public class DataBaseClass {
 
     }
 
-    public void updateActive(boolean isActive){
-        DatabaseReference users=databaseReference.child("user");
-        DatabaseReference specificUser=users.child(registerClass.getUserId());
+    public void updateActive(boolean isActive) {
+        DatabaseReference users = databaseReference.child("user");
+        DatabaseReference specificUser = users.child(registerClass.getUserId());
         specificUser.child("active").setValue(isActive);
     }
 
-    public void updateLocation(double longitude,double latitude){
-        DatabaseReference users=databaseReference.child("user");
-        DatabaseReference specificUser=users.child(registerClass.getUserId());
+    public void updateLocation(double longitude, double latitude) {
+        DatabaseReference users = databaseReference.child("user");
+        DatabaseReference specificUser = users.child(registerClass.getUserId());
         specificUser.child("longitude").setValue(longitude);
         specificUser.child("latitude").setValue(latitude);
     }
 
-    public void getImage(){
-        StorageReference reference = storageReference.child("profileImages/"+RegisterClass.getInstance().getUserId());
+    public void getImage() {
+        StorageReference reference = storageReference.child("profileImages/" + RegisterClass.getInstance().getUserId());
         reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -165,9 +170,9 @@ public class DataBaseClass {
         });
     }
 
-    public void getUser(ValueEventListener listener){
+    public void getUser(ValueEventListener listener) {
         final DatabaseReference users = firebaseDatabase.getReference("user");
-        Log.d("sun","sun");
+        Log.d("sun", "sun");
         users.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
     }
 
@@ -192,24 +197,25 @@ public class DataBaseClass {
     }
 
 
-    public void retrieveAllUsersList(ValueEventListener listener){
+    public void retrieveAllUsersList(ValueEventListener listener) {
         databaseReference = firebaseDatabase.getReference();
         databaseReference.child("user").addListenerForSingleValueEvent(listener);
     }
 
-    public void retrieveUserPreferences(ValueEventListener listener){
+    public void retrieveUserPreferences(ValueEventListener listener) {
         final UserPreferences[] userPreferences = new UserPreferences[1];
         databaseReference = firebaseDatabase.getReference();
         DatabaseReference userPreferenceTable = databaseReference.child("user_preferences");
         userPreferenceTable.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
     }
 
-      public StorageReference retrieveImageStorageReference (String UserId){
-        storageReference = FirebaseStorage.getInstance().getReference().child("profileImages/"+ UserId);
+    public StorageReference retrieveImageStorageReference(String UserId) {
+        storageReference = FirebaseStorage.getInstance().getReference().child("profileImages/" + UserId);
         return storageReference;
-
-    public void setCallBackGetImage(OnGetUserImage callBackGetImage) {
-        this.callBackGetImage = callBackGetImage;
-
     }
-}
+        public void setCallBackGetImage(OnGetUserImage callBackGetImage){
+            this.callBackGetImage = callBackGetImage;
+
+        }
+    }
+

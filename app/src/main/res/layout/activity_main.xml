@@ -9,23 +9,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
-
-
-</RelativeLayout>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/rootLayout"
         android:layout_above="@+id/layoutBottomNavgtionBar"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/layoutBottomNavgtionBar"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/layoutBottomNavgtionBar"/>
 
-    </RelativeLayout>
+</RelativeLayout>
+
+
+
+
+
+
 
 
 
