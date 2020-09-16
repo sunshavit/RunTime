@@ -1,38 +1,28 @@
 package com.example.runtime;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class MainActivity extends AppCompatActivity implements WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
+public class MainActivity extends AppCompatActivity implements BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
         ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
-        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener{
+        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener{
     // where to do the user authentication
     // local time and local date require sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
@@ -45,12 +35,19 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
     final String SIGNUP2TAG="signup2tag";
     final String SIGNUP3TAG="signup3tag";
     final String HOME_TAG="homeTag";
+
+    final String FIND_PEOPLE = "findPeople";
+
+    final String NAV_TAG = "nav";
+    final String PROFiLE_TAG = "profiletag";
+
     private boolean isFirstFragment=true;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseDatabase firebaseDatabase ;
     private boolean isPreferencesCreated;
     private boolean isUserListsCreated;
+    private HomeFragment homeFragment = new HomeFragment();
 
 
 
@@ -72,9 +69,9 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
         dataBaseClass.setCallBackPreferenceCreate(this);
         registerClass.setSignInListener(this);
         dataBaseClass.setCallBackUserLists(this);
+        homeFragment.setFindPeopleCallback(this);
 
         //registerClass.stateListener();
-
 
 
         authStateListener=new FirebaseAuth.AuthStateListener() {
@@ -84,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
                 FirebaseUser user=firebaseAuth.getCurrentUser();
                 if(user!=null) { //sign up or sign in
                     getLocationUpdates();
+                    //dataBaseClass.updateActive(true);
                     Toast.makeText(MainActivity.this,user.getUid(),Toast.LENGTH_LONG).show();
                 }
                 else { //sign out
@@ -126,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
     @Override
     protected void onStop() {
         super.onStop();
+        Toast.makeText(this, "welcome" , Toast.LENGTH_SHORT).show();
        registerClass.removeStateListener(authStateListener);
     }
 
@@ -149,6 +148,31 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     }
 
+    @Override
+    public void onNavChange(String page) {
+        switch (page){
+            case "home":
+                Toast.makeText(this,"home", Toast.LENGTH_LONG).show();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+                break;
+            case "group":
+                Toast.makeText(this,"group", Toast.LENGTH_LONG).show();
+                //fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).commit();
+                break;
+            case "location":
+                Toast.makeText(this,"loction", Toast.LENGTH_LONG).show();
+                //fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).commit();
+                break;
+            case "profile":
+                Toast.makeText(this,"profile", Toast.LENGTH_LONG).show();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new ProfileFragment(),PROFiLE_TAG).commit();
+                break;
+            case "message":
+                Toast.makeText(this,"message", Toast.LENGTH_LONG).show();
+                //fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).commit();
+                break;
+        }
+    }
     //    private void getLocationUpdates() {
 //        CurrentLocationListener.getInstance(getApplicationContext()).observe(this, new Observer<Location>() {
 //            @Override
@@ -196,8 +220,13 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     @Override
     public void onSuccessSignIn(String userId) {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new CreateEventFragment(),HOME_TAG).commit();
+
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+
+        fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),NAV_TAG).commit();
+
         Toast.makeText(MainActivity.this,"sign up successful",Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -225,12 +254,22 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.O
 
     public void moveToHomeFragment(){
         if (isPreferencesCreated && isUserListsCreated){
-            fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+
+            fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+
+           
+            fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),"nav").commit();
+
         }
         else
             Toast.makeText(MainActivity.this,"failed",Toast.LENGTH_LONG).show();
     }
 
+
+    @Override
+    public void onFindPeopleClicked() {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new FindPeopleFragment(), FIND_PEOPLE).commit();
+    }
 
 }
 

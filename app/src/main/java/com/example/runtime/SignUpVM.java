@@ -65,7 +65,11 @@ public class SignUpVM extends ViewModel  {
         this.gender = gender;
         this.runningLevel = runningLevel;
 
-        dataBaseClass.createUser(new User(this.fullName,this.gender,this.year,this.month,this.dayOfMonth,this.runningLevel,false,0,0));
+
+        dataBaseClass.createUser(new User(registerClass.getUserId(),this.fullName,this.gender,this.year,this.month,this.dayOfMonth,this.runningLevel,false,0,0));
+
+        
+
 
 
 
