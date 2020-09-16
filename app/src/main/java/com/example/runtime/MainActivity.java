@@ -2,6 +2,10 @@ package com.example.runtime;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -220,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBarFragm
         fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
 
         fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),NAV_TAG).commit();
-       
+
         Toast.makeText(MainActivity.this,"sign up successful",Toast.LENGTH_LONG).show();
 
     }
@@ -261,10 +265,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavBarFragm
             Toast.makeText(MainActivity.this,"failed",Toast.LENGTH_LONG).show();
     }
 
+
     @Override
     public void onFindPeopleClicked() {
         fragmentManager.beginTransaction().replace(R.id.rootLayout, new FindPeopleFragment(), FIND_PEOPLE).commit();
     }
+
 }
 
 

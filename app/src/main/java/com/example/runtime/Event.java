@@ -12,8 +12,12 @@ import java.util.TimeZone;
 
 
 public class Event {
-    private LocalDate date;
-    private LocalTime startTime;
+    private String eventId;
+    private int year;
+    private int month;
+    private int dayOfMonth;
+    private int hourOfDay;
+    private int minute;
     private Location location;
     private String manager;
     private String runningLevel;
@@ -22,29 +26,67 @@ public class Event {
     public Event() {
     }
 
-    public Event(LocalDate date, LocalTime startTime, Location location, String manager, String runningLevel) {
-        this.date = date;
-        this.startTime = startTime;
+    public Event(String eventId, int year, int month, int dayOfMonth, int hourOfDay, int minute, Location location, String manager, String runningLevel, ArrayList<String> runners) {
+        this.eventId = eventId;
+        this.year = year;
+        this.month = month;
+        this.dayOfMonth = dayOfMonth;
+        this.hourOfDay = hourOfDay;
+        this.minute = minute;
         this.location = location;
         this.manager = manager;
         this.runningLevel = runningLevel;
         this.runners = new ArrayList<>();
+
+        runners.add("false");
     }
 
-    public LocalDate getDate() {
-        return date;
+    public String getEventId() {
+        return eventId;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
+    public int getYear() {
+        return year;
     }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(int dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public int getHourOfDay() {
+        return hourOfDay;
+    }
+
+    public void setHourOfDay(int hourOfDay) {
+        this.hourOfDay = hourOfDay;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public void setMinute(int minute) {
+        this.minute = minute;
     }
 
     public Location getLocation() {
