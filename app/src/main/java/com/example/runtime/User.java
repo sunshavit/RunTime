@@ -11,6 +11,7 @@ public class User {
     private double longitude;
     private double latitude;
     private String userId;
+    private String userToken;
 
    
 
@@ -29,7 +30,7 @@ public class User {
         this.userId = userId;
     }
 
-    public User(String userId, String fullName, String gender, int year, int month, int dayOfMonth, String runningLevel, boolean isOnline, double longitude, double latitude) {
+    public User(String userToken, String userId, String fullName, String gender, int year, int month, int dayOfMonth, String runningLevel, boolean isOnline, double longitude, double latitude) {
 
     
         this.fullName = fullName;
@@ -41,10 +42,19 @@ public class User {
         this.isActive = isOnline;
         this.longitude=longitude;
         this.latitude=latitude;
+        this.userToken = userToken;
 
         this.userId = userId;
 
        
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
     }
 
     public double getLongitude() {

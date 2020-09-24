@@ -20,16 +20,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.CreateNewEventListener, BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
         ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
-        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener{
+        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener, FindPeopleFragment.OnStrangerCellClickListener{
     // where to do the user authentication
     // local time and local date require sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     final String TOOLBAR_TAG="toolbartag";
 
     final String FIND_PEOPLE = "findPeople";
+    final String STRANGER_FRAGMENT = "strangerFragment";
 
     final String NAV_TAG = "nav";
     final String PROFiLE_TAG = "profiletag";
@@ -94,6 +99,17 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
                 FirebaseUser user=firebaseAuth.getCurrentUser();
                 if(user!=null) { //sign up or sign in
                     getLocationUpdates();
+
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (task.isSuccessful()){
+                                String token = task.getResult().getToken();
+                                dataBaseClass.saveUserToken(token);
+                            }
+                        }
+                    });
+
                     //dataBaseClass.updateActive(true);
                     Toast.makeText(MainActivity.this,user.getUid(),Toast.LENGTH_LONG).show();
                 }
@@ -307,7 +323,15 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
 
     @Override
     public void onFindPeopleClicked() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout, new FindPeopleFragment(), FIND_PEOPLE).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new FindPeopleFragment(), FIND_PEOPLE).addToBackStack(null).commit();
+    }
+
+    //when a stranger at findPeopleFragment recycler is clicked
+
+    @Override
+    public void onStrangerCellClicked(String strangerId, boolean isRequested) {
+        StrangerFragment strangerFragment = StrangerFragment.newInstance(strangerId, isRequested);
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, strangerFragment, STRANGER_FRAGMENT).addToBackStack(null).commit();
     }
 
     @Override

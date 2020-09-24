@@ -59,8 +59,13 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
     public void onGetUser() {
         title.setText("hello"+ " " +user.getUser().getFullName());
         Log.d("sun",user.getUser().getLatitude()+"");
-        if(user.getUser().getLongitude()==0||user.getUser().getLatitude()!=0)
+
+        //String city = viewModel.getAddress(getContext(),user.getUser().getLatitude(),user.getUser().getLongitude());
+       // locationtext.setText(city);
+
+        if(user.getUser().getLongitude()!=0||user.getUser().getLatitude()!=0)
             locationtext.setText(viewModel.getAddress(getContext(),user.getUser().getLatitude(),user.getUser().getLongitude()));
+
 
     }
 
@@ -75,6 +80,13 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
         locationtext = root.findViewById(R.id.locationText);
         if(user.getUser().getFullName()!=null){
             title.setText("hello"+ " " +user.getUser().getFullName());
+
+            //Log.d("home", ""+ user.getUser().getFullName());
+            //Log.d("home", ""+ user.getUser().getLatitude());
+           // String city = viewModel.getAddress(getActivity(),user.getUser().getLatitude(),user.getUser().getLongitude());
+
+           // locationtext.setText(city);
+
         }
 
 
