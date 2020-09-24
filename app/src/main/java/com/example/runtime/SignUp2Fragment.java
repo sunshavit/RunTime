@@ -38,10 +38,10 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
     private SignUpVM viewModel;
     private String gender;
     private String level;
-    int yearOfBirth;
-    int monthOfBirth;
-    int dayOfMonthOfBirth;
-    final int PICK_IMAGE_REQUEST=1;
+    private int yearOfBirth;
+    private int monthOfBirth;
+    private int dayOfMonthOfBirth;
+    private final int PICK_IMAGE_REQUEST=1;
     private Uri filePath;
     private ImageView imageViewProfile;
     private DataBaseClass dataBaseClass;

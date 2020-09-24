@@ -31,6 +31,10 @@ public class DataBaseClass {
 
     private static DataBaseClass dataBaseClass = null;
 
+    interface OnLocationUpdateListener{
+        void onLocationUpdate();
+    }
+
     interface OnGetUserImage {
         void onSuccessGetImage(String uri);
 
@@ -67,6 +71,7 @@ public class DataBaseClass {
     private OnSaveImageListener callBackImage;
     private OnUserListsListener callBackUserLists;
     private OnGetUserImage callBackGetImage;
+    private OnLocationUpdateListener updateListener;
 
     private DataBaseClass() {
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -158,7 +163,8 @@ public class DataBaseClass {
         DatabaseReference specificUser = users.child(registerClass.getUserId());
         specificUser.child("longitude").setValue(longitude);
         specificUser.child("latitude").setValue(latitude);
-
+        if(updateListener!=null)
+            updateListener.onLocationUpdate();
     }
 
     public void getImage() {
@@ -193,6 +199,10 @@ public class DataBaseClass {
         this.callBackImage = callBackImage;
     }
 
+    public void setUpdateLocationListener(OnLocationUpdateListener updateListener) {
+        this.updateListener = updateListener;
+    }
+
     public void setCallBackUserLists(OnUserListsListener callBackUserLists) {
         this.callBackUserLists = callBackUserLists;
     }
@@ -210,13 +220,24 @@ public class DataBaseClass {
         userPreferenceTable.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
     }
 
-    public StorageReference retrieveImageStorageReference(String UserId) {
-        StorageReference storageReference1 = FirebaseStorage.getInstance().getReference().child("profileImages/" + UserId);
-        return storageReference1;
+        public StorageReference retrieveImageStorageReference(String UserId) {
+            StorageReference storageReference1 = FirebaseStorage.getInstance().getReference().child("profileImages/" + UserId);
+            return storageReference1;
     }
         public void setCallBackGetImage(OnGetUserImage callBackGetImage){
             this.callBackGetImage = callBackGetImage;
 
         }
+
+        public void updateName(String name){
+            DatabaseReference databaseReferenceNew = firebaseDatabase.getReference().child("user").child(registerClass.getUserId());
+            databaseReferenceNew.child("fullName").setValue(name);
+        }
+
+    public void updateRunningLevel(String level){
+        DatabaseReference databaseReferenceNew = firebaseDatabase.getReference().child("user").child(registerClass.getUserId());
+        databaseReferenceNew.child("runningLevel").setValue(level);
+    }
+
     }
 
