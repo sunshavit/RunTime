@@ -29,7 +29,10 @@ import com.google.android.material.navigation.NavigationView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
@@ -109,8 +112,38 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
-                FirebaseUser user=firebaseAuth.getCurrentUser();
+                fragmentManager = getSupportFragmentManager();
+                final FirebaseUser user=firebaseAuth.getCurrentUser();
                 if(user!=null) { //sign up or sign in
+
+                    ValueEventListener listener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.hasChild("gender")){
+
+                                Log.d("home", "snapshot");
+
+                                fragmentTransaction = fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG);
+                                fragmentTransaction.commit();
+
+                                fragmentManager.beginTransaction().replace(R.id.toolbarLayout,new ToolBarFragment(),TOOLBAR_TAG).commit();
+
+                                fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),NAV_TAG).commit();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    };
+
+                    dataBaseClass.isUserExists(registerClass.getUserId(), listener);
+                    //UserInstance userInstance = UserInstance.getInstance();
+                    /*if (userInstance.getUser().getGender() != null){
+
+
+                    }*/
                     getLocationUpdates();
 
                     FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -122,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
                             }
                         }
                     });
+
+
 
                     //dataBaseClass.updateActive(true);
                     Toast.makeText(MainActivity.this,user.getUid(),Toast.LENGTH_LONG).show();
@@ -138,9 +173,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
             }
         };
 
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction().add(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG);
-        fragmentTransaction.commit();
+
+
+
 
         drawerLayout = findViewById(R.id.drawerLayout);
         NavigationView navigationView = findViewById(R.id.NavigationSide);
@@ -326,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
 
             fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
 
-           
+            fragmentManager.beginTransaction().replace(R.id.toolbarLayout,new ToolBarFragment(),TOOLBAR_TAG).commit();
             fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),"nav").commit();
 
         }
@@ -351,7 +386,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId()==android.R.id.home)
-            drawerLayout.openDrawer(Gravity.LEFT);
+            drawerLayout.openDrawer(GravityCompat.START);
         if(item.getItemId()==R.id.editProfileSidebar)
             fragmentManager.beginTransaction().replace(R.id.rootLayout, new EditProfileFragment(), "editProfile").commit();
         return super.onOptionsItemSelected(item);

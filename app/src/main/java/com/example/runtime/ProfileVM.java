@@ -33,13 +33,16 @@ public class ProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage
     }
 
     public String getAddress(Context context, double latitude, double longitude){
-        Geocoder geocoder = new Geocoder(context , Locale.getDefault());
-        try {
-            return geocoder.getFromLocation(latitude,longitude,1).get(0).getLocality();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(latitude != 0 || longitude != 0){
+            Geocoder geocoder = new Geocoder(context , Locale.getDefault());
+            try {
+                return geocoder.getFromLocation(latitude,longitude,1).get(0).getLocality();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
+
+        return " ";
     }
 
     public int getAge(int year, int month, int day){
