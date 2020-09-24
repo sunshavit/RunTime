@@ -130,10 +130,10 @@ public class FindPeopleVM extends AndroidViewModel {
                     for (DataSnapshot snapshot1 : snapshot.getChildren()){
                         User user = snapshot1.getValue(User.class);
                         Log.d("tag", "inside first listener");
-                        if(user != null){
-                            Log.d("tag1", user.toString());
-                            Log.d("tag1", user.getFullName());
-                        }
+                       /* if(user != null){
+                         //   Log.d("tag1", user.toString());
+                           // Log.d("tag1", user.getFullName());
+                        }*/
 
                         usersFromDatabase.add(user);
 
@@ -196,6 +196,8 @@ public class FindPeopleVM extends AndroidViewModel {
         double latitude = currentUser.getLatitude();
         //user preferences
         String preferredGender = userPreferences.getGender();
+
+        Log.d("gender", preferredGender);
         String preferredLevel = userPreferences.getRuningLevel();
         int preferredFromAge = userPreferences.getFromAge();
         int preferredToAge = userPreferences.getToAge();
@@ -210,6 +212,7 @@ public class FindPeopleVM extends AndroidViewModel {
             Log.d("distance", distance+"");
 
             //also check if user not on friends list already!
+            Log.d("user", user.getGender());
             if(user.getGender().equals(preferredGender)
                     && user.getRunningLevel().equals(preferredLevel)
                     && age >= preferredFromAge && age <= preferredToAge
