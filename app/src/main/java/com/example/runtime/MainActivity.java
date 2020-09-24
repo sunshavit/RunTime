@@ -3,11 +3,12 @@ package com.example.runtime;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -20,10 +21,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,7 +36,8 @@ import com.google.firebase.iid.InstanceIdResult;
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.CreateNewEventListener, BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
         ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
-        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener, FindPeopleFragment.OnStrangerCellClickListener{
+        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener, CreateEventFragment.OnMapListener,MapFragment.OnCreateEventListener, FindPeopleFragment.OnStrangerCellClickListener {
+
     // where to do the user authentication
     // local time and local date require sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
@@ -47,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     final String SIGNUP3TAG="signup3tag";
     final String HOME_TAG="homeTag";
     final String CREATEEVENT_TAG="eventtag";
+
+    final String MAP_TAG="map_tag";
+
     final String TOOLBAR_TAG="toolbartag";
 
     final String FIND_PEOPLE = "findPeople";
@@ -54,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
 
     final String NAV_TAG = "nav";
     final String PROFiLE_TAG = "profiletag";
+
 
     private boolean isFirstFragment=true;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -64,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     private HomeFragment homeFragment = new HomeFragment();
     private UserInstance userInstance;
     private DrawerLayout drawerLayout;
+
+    CreateEventFragment fragment;
 
 
 
@@ -89,7 +99,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
         dataBaseClass.setCallBackUserLists(this);
         homeFragment.setFindPeopleCallback(this);
 
+
+
         //registerClass.stateListener();
+        fragment = new CreateEventFragment();
 
 
         authStateListener=new FirebaseAuth.AuthStateListener() {
@@ -146,7 +159,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
 
     @Override
     public void onCreateNewEvent() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new CreateEventFragment(),CREATEEVENT_TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new CreateEventFragment(),CREATEEVENT_TAG).addToBackStack(null).commit();
+
     }
 
     @Override
@@ -341,6 +355,20 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
         if(item.getItemId()==R.id.editProfileSidebar)
             fragmentManager.beginTransaction().replace(R.id.rootLayout, new EditProfileFragment(), "editProfile").commit();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onMapOkClick() {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new MapFragment(), MAP_TAG).commit();
+    }
+
+    @Override
+    public void onCreateEvent(String streetAddress) {
+        Fragment fragment=getSupportFragmentManager().findFragmentByTag(CREATEEVENT_TAG);
+        CreateEventFragment fragment1=(CreateEventFragment)fragment;
+        getSupportFragmentManager().beginTransaction().replace(R.id.rootLayout,fragment1).commit();
+        fragment1.updateLocationEt(streetAddress);
+
     }
 
 }
