@@ -19,6 +19,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.Set;
 
 public class DataBaseClass {
@@ -32,6 +33,8 @@ public class DataBaseClass {
 
 
     private static DataBaseClass dataBaseClass = null;
+
+
 
     interface OnLocationUpdateListener{
         void onLocationUpdate();
@@ -113,6 +116,13 @@ public class DataBaseClass {
         });
     }
 
+    public void isUserExists(String userId, ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference user = databaseReference.child("user");
+        DatabaseReference currentUser = user.child(userId);
+        currentUser.addListenerForSingleValueEvent(listener);
+    }
+
     public void createPreferences(UserPreferences userPreferences) {
         databaseReference = firebaseDatabase.getReference();
         DatabaseReference databaseReference1 = databaseReference.child("user_preferences");
@@ -168,12 +178,15 @@ public class DataBaseClass {
     }
 
     public void updateLocation(double longitude, double latitude) {
-        DatabaseReference users = databaseReference.child("user");
-        DatabaseReference specificUser = users.child(registerClass.getUserId());
-        specificUser.child("longitude").setValue(longitude);
-        specificUser.child("latitude").setValue(latitude);
-        if(updateListener!=null)
-            updateListener.onLocationUpdate();
+
+        if(registerClass.getCurrentUser() != null){
+            DatabaseReference users = databaseReference.child("user");
+            DatabaseReference specificUser = users.child(registerClass.getUserId());
+            specificUser.child("longitude").setValue(longitude);
+            specificUser.child("latitude").setValue(latitude);
+            if(updateListener!=null)
+                updateListener.onLocationUpdate();
+        }
     }
 
     public void updateSentFriendRequest(String strangerId, String userId){
