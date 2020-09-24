@@ -1,67 +1,77 @@
 package com.example.runtime;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserLists {
-    private ArrayList<String> myFriends ;
-    private ArrayList<String> myEvent ;
-    private ArrayList<String> friendsRequests;
-    private ArrayList<String> eventRequests;
-    private ArrayList<String> managedEvent;
+    //turn all lists to HashMaps
+    private HashMap<String, Boolean> myFriends ;
+    private HashMap<String, Boolean> myEvents ;
+    private HashMap<String, Boolean> friendsRequests;
+    private HashMap<String, Boolean> eventRequests;
+    private HashMap<String, Boolean> managedEvents;
+    private HashMap<String, Boolean> sentFriendsRequests;
 
     public UserLists() {
-        myFriends = new ArrayList<>();
-        myEvent = new ArrayList<>();
-        friendsRequests = new ArrayList<>();
-        eventRequests = new ArrayList<>();
-        managedEvent = new ArrayList<>();
+        myFriends = new HashMap<>();
+        myEvents = new HashMap<>();
+        friendsRequests = new HashMap<>();
+        eventRequests = new HashMap<>();
+        managedEvents = new HashMap<>();
+        sentFriendsRequests = new HashMap<>();
 
-        myFriends.add("false");
-        myEvent.add("false");
-        friendsRequests.add("false");
-        eventRequests.add("false");
-        managedEvent.add("false");
+        myFriends.put("false", false);
+        myEvents.put("false", false);
+        friendsRequests.put("false", false);
+        eventRequests.put("false", false);
+        managedEvents.put("false", false);
+        sentFriendsRequests.put("false", false);
     }
 
-
-
-    public ArrayList<String> getMyFriends() {
+    public HashMap<String, Boolean> getMyFriends() {
         return myFriends;
     }
 
-    public void setMyFriends(ArrayList<String> myFriends) {
+    public void setMyFriends(HashMap<String, Boolean> myFriends) {
         this.myFriends = myFriends;
     }
 
-    public ArrayList<String> getMyEvent() {
-        return myEvent;
+    public HashMap<String, Boolean> getMyEvents() {
+        return myEvents;
     }
 
-    public void setMyEvent(ArrayList<String> myEvent) {
-        this.myEvent = myEvent;
+    public void setMyEvents(HashMap<String, Boolean> myEvents) {
+        this.myEvents = myEvents;
     }
 
-    public ArrayList<String> getFriendsRequests() {
+    public HashMap<String, Boolean> getFriendsRequests() {
         return friendsRequests;
     }
 
-    public void setFriendsRequests(ArrayList<String> friendsRequests) {
+    public void setFriendsRequests(HashMap<String, Boolean> friendsRequests) {
         this.friendsRequests = friendsRequests;
     }
 
-    public ArrayList<String> getEventRequests() {
+    public HashMap<String, Boolean> getEventRequests() {
         return eventRequests;
     }
 
-    public void setEventRequests(ArrayList<String> eventRequests) {
+    public void setEventRequests(HashMap<String, Boolean> eventRequests) {
         this.eventRequests = eventRequests;
     }
 
-    public ArrayList<String> getManagedEvent() {
-        return managedEvent;
+    public HashMap<String, Boolean> getManagedEvents() {
+        return managedEvents;
     }
 
-    public void setManagedEvent(ArrayList<String> managedEvent) {
-        this.managedEvent = managedEvent;
+    public void setManagedEvents(HashMap<String, Boolean> managedEvents) {
+        this.managedEvents = managedEvents;
+    }
+
+    public HashMap<String, Boolean> getSentFriendsRequests() {
+        return sentFriendsRequests;
+    }
+
+    public void setSentFriendsRequests(HashMap<String, Boolean> sentFriendsRequests) {
+        this.sentFriendsRequests = sentFriendsRequests;
     }
 }

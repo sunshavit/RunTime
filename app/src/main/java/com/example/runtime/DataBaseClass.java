@@ -27,6 +27,7 @@ public class DataBaseClass {
     private final String USERSTABLE = "users";
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
+    //private UserInstance userInstance = UserInstance.getInstance();
 
 
     private static DataBaseClass dataBaseClass = null;
@@ -218,5 +219,27 @@ public class DataBaseClass {
             this.callBackGetImage = callBackGetImage;
 
         }
+
+    public void createNewEvent(Event event, String userId){
+        databaseReference = firebaseDatabase.getReference(); //to get root
+        DatabaseReference events = databaseReference.child("events");
+        DatabaseReference newEvent = events.push();
+        String eventKey = newEvent.getKey();
+        event.setEventId(eventKey);
+        events.child(eventKey).setValue(event); //save new event to events.
+
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        DatabaseReference managedEvents = currentUser.child("managedEvents");
+        DatabaseReference myEvents = currentUser.child("myEvents");
+
+        myEvents.child(eventKey).setValue(eventKey);
+        managedEvents.child(eventKey).setValue(eventKey);
+
+
     }
+
+    }
+
+
 
