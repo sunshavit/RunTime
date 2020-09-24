@@ -19,6 +19,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class DataBaseClass {
     private FirebaseDatabase firebaseDatabase;
@@ -83,6 +84,13 @@ public class DataBaseClass {
         }
         return dataBaseClass;
 
+    }
+
+    public void saveUserToken(String token) {
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference users = databaseReference.child("user");
+        DatabaseReference currentUser = users.child(registerClass.getUserId());
+        currentUser.child("userToken").setValue(token);
     }
 
     public void createUser(User user) {
@@ -160,6 +168,46 @@ public class DataBaseClass {
         specificUser.child("latitude").setValue(latitude);
 
     }
+
+    public void updateSentFriendRequest(String strangerId, String userId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUserLists = userLists.child(userId);
+        DatabaseReference strangerLists = userLists.child(strangerId);
+        currentUserLists.child("sentFriendsRequests").child(strangerId).setValue(true);
+        strangerLists.child("friendsRequests").child(userId).setValue(true);
+    }
+
+    public void updateCanceledFriendRequest(String strangerId, String userId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUserLists = userLists.child(userId);
+        DatabaseReference strangerLists = userLists.child(strangerId);
+        currentUserLists.child("sentFriendsRequests").child(strangerId).removeValue();
+        strangerLists.child("friendsRequests").child(userId).removeValue();
+    }
+
+    public void retrieveUserById(String userId, ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference users = databaseReference.child("user");
+        users.child(userId).addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveSentRequests(ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(registerClass.getUserId());
+        currentUser.child("sentFriendsRequests").addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveUserToken(String userId, ValueEventListener listener) {
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference users = databaseReference.child("user");
+        DatabaseReference specificUser = users.child(userId);
+        specificUser.child("userToken").addListenerForSingleValueEvent(listener);
+    }
+
+
 
     public void getImage() {
         StorageReference reference = storageReference.child("profileImages/" + RegisterClass.getInstance().getUserId());
