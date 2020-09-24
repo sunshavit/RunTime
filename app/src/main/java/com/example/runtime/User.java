@@ -10,7 +10,6 @@ public class User {
     private boolean isActive;
     private double longitude;
     private double latitude;
-
     private String userId;
     private String userToken;
 
