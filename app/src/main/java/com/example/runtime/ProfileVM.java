@@ -42,16 +42,22 @@ public class ProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage
         return null;
     }
 
-    public int getAge(int year,int month , int days){
-        Calendar calendar = Calendar.getInstance();
-        int yearNow = calendar.get(Calendar.YEAR);
-        int monthNow = calendar.get(Calendar.MONTH);
-        int dayNow = calendar.get(Calendar.DAY_OF_MONTH);
-        if(dayNow>days)
-            month--;
-        if(monthNow>month)
-            year++;
-        return yearNow-year;
+    public int getAge(int year, int month, int day){
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        dob.set(year, month, day);
+
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
+            age--;
+        }
+
+        Integer ageInt = Integer.valueOf(age);
+        //String ageS = ageInt.toString();
+
+        return ageInt;
     }
 
     public void getImageFromData(){
