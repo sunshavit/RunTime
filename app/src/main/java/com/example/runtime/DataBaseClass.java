@@ -276,7 +276,7 @@ public class DataBaseClass {
     }
 
     public void retrieveUserPreferences(ValueEventListener listener) {
-        final UserPreferences[] userPreferences = new UserPreferences[1];
+        //final UserPreferences[] userPreferences = new UserPreferences[1];
         databaseReference = firebaseDatabase.getReference();
         DatabaseReference userPreferenceTable = databaseReference.child("user_preferences");
         userPreferenceTable.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
