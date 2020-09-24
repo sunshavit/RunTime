@@ -141,6 +141,7 @@ public class RegisterClass {
     }
 
     public String getUserId(){
+
         return firebaseAuth.getCurrentUser().getUid();
 
     }
