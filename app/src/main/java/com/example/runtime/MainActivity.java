@@ -3,6 +3,11 @@ package com.example.runtime;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -10,16 +15,29 @@ import androidx.lifecycle.Observer;
 
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.CreateNewEventListener, BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
         ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
-        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener, CreateEventFragment.OnMapListener,MapFragment.OnCreateEventListener {
+        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener, CreateEventFragment.OnMapListener,MapFragment.OnCreateEventListener, FindPeopleFragment.OnStrangerCellClickListener {
+
     // where to do the user authentication
     // local time and local date require sdk 26
 //    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
@@ -33,8 +51,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     final String SIGNUP3TAG="signup3tag";
     final String HOME_TAG="homeTag";
     final String CREATEEVENT_TAG="eventtag";
+
     final String MAP_TAG="map_tag";
+
+    final String TOOLBAR_TAG="toolbartag";
+
     final String FIND_PEOPLE = "findPeople";
+    final String STRANGER_FRAGMENT = "strangerFragment";
 
     final String NAV_TAG = "nav";
     final String PROFiLE_TAG = "profiletag";
@@ -48,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     private boolean isUserListsCreated;
     private HomeFragment homeFragment = new HomeFragment();
     private UserInstance userInstance;
+    private DrawerLayout drawerLayout;
 
     CreateEventFragment fragment;
 
@@ -88,11 +112,27 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
                 FirebaseUser user=firebaseAuth.getCurrentUser();
                 if(user!=null) { //sign up or sign in
                     getLocationUpdates();
+
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (task.isSuccessful()){
+                                String token = task.getResult().getToken();
+                                dataBaseClass.saveUserToken(token);
+                            }
+                        }
+                    });
+
                     //dataBaseClass.updateActive(true);
                     Toast.makeText(MainActivity.this,user.getUid(),Toast.LENGTH_LONG).show();
                 }
-                else { //sign out
-
+                else {
+                    fragmentManager.beginTransaction().replace(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG).commit();
+                    Fragment toolBarFragment =getSupportFragmentManager().findFragmentByTag(TOOLBAR_TAG);
+                    if(toolBarFragment!=null) {
+                        fragmentManager.beginTransaction().remove(toolBarFragment).commit();
+                        fragmentManager.beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(NAV_TAG)).commit();
+                    }
                 }
 
             }
@@ -102,7 +142,19 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
         fragmentTransaction = fragmentManager.beginTransaction().add(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG);
         fragmentTransaction.commit();
 
-
+        drawerLayout = findViewById(R.id.drawerLayout);
+        NavigationView navigationView = findViewById(R.id.NavigationSide);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.signOutSidebar:
+                        registerClass.signOut();
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -234,6 +286,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     @Override
     public void onSuccessSignIn(String userId) {
 
+        fragmentManager.beginTransaction().replace(R.id.toolbarLayout,new ToolBarFragment(),TOOLBAR_TAG).commit();
+
         fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
 
         fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),NAV_TAG).commit();
@@ -283,7 +337,24 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
 
     @Override
     public void onFindPeopleClicked() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout, new FindPeopleFragment(), FIND_PEOPLE).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new FindPeopleFragment(), FIND_PEOPLE).addToBackStack(null).commit();
+    }
+
+    //when a stranger at findPeopleFragment recycler is clicked
+
+    @Override
+    public void onStrangerCellClicked(String strangerId, boolean isRequested) {
+        StrangerFragment strangerFragment = StrangerFragment.newInstance(strangerId, isRequested);
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, strangerFragment, STRANGER_FRAGMENT).addToBackStack(null).commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==android.R.id.home)
+            drawerLayout.openDrawer(Gravity.LEFT);
+        if(item.getItemId()==R.id.editProfileSidebar)
+            fragmentManager.beginTransaction().replace(R.id.rootLayout, new EditProfileFragment(), "editProfile").commit();
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

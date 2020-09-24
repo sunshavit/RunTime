@@ -1,7 +1,6 @@
 package com.example.runtime;
 
 import android.content.Context;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+
+import androidx.lifecycle.Observer;
+
 
 
 public class HomeFragment extends Fragment implements UserInstance.OnGetUserListener {
@@ -45,6 +48,7 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel= new ViewModelProvider(getActivity()).get(HomeVM.class);
+        viewModel.setContext(getContext());
         try {
             createnewEventCallBack = (CreateNewEventListener) context;
         }
@@ -57,8 +61,17 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
     public void onGetUser() {
         title.setText("hello"+ " " +user.getUser().getFullName());
         Log.d("sun",user.getUser().getLatitude()+"");
-        String city = viewModel.getAddress(getContext(),user.getUser().getLatitude(),user.getUser().getLongitude());
-        locationtext.setText(city);
+
+       // String city = viewModel.getAddress(getContext(),user.getUser().getLatitude(),user.getUser().getLongitude());
+      //  locationtext.setText(city);
+
+
+        //String city = viewModel.getAddress(getContext(),user.getUser().getLatitude(),user.getUser().getLongitude());
+       // locationtext.setText(city);
+
+        if(user.getUser().getLongitude()!=0||user.getUser().getLatitude()!=0)
+            locationtext.setText(viewModel.getAddress(getContext(),user.getUser().getLatitude(),user.getUser().getLongitude()));
+
 
     }
 
@@ -71,11 +84,26 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
         user.setCallBackUserGet(this);
         title = root.findViewById(R.id.helloLabelMain);
         locationtext = root.findViewById(R.id.locationText);
-        if(user.getUser()!=null){
+        if(user.getUser().getFullName()!=null){
             title.setText("hello"+ " " +user.getUser().getFullName());
-            String city = viewModel.getAddress(getActivity(),user.getUser().getLatitude(),user.getUser().getLongitude());
-            locationtext.setText(city);
+
+            //Log.d("home", ""+ user.getUser().getFullName());
+            //Log.d("home", ""+ user.getUser().getLatitude());
+           // String city = viewModel.getAddress(getActivity(),user.getUser().getLatitude(),user.getUser().getLongitude());
+
+           // locationtext.setText(city);
+
         }
+
+
+        Observer<String> observerLocation = new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                locationtext.setText(s);
+            }
+        };
+
+        viewModel.getLocation().observe(this,observerLocation);
 
 
         ToggleButton activeBtn = root.findViewById(R.id.active_btn);

@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class ProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage {
@@ -41,6 +42,17 @@ public class ProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage
         return null;
     }
 
+    public int getAge(int year,int month , int days){
+        Calendar calendar = Calendar.getInstance();
+        int yearNow = calendar.get(Calendar.YEAR);
+        int monthNow = calendar.get(Calendar.MONTH);
+        int dayNow = calendar.get(Calendar.DAY_OF_MONTH);
+        if(dayNow>days)
+            month--;
+        if(monthNow>month)
+            year++;
+        return yearNow-year;
+    }
 
     public void getImageFromData(){
         dataBaseClass.getImage();

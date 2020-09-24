@@ -6,29 +6,42 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class FindPeopleFragment extends Fragment {
+public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.AddFriendBtnListener, FindPeopleAdapter.StrangerClickListener {
 
     private FindPeopleVM viewModel;
     private ArrayList<User> relevantUsers = new ArrayList<>();
     private FindPeopleAdapter adapter;
+    private ArrayList<String> recentSentRequests = new ArrayList<>();
+
+    interface OnStrangerCellClickListener{
+       void onStrangerCellClicked(String strangerId, boolean isRequested);
+    }
+
+    OnStrangerCellClickListener strangerCellCallback;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel= new ViewModelProvider(getActivity()).get(FindPeopleVM.class);
+        //viewModel= new ViewModelProvider(getActivity()).get(FindPeopleVM.class);
+        viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(FindPeopleVM.class);
+
+        try {
+            strangerCellCallback = (OnStrangerCellClickListener) context;
+        } catch (ClassCastException e){
+            throw new ClassCastException("Activity must implement OnStrangerCellClickedListener");
+        }
     }
 
     @Nullable
@@ -38,25 +51,70 @@ public class FindPeopleFragment extends Fragment {
         View root = inflater.inflate(R.layout.find_people_fragment, container, false);
         RecyclerView recyclerView = root.findViewById(R.id.findPeopleRecycler);
         //TextView locationTV = root.findViewById(R.id.findPeopleLocationTV);//geocode address
-        adapter = new FindPeopleAdapter(relevantUsers, getContext());
+        Log.d("tag2", relevantUsers.size()+"");
+
+        adapter = new FindPeopleAdapter(relevantUsers, getContext(), recentSentRequests);
         recyclerView.setAdapter(adapter);
+        adapter.setAddFriendCallback(this);
+        adapter.setStrangerClickCallback(this);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(),2);
         recyclerView.setLayoutManager(manager);
-        viewModel.retrieveUsersList();
 
         viewModel.getRelevantUsers().observe(this, new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
 
+                relevantUsers.clear();
                 relevantUsers.addAll(users);
-                Log.d("tag", "inside observe" + users.get(0).getFullName());
+               // Log.d("tag2", "inside observe " + users.get(0).getFullName());
+                Log.d("tag2", relevantUsers.size()+"");
                 adapter.notifyDataSetChanged();
 
             }
         });
 
 
+
+
+
+        //observation was here
+
+
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.getSentRequests();
+        viewModel.getRecentSentRequests().observe(this, new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(ArrayList<String> strings) {
+
+                recentSentRequests.clear();
+                recentSentRequests.addAll(strings);
+                adapter.notifyDataSetChanged();
+                // Log.d("tag2", "inside observe " + users.get(0).getFullName());
+                Log.d("tag2", "inside observer");
+                Log.d("tag2", recentSentRequests.size()+"");
+
+            }
+        });
+    }
+
+    @Override
+    public void onSendFriendRequest(String strangerId) {
+       viewModel.onSendFriendRequest(strangerId);
+    }
+
+    @Override
+    public void onCancelFriendRequest(String strangerId) {
+        viewModel.onCancelFriendRequest(strangerId);
+    }
+
+    @Override
+    public void onStrangerClicked(String strangerId, boolean isRequested) {
+        strangerCellCallback.onStrangerCellClicked(strangerId, isRequested);
     }
 }
