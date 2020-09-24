@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Calendar;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment {
@@ -45,6 +47,7 @@ public class ProfileFragment extends Fragment {
             }
         };
 
+
         profileVM.getImageLivedata().observe(this , resultObserverImage);
 
         final TextView textViewLocation = root.findViewById(R.id.locationProfileTV);
@@ -55,7 +58,7 @@ public class ProfileFragment extends Fragment {
         Observer<User> observerUser = new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                textViewAge.setText(user.getDayOfMonth()+"/"+user.getMonth()+"/"+user.getYear());
+                textViewAge.setText(profileVM.getAge(user.getYear(),user.getMonth(),user.getDayOfMonth())+"");
                 textViewLevel.setText(user.getRunningLevel());
                 textViewLocation.setText(profileVM.getAddress(context,user.getLatitude(),user.getLongitude()));
                 textViewName.setText(user.getFullName());

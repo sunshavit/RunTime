@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import androidx.fragment.app.FragmentManager;
@@ -12,9 +14,14 @@ import androidx.lifecycle.Observer;
 
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -36,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     final String SIGNUP3TAG="signup3tag";
     final String HOME_TAG="homeTag";
     final String CREATEEVENT_TAG="eventtag";
+    final String TOOLBAR_TAG="toolbartag";
 
     final String FIND_PEOPLE = "findPeople";
 
@@ -50,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     private boolean isUserListsCreated;
     private HomeFragment homeFragment = new HomeFragment();
     private UserInstance userInstance;
+    private DrawerLayout drawerLayout;
 
 
 
@@ -57,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     // private FirebaseStorage firebaseStorage;
     RegisterClass registerClass;
     DataBaseClass dataBaseClass;
+
 
 
     @Override
@@ -87,8 +97,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
                     //dataBaseClass.updateActive(true);
                     Toast.makeText(MainActivity.this,user.getUid(),Toast.LENGTH_LONG).show();
                 }
-                else { //sign out
-
+                else {
+                    fragmentManager.beginTransaction().replace(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG).commit();
+                    Fragment toolBarFragment =getSupportFragmentManager().findFragmentByTag(TOOLBAR_TAG);
+                    if(toolBarFragment!=null) {
+                        fragmentManager.beginTransaction().remove(toolBarFragment).commit();
+                        fragmentManager.beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(NAV_TAG)).commit();
+                    }
                 }
 
             }
@@ -98,7 +113,19 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
         fragmentTransaction = fragmentManager.beginTransaction().add(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG);
         fragmentTransaction.commit();
 
-
+        drawerLayout = findViewById(R.id.drawerLayout);
+        NavigationView navigationView = findViewById(R.id.NavigationSide);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.signOutSidebar:
+                        registerClass.signOut();
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -229,6 +256,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     @Override
     public void onSuccessSignIn(String userId) {
 
+        fragmentManager.beginTransaction().replace(R.id.toolbarLayout,new ToolBarFragment(),TOOLBAR_TAG).commit();
+
         fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
 
         fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),NAV_TAG).commit();
@@ -279,6 +308,15 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     @Override
     public void onFindPeopleClicked() {
         fragmentManager.beginTransaction().replace(R.id.rootLayout, new FindPeopleFragment(), FIND_PEOPLE).commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==android.R.id.home)
+            drawerLayout.openDrawer(Gravity.LEFT);
+        if(item.getItemId()==R.id.editProfileSidebar)
+            fragmentManager.beginTransaction().replace(R.id.rootLayout, new EditProfileFragment(), "editProfile").commit();
+        return super.onOptionsItemSelected(item);
     }
 
 }
