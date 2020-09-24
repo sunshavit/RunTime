@@ -1,30 +1,63 @@
 package com.example.runtime;
 
+
+import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.solver.widgets.Snapshot;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.storage.StorageReference;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class FindPeopleVM extends ViewModel {
+public class FindPeopleVM extends AndroidViewModel {
 
     MutableLiveData<ArrayList<User>> relevantUsers = new MutableLiveData<>();
+    MutableLiveData<ArrayList<String>> recentSentRequests = new MutableLiveData<>();
+    ArrayList<String> recentSentRequestsArrayList = new ArrayList<>();
+    ArrayList<User> relevant = new ArrayList<>();
     private User currentUser;
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
     private ArrayList<User> usersFromDatabase = new ArrayList<>();
-    UserPreferences userPreferences;
+    private UserPreferences userPreferences;
+    private final String API_TOKEN_KEY = "AAAAfwvvO64:APA91bG6RWYJYEROIIoBMpzKm6kMdCbqDdqpzhynZ4YnFKEiQ0vu5QuLfJdGTtlixdzqBoL2Ul99A5Mf9kspOh8Whz9U-AY1-7rQTBiOUNUeYZM3UHh4A7Tm4Kb-u4Hrv98zApJn76NQ";
+
+    public FindPeopleVM(@NonNull Application application) {
+        super(application);
+        retrieveUsersList();
+        getSentRequests();
+    }
 
 
 
+   /* public FindPeopleVM() {
+        retrieveUsersList();
+        getSentRequests();
+    }*/
 
     public void retrieveUsersList(){
 
@@ -88,6 +121,8 @@ public class FindPeopleVM extends ViewModel {
     //trying
 
     private void getAllUsersList(){
+
+        usersFromDatabase.clear();
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -96,15 +131,15 @@ public class FindPeopleVM extends ViewModel {
                         User user = snapshot1.getValue(User.class);
                         Log.d("tag", "inside first listener");
                         if(user != null){
-                            Log.d("tag", user.toString());
-                            Log.d("tag", user.getFullName());
+                            Log.d("tag1", user.toString());
+                            Log.d("tag1", user.getFullName());
                         }
 
                         usersFromDatabase.add(user);
 
                     }
-                    Log.d("tag", usersFromDatabase.get(3).getGender());
-                    Log.d("tag", usersFromDatabase.toString());
+                    Log.d("tag1", usersFromDatabase.get(0).getGender());
+                    Log.d("tag1", usersFromDatabase.toString());
                     getUserPreferences();
                 }
             }
@@ -154,8 +189,8 @@ public class FindPeopleVM extends ViewModel {
         Log.d("tag", "inside final function");
         Log.d("tag", userPreferences.getRuningLevel());
         Log.d("tag", currentUser.getFullName());
-        Log.d("tag", usersFromDatabase.get(2).getFullName());
-        Log.d("tag", usersFromDatabase.get(3).getFullName());
+        Log.d("tag", usersFromDatabase.get(0).getFullName());
+        Log.d("tag", usersFromDatabase.get(0).getFullName());
         //user location
         double longitude = currentUser.getLongitude();
         double latitude = currentUser.getLatitude();
@@ -166,26 +201,150 @@ public class FindPeopleVM extends ViewModel {
         int preferredToAge = userPreferences.getToAge();
 
         //choosing only relevant users from the list
-        ArrayList<User> relevant = new ArrayList<>();
+       // ArrayList<User> relevant = new ArrayList<>();
 
         for (User user : usersFromDatabase){
 
             int age = getAge(user.getYear(), user.getMonth(), user.getDayOfMonth());
-            double distance = haversine(user.getLatitude(), user.getLongitude(), longitude, latitude);
+            double distance = haversine(user.getLatitude(), user.getLongitude(), latitude, longitude);
+            Log.d("distance", distance+"");
 
+            //also check if user not on friends list already!
             if(user.getGender().equals(preferredGender)
-                    //&&
-                   // user.getRunningLevel().equals(preferredLevel)&&
-                  //  distance < 1 && age >= preferredFromAge && age <= preferredToAge
-                      ){
+                    && user.getRunningLevel().equals(preferredLevel)
+                    && age >= preferredFromAge && age <= preferredToAge
+                    && distance < 20
+                    && !(user.getUserId().equals(currentUser.getUserId()))
+                     ) {
                 relevant.add(user);
+                Log.d("distance", "relevant user distance " +distance+"");
+                Log.d("tag2", "inside findRelevant users "+relevant.size()+"");
             }
         }
 
-        Log.d("tag", "relevant" + relevant.get(0).getFullName());
-
-        relevantUsers.setValue(relevant);
+     //   Log.d("tag", "relevant" + relevant.get(0).getFullName());
+        relevantUsers.setValue(relevant);//not here
     }
 
+    public void getSentRequests(){
+
+        recentSentRequestsArrayList.clear();
+
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                        recentSentRequestsArrayList.add(snapshot1.getKey());
+                        Log.d("snapshot", snapshot1.getKey());
+                    }
+                }
+                Log.d("snapshot", "" +recentSentRequestsArrayList.size());
+                updateSentRequestsMutable();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        dataBaseClass.retrieveSentRequests(listener);
+        //get from database
+
+    }
+
+    private void updateSentRequestsMutable() {
+        recentSentRequests.setValue(recentSentRequestsArrayList);
+        //notify adapter
+    }
+
+
+    //friend requests
+    //updating list of recent requests that can be canceled
+
+    public void onSendFriendRequest(final String strangerId) {//from recycler
+
+        //update firebase
+        dataBaseClass.updateSentFriendRequest(strangerId, currentUser.getUserId());
+        //send fcm message
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    String strangerToken = snapshot.getValue(String.class);
+                    try {
+                        createFriendRequestNotificationMessage(strangerToken);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        dataBaseClass.retrieveUserToken(strangerId, listener);
+    }
+
+    private void createFriendRequestNotificationMessage(String token) throws JSONException {
+
+        Log.d("tag2", "inside create friendRequestNotificationMessage");
+
+        final JSONObject rootObject = new JSONObject();
+        rootObject.put("to", token);
+        JSONObject notificationObject = new JSONObject();
+        notificationObject.put("title", "New friend request!");
+        notificationObject.put("body", "don't  keep them waiting");
+        rootObject.put("notification", notificationObject);
+
+        String url = "https://fcm.googleapis.com/fcm/send";
+
+        RequestQueue queue = Volley.newRequestQueue(getApplication().getApplicationContext());
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return rootObject.toString().getBytes();
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization", "key=" + API_TOKEN_KEY);
+                return headers;
+            }
+        };
+
+        queue.add(request);
+        queue.start();
+
+    }
+
+    public void onCancelFriendRequest(String strangerId) {//from recycler
+
+        //update firebase
+        dataBaseClass.updateCanceledFriendRequest(strangerId, currentUser.getUserId());
+
+    }
+
+    public MutableLiveData<ArrayList<String>> getRecentSentRequests(){
+        return recentSentRequests;
+    }
 
 }

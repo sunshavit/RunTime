@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.TimeZone;
 
 
@@ -18,27 +19,28 @@ public class Event {
     private int dayOfMonth;
     private int hourOfDay;
     private int minute;
-    private Location location;
+    private double longitude;
+    private double latitude;
     private String manager;
     private String runningLevel;
-    private ArrayList<String> runners;
+    private HashMap<String,Boolean> runners = new HashMap<>();
 
     public Event() {
     }
 
-    public Event(String eventId, int year, int month, int dayOfMonth, int hourOfDay, int minute, Location location, String manager, String runningLevel, ArrayList<String> runners) {
-        this.eventId = eventId;
+
+    public Event( int year, int month, int dayOfMonth, int hourOfDay, int minute, double longitude,double latitude, String manager, String runningLevel) {
         this.year = year;
         this.month = month;
         this.dayOfMonth = dayOfMonth;
         this.hourOfDay = hourOfDay;
         this.minute = minute;
-        this.location = location;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.manager = manager;
         this.runningLevel = runningLevel;
-        this.runners = new ArrayList<>();
 
-        runners.add("false");
+        runners.put("false",false);
     }
 
     public String getEventId() {
@@ -89,12 +91,20 @@ public class Event {
         this.minute = minute;
     }
 
-    public Location getLocation() {
-        return location;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public String getManager() {
@@ -113,11 +123,11 @@ public class Event {
         this.runningLevel = runningLevel;
     }
 
-    public ArrayList<String> getRunners() {
+    public HashMap<String, Boolean> getRunners() {
         return runners;
     }
 
-    public void setRunners(ArrayList<String> runners) {
+    public void setRunners(HashMap<String, Boolean> runners) {
         this.runners = runners;
     }
 }

@@ -99,7 +99,7 @@ public class RegisterClass {
 
     public void signOut(){
         firebaseAuth.signOut();
-        signOutCallback.onSignOut();
+//        signOutCallback.onSignOut();
     }
 
   /*  public void stateListener(){

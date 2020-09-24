@@ -19,6 +19,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class DataBaseClass {
     private FirebaseDatabase firebaseDatabase;
@@ -27,9 +28,14 @@ public class DataBaseClass {
     private final String USERSTABLE = "users";
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
+    //private UserInstance userInstance = UserInstance.getInstance();
 
 
     private static DataBaseClass dataBaseClass = null;
+
+    interface OnLocationUpdateListener{
+        void onLocationUpdate();
+    }
 
     interface OnGetUserImage {
         void onSuccessGetImage(String uri);
@@ -67,6 +73,7 @@ public class DataBaseClass {
     private OnSaveImageListener callBackImage;
     private OnUserListsListener callBackUserLists;
     private OnGetUserImage callBackGetImage;
+    private OnLocationUpdateListener updateListener;
 
     private DataBaseClass() {
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -83,6 +90,13 @@ public class DataBaseClass {
         }
         return dataBaseClass;
 
+    }
+
+    public void saveUserToken(String token) {
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference users = databaseReference.child("user");
+        DatabaseReference currentUser = users.child(registerClass.getUserId());
+        currentUser.child("userToken").setValue(token);
     }
 
     public void createUser(User user) {
@@ -158,7 +172,49 @@ public class DataBaseClass {
         DatabaseReference specificUser = users.child(registerClass.getUserId());
         specificUser.child("longitude").setValue(longitude);
         specificUser.child("latitude").setValue(latitude);
+        if(updateListener!=null)
+            updateListener.onLocationUpdate();
     }
+
+    public void updateSentFriendRequest(String strangerId, String userId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUserLists = userLists.child(userId);
+        DatabaseReference strangerLists = userLists.child(strangerId);
+        currentUserLists.child("sentFriendsRequests").child(strangerId).setValue(true);
+        strangerLists.child("friendsRequests").child(userId).setValue(true);
+    }
+
+    public void updateCanceledFriendRequest(String strangerId, String userId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUserLists = userLists.child(userId);
+        DatabaseReference strangerLists = userLists.child(strangerId);
+        currentUserLists.child("sentFriendsRequests").child(strangerId).removeValue();
+        strangerLists.child("friendsRequests").child(userId).removeValue();
+    }
+
+    public void retrieveUserById(String userId, ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference users = databaseReference.child("user");
+        users.child(userId).addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveSentRequests(ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(registerClass.getUserId());
+        currentUser.child("sentFriendsRequests").addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveUserToken(String userId, ValueEventListener listener) {
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference users = databaseReference.child("user");
+        DatabaseReference specificUser = users.child(userId);
+        specificUser.child("userToken").addListenerForSingleValueEvent(listener);
+    }
+
+
 
     public void getImage() {
         StorageReference reference = storageReference.child("profileImages/" + RegisterClass.getInstance().getUserId());
@@ -192,6 +248,10 @@ public class DataBaseClass {
         this.callBackImage = callBackImage;
     }
 
+    public void setUpdateLocationListener(OnLocationUpdateListener updateListener) {
+        this.updateListener = updateListener;
+    }
+
     public void setCallBackUserLists(OnUserListsListener callBackUserLists) {
         this.callBackUserLists = callBackUserLists;
     }
@@ -209,13 +269,46 @@ public class DataBaseClass {
         userPreferenceTable.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
     }
 
-    public StorageReference retrieveImageStorageReference(String UserId) {
-        storageReference = FirebaseStorage.getInstance().getReference().child("profileImages/" + UserId);
-        return storageReference;
+        public StorageReference retrieveImageStorageReference(String UserId) {
+            StorageReference storageReference1 = FirebaseStorage.getInstance().getReference().child("profileImages/" + UserId);
+            return storageReference1;
     }
         public void setCallBackGetImage(OnGetUserImage callBackGetImage){
             this.callBackGetImage = callBackGetImage;
 
         }
+
+    public void createNewEvent(Event event, String userId){
+        databaseReference = firebaseDatabase.getReference(); //to get root
+        DatabaseReference events = databaseReference.child("events");
+        DatabaseReference newEvent = events.push();
+        String eventKey = newEvent.getKey();
+        event.setEventId(eventKey);
+        events.child(eventKey).setValue(event); //save new event to events.
+
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        DatabaseReference managedEvents = currentUser.child("managedEvents");
+        DatabaseReference myEvents = currentUser.child("myEvents");
+
+        myEvents.child(eventKey).setValue(eventKey);
+        managedEvents.child(eventKey).setValue(eventKey);
+
+
+       // public void updateName(String name){
+          //  DatabaseReference databaseReferenceNew = firebaseDatabase.getReference().child("user").child(registerClass.getUserId());
+           // databaseReferenceNew.child("fullName").setValue(name);
+    //    }
+
+   // public void updateRunningLevel(String level){
+      //  DatabaseReference databaseReferenceNew = firebaseDatabase.getReference().child("user").child(registerClass.getUserId());
+      //  databaseReferenceNew.child("runningLevel").setValue(level);
+   // }
+
+
     }
+
+    }
+
+
 

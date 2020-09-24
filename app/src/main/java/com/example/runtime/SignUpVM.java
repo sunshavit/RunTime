@@ -14,11 +14,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 
 public class SignUpVM extends ViewModel  {
     private String fullName;
@@ -37,6 +40,7 @@ public class SignUpVM extends ViewModel  {
     private Uri userImage;
     private RegisterClass registerClass = RegisterClass.getInstance();
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
+    private UserInstance userInstance = UserInstance.getInstance();
 
 
 
@@ -65,14 +69,18 @@ public class SignUpVM extends ViewModel  {
         this.gender = gender;
         this.runningLevel = runningLevel;
 
+        final User user = new User("0",registerClass.getUserId(),this.fullName,this.gender,this.year,this.month,this.dayOfMonth,this.runningLevel,false,userInstance.getUser().getLongitude(),userInstance.getUser().getLatitude());
 
-        dataBaseClass.createUser(new User(registerClass.getUserId(),this.fullName,this.gender,this.year,this.month,this.dayOfMonth,this.runningLevel,false,0,0));
-
-        
-
-
-
-
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if(task.isSuccessful()){
+                    String token = Objects.requireNonNull(task.getResult()).getToken();
+                    user.setUserToken(token);
+                    dataBaseClass.createUser(user);
+                }
+            }
+        });
     }
 
     public void setDataNext3(int startAge , int endAge , String partnerGender , String partnerLevel){
