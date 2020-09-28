@@ -37,7 +37,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.CreateNewEventListener, BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
+public class MainActivity extends AppCompatActivity implements MessagesFragment.OnClickOnMessages, DataBaseClass.OnChangeUserListener, HomeFragment.CreateNewEventListener, BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
         ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
         RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener, CreateEventFragment.OnMapListener,MapFragment.OnCreateEventListener, FindPeopleFragment.OnStrangerCellClickListener {
 
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     final String SIGNUP1TAG="signup1tag";
     final String SIGNUP2TAG="signup2tag";
     final String SIGNUP3TAG="signup3tag";
+    private static final String MESSAGES_TAG = "messagestag";
     final String HOME_TAG="homeTag";
     final String CREATEEVENT_TAG="eventtag";
 
@@ -101,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
         registerClass.setSignInListener(this);
         dataBaseClass.setCallBackUserLists(this);
         homeFragment.setFindPeopleCallback(this);
+        dataBaseClass.setOnChangeUserListener(this);
+
+
 
 
 
@@ -186,6 +190,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
                     case R.id.signOutSidebar:
                         registerClass.signOut();
                         break;
+                    case R.id.editProfileSidebar:
+                        fragmentManager.beginTransaction().replace(R.id.rootLayout, new EditProfileFragment(), "editProfile").commit();
+                        break;
                 }
                 return false;
             }
@@ -219,6 +226,12 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
         super.onStart();
         registerClass.addStateListener(authStateListener);
 
+    }
+
+    @Override
+    public void onClickMessages(User user) {
+        MessagesFragment2 messagesFragment2 = MessagesFragment2.newInstance(user);
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,messagesFragment2,SIGNUP1TAG).commit();
     }
 
     @Override
@@ -269,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
                 break;
             case "message":
                 Toast.makeText(this,"message", Toast.LENGTH_LONG).show();
-                //fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new MessagesFragment(),MESSAGES_TAG).commit();
                 break;
         }
     }
@@ -387,8 +400,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId()==android.R.id.home)
             drawerLayout.openDrawer(GravityCompat.START);
-        if(item.getItemId()==R.id.editProfileSidebar)
-            fragmentManager.beginTransaction().replace(R.id.rootLayout, new EditProfileFragment(), "editProfile").commit();
         return super.onOptionsItemSelected(item);
     }
 
@@ -406,6 +417,15 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
 
     }
 
+    @Override
+    public void onChangeUserSuccess() {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+    }
+
+    @Override
+    public void onChangeUserFailed() {
+        Toast.makeText(MainActivity.this,"failed",Toast.LENGTH_LONG).show();
+    }
 }
 
 

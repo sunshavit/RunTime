@@ -35,6 +35,10 @@ public class DataBaseClass {
     private static DataBaseClass dataBaseClass = null;
 
 
+    interface OnChangeUserListener{
+        void onChangeUserSuccess();
+        void onChangeUserFailed();
+    }
 
     interface OnLocationUpdateListener{
         void onLocationUpdate();
@@ -77,6 +81,7 @@ public class DataBaseClass {
     private OnUserListsListener callBackUserLists;
     private OnGetUserImage callBackGetImage;
     private OnLocationUpdateListener updateListener;
+    private OnChangeUserListener onChangeUserListener;
 
     private DataBaseClass() {
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -100,6 +105,21 @@ public class DataBaseClass {
         DatabaseReference users = databaseReference.child("user");
         DatabaseReference currentUser = users.child(registerClass.getUserId());
         currentUser.child("userToken").setValue(token);
+    }
+
+
+    public void changeUser(User user) {
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference databaseReference1 = databaseReference.child("user");
+        databaseReference1.child(registerClass.getUserId()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful())
+                    onChangeUserListener.onChangeUserSuccess();
+                else
+                    onChangeUserListener.onChangeUserFailed();
+            }
+        });
     }
 
     public void createUser(User user) {
@@ -229,6 +249,7 @@ public class DataBaseClass {
 
 
 
+
     public void getImage() {
         StorageReference reference = storageReference.child("profileImages/" + RegisterClass.getInstance().getUserId());
         reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -239,15 +260,21 @@ public class DataBaseClass {
         });
     }
 
+
+
+
     public void getUser(ValueEventListener listener) {
         final DatabaseReference users = firebaseDatabase.getReference("user");
-        Log.d("sun", "sun");
         users.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
     }
 
     public void onCancelled(@NonNull DatabaseError error) {
     }
 
+
+    public void setOnChangeUserListener(OnChangeUserListener onChangeUserListener) {
+        this.onChangeUserListener = onChangeUserListener;
+    }
 
     public void setCallBackCreate(OnUserCreateListener callBackCreate) {
         this.callBackCreate = callBackCreate;
@@ -270,9 +297,21 @@ public class DataBaseClass {
     }
 
 
+
+
     public void retrieveAllUsersList(ValueEventListener listener) {
         databaseReference = firebaseDatabase.getReference();
         databaseReference.child("user").addListenerForSingleValueEvent(listener);
+    }
+
+    public void getUserWithId(ValueEventListener listener,String id) {
+        final DatabaseReference users = firebaseDatabase.getReference("user");
+        users.child(id).addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveAllFriends(ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        databaseReference.child("user_lists").child(registerClass.getUserId()).child("myFriends").addValueEventListener(listener);
     }
 
     public void retrieveUserPreferences(ValueEventListener listener) {

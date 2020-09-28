@@ -13,40 +13,29 @@ public class User {
     private String userId;
     private String userToken;
 
-   
-
-
-
-
     public User() {
     }
 
-
-    public String getUserId() {
-        return userId;
+    public User(String userToken, String userId, String fullName, String gender, int year, int month, int dayOfMonth, String runningLevel, boolean isOnline, double longitude, double latitude) {
+        this.fullName = fullName;
+        this.gender = gender;
+        this.year = year;
+        this.month = month;
+        this.dayOfMonth = dayOfMonth;
+        this.runningLevel = runningLevel;
+        this.isActive = isOnline;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.userToken = userToken;
+        this.userId = userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public User(String userToken, String userId, String fullName, String gender, int year, int month, int dayOfMonth, String runningLevel, boolean isOnline, double longitude, double latitude) {
-
-    
-        this.fullName = fullName;
-        this.gender = gender;
-        this.year=year;
-        this.month=month;
-        this.dayOfMonth=dayOfMonth;
-        this.runningLevel = runningLevel;
-        this.isActive = isOnline;
-        this.longitude=longitude;
-        this.latitude=latitude;
-        this.userToken = userToken;
-
-        this.userId = userId;
-
-       
+    public String getUserId() {
+        return userId;
     }
 
     public String getUserToken() {
@@ -109,12 +98,9 @@ public class User {
         return gender;
     }
 
-    
-
     public void setGender(String gender) {
         this.gender = gender;
     }
-
 
     public String getRunningLevel() {
         return runningLevel;
@@ -123,8 +109,6 @@ public class User {
     public void setRunningLevel(String runningLevel) {
         this.runningLevel = runningLevel;
     }
-
-
 
     public boolean isActive() {
         return isActive;
