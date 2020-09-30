@@ -37,6 +37,7 @@ public class MapFragment extends Fragment {
     private SearchView searchView;
     private UserInstance userInstance;
     private LatLng latLng;
+
     private String streetAddress;
     TextView searchResult;
 
@@ -45,12 +46,11 @@ public class MapFragment extends Fragment {
 
 
     interface OnCreateEventListener{
-        void onCreateEvent(String streetAddress);
+        void onCreateEventFromMap(boolean isNew);
         //void onInputSent(String locationName);
     }
 
     OnCreateEventListener createEventCallback;
-
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -193,7 +193,7 @@ public class MapFragment extends Fragment {
                 //Toast.makeText(getContext(),streetAddress,Toast.LENGTH_LONG).show();
                 //createEventCallback.onInputSent(streetAddress);
                 viewModel.setStreetAddress(streetAddress);
-                createEventCallback.onCreateEvent(streetAddress);
+                createEventCallback.onCreateEventFromMap(false);
 
             }
         });
