@@ -328,6 +328,11 @@ public class DataBaseClass {
         databaseReference.child("user").addListenerForSingleValueEvent(listener);
     }
 
+
+    public void retrieveAllEventsList(ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        databaseReference.child("events").addListenerForSingleValueEvent(listener);
+
     public void getUserWithId(ValueEventListener listener, String id) {
         final DatabaseReference users = firebaseDatabase.getReference("user");
         users.child(id).addListenerForSingleValueEvent(listener);
@@ -336,6 +341,7 @@ public class DataBaseClass {
     public void retrieveAllFriends(ValueEventListener listener) {
         databaseReference = firebaseDatabase.getReference();
         databaseReference.child("user_lists").child(registerClass.getUserId()).child("myFriends").addValueEventListener(listener);
+
     }
 
     public void retrieveUserPreferences(ValueEventListener listener) {
@@ -501,6 +507,7 @@ public class DataBaseClass {
         DatabaseReference newEvent = events.push();
         String eventKey = newEvent.getKey();
         event.setEventId(eventKey);
+        event.setManager(userId);
         events.child(eventKey).setValue(event); //save new event to events.
 
         DatabaseReference userLists = databaseReference.child("user_lists");
@@ -508,11 +515,28 @@ public class DataBaseClass {
         DatabaseReference managedEvents = currentUser.child("managedEvents");
         DatabaseReference myEvents = currentUser.child("myEvents");
 
-        myEvents.child(eventKey).setValue(eventKey);
-        managedEvents.child(eventKey).setValue(eventKey);
+        myEvents.child(eventKey).setValue(true);
+        managedEvents.child(eventKey).setValue(true);
+
+    }
 
 
+    public void addEventToMyEventsList(String eventId,String userId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUserLists = userLists.child(userId);
+        DatabaseReference myEventsList = currentUserLists.child("myEvents");
+        myEventsList.child(eventId).setValue(true);
 
+    }
+
+
+    public void removeEventFromMyEventsList(String eventId,String userId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUserLists = userLists.child(userId);
+        DatabaseReference myEventsList = currentUserLists.child("myEvents");
+        myEventsList.child(eventId).removeValue();
 
     }
 

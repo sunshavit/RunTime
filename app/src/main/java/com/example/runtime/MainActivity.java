@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -36,10 +37,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import static java.security.AccessController.getContext;
+
 
 public class MainActivity extends AppCompatActivity implements MessagesFragment.OnClickOnMessages, DataBaseClass.OnChangeUserListener, HomeFragment.CreateNewEventListener, BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
         ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
-        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener, CreateEventFragment.OnMapListener,MapFragment.OnCreateEventListener, FindPeopleFragment.OnStrangerCellClickListener {
+        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener, CreateEventFragment.OnMapListener,
+        MapFragment.OnCreateEventListener, FindPeopleFragment.OnStrangerCellClickListener, HomeFragment.findEventsListener, CreateEventFragment.OnBackFromCreateEventListener{
 
     // where to do the user authentication
     // local time and local date require sdk 26
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     final String TOOLBAR_TAG="toolbartag";
 
     final String FIND_PEOPLE = "findPeople";
+    final String FIND_EVENTS = "findEvents";
     final String STRANGER_FRAGMENT = "strangerFragment";
 
     final String NAV_TAG = "nav";
@@ -77,7 +82,9 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     private UserInstance userInstance;
     private DrawerLayout drawerLayout;
 
-    CreateEventFragment fragment;
+    CreateEventFragment createEventFragment;
+    RelativeLayout toolbarLayout;
+    String isNull;
 
 
 
@@ -85,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     // private FirebaseStorage firebaseStorage;
     RegisterClass registerClass;
     DataBaseClass dataBaseClass;
+    Fragment toolBarFragment;
+    Fragment navigationFragment;
+
 
 
 
@@ -102,14 +112,21 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         registerClass.setSignInListener(this);
         dataBaseClass.setCallBackUserLists(this);
         homeFragment.setFindPeopleCallback(this);
+        homeFragment.setFindEventsCallback(this);
         dataBaseClass.setOnChangeUserListener(this);
 
 
 
 
 
+
         //registerClass.stateListener();
-        fragment = new CreateEventFragment();
+       createEventFragment = CreateEventFragment.getInstance(false);
+
+
+        toolbarLayout = findViewById(R.id.toolbarLayout);
+
+
 
 
         authStateListener=new FirebaseAuth.AuthStateListener() {
@@ -126,9 +143,8 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                             if (snapshot.hasChild("gender")){
 
                                 Log.d("home", "snapshot");
-
-                                fragmentTransaction = fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG);
-                                fragmentTransaction.commit();
+                                fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+                                //fragmentTransaction.commit();
 
                                 fragmentManager.beginTransaction().replace(R.id.toolbarLayout,new ToolBarFragment(),TOOLBAR_TAG).commit();
 
@@ -165,11 +181,11 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
 
                     //dataBaseClass.updateActive(true);
-                    Toast.makeText(MainActivity.this,user.getUid(),Toast.LENGTH_LONG).show();
+                    //Toast.makeText(MainActivity.this,user.getUid(),Toast.LENGTH_LONG).show();
                 }
                 else {
                     fragmentManager.beginTransaction().replace(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG).commit();
-                    Fragment toolBarFragment =getSupportFragmentManager().findFragmentByTag(TOOLBAR_TAG);
+                    toolBarFragment =getSupportFragmentManager().findFragmentByTag(TOOLBAR_TAG);
                     if(toolBarFragment!=null) {
                         fragmentManager.beginTransaction().remove(toolBarFragment).commit();
                         fragmentManager.beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(NAV_TAG)).commit();
@@ -204,9 +220,21 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     }
 
     @Override
-    public void onCreateNewEvent() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new CreateEventFragment(),CREATEEVENT_TAG).addToBackStack(null).commit();
+    public void onCreateNewEvent(boolean isNew) {
+        createEventFragment = null;
+        //createEventFragment = CreateEventFragment.getInstance(true);
 
+
+        //createEventFragment = CreateEventFragment.getInstance();
+
+        createEventFragment = CreateEventFragment.getInstance(true);
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,createEventFragment ,CREATEEVENT_TAG).addToBackStack(null).commit();
+        //to remove toolbar and navigation bar.
+        navigationFragment =getSupportFragmentManager().findFragmentByTag(NAV_TAG);
+        if(navigationFragment!=null) {
+            toolbarLayout.setVisibility(View.GONE);
+            fragmentManager.beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(NAV_TAG)).commit();
+        }
     }
 
     @Override
@@ -360,12 +388,11 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     }
 
     public void getLocationUpdates(){
-        Toast.makeText(MainActivity.this,"fun",Toast.LENGTH_LONG).show();
         CurrentLocationListener.getInstance(getApplicationContext()).observe(this, new Observer<Location>() {
             @Override
             public void onChanged(Location location) {
                 if(location!=null){
-                    Toast.makeText(MainActivity.this,location.toString(),Toast.LENGTH_LONG).show();
+                    //Toast.makeText(MainActivity.this,location.toString(),Toast.LENGTH_LONG).show();
                     double longitude=location.getLongitude();
                     double latitude=location.getLatitude();
                     userInstance.getUser().setLongitude(longitude);
@@ -398,6 +425,11 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         fragmentManager.beginTransaction().replace(R.id.rootLayout, new FindPeopleFragment(), FIND_PEOPLE).addToBackStack(null).commit();
     }
 
+    @Override
+    public void onFindEventsClicked() {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new /**/FindEventsFragment(), FIND_EVENTS).addToBackStack(null).commit();
+    }
+
     //when a stranger at findPeopleFragment recycler is clicked
 
     @Override
@@ -415,19 +447,26 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
     @Override
     public void onMapOkClick() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout, new MapFragment(), MAP_TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new MapFragment(), MAP_TAG).addToBackStack(null).commit();
     }
 
     @Override
-    public void onCreateEvent(String streetAddress) {
-        Fragment fragment=getSupportFragmentManager().findFragmentByTag(CREATEEVENT_TAG);
-        CreateEventFragment fragment1=(CreateEventFragment)fragment;
-        getSupportFragmentManager().beginTransaction().replace(R.id.rootLayout,fragment1).commit();
-        fragment1.updateLocationEt(streetAddress);
+    public void onCreateEventFromMap(boolean isNew) {
 
+        for(int i=1; i<getSupportFragmentManager().getBackStackEntryCount() ; i++){
+            getSupportFragmentManager().popBackStack();
+        }
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, CreateEventFragment.getInstance(false), CREATEEVENT_TAG).addToBackStack(null).commit();
+            for(int i=1; i<getSupportFragmentManager().getBackStackEntryCount() ; i++){
+                getSupportFragmentManager().popBackStack();
+            }
     }
 
     @Override
+
+    public void toHomeFromCreateEvent() {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new HomeFragment(), HOME_TAG).commit();
+
     public void onChangeUserSuccess() {
         fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
     }
@@ -435,6 +474,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     @Override
     public void onChangeUserFailed() {
         Toast.makeText(MainActivity.this,"failed",Toast.LENGTH_LONG).show();
+
     }
 }
 
