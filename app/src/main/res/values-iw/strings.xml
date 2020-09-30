@@ -2,4 +2,26 @@
 <resources>
     <string name="app_name">RunTime</string>
     <string name="chosenLocation">המיקום הנבחר</string>
+    <string name="event_date">תאריך:</string>
+    <string name="event_time">שעה:</string>
+    <string name="event_location">מיקום:</string>
+    <string name="number_of_runners">רצים הצטרפו</string>
+    <string name="set_date">בחר תאריך</string>
+    <string name="set_time">בחר שעה</string>
+    <string name="event_title">קבע את פרטי האירוע</string>
+    <string name="set_location">בחר מיקום</string>
+    <string name="invite_friends_btn">הזמן חברים</string>
+    <string name="done_btn">סיום</string>
+    <string name="activity_level">בחר רמת קושי</string>
+    <string name="easy">קל</string>
+    <string name="active">בינוני</string>
+    <string name="medium">קשה</string>
+    <string name="event_status">בחר את סטטוס האירוע</string>
+    <string name="public_event">אירוע ציבורי</string>
+    <string name="private_event">אירוע פרטי</string>
+    <string name="all_fields">בבקשה מלא את כל השדות</string>
+    <string name="new_event_snack_bar">אירוע חדש נוצר בהצלחה!</string>
+    <string name="join_btn">הצטרף!</string>
+    <string name="cancel_join_btn">ביטול</string>
+    <string name="events_recycler_title">אירועים בקרבת מקום</string>
 </resources>

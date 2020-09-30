@@ -1,63 +1,240 @@
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_margin="20dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="click to set date"
-        android:id="@+id/eventDateEt"/>
+        android:text="@string/event_title"
+        android:textSize="25sp"
+        android:layout_marginBottom="25dp"
+        android:textStyle="bold"
+        android:textColor="@color/DarkBlue"
+        android:gravity="center"/>
 
-    <EditText
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="click to set time"
-        android:id="@+id/eventTimeEt"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="click to choose event location"
-        android:id="@+id/eventLocationEt"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="invite friends"
-        android:id="@+id/inviteFriendsBtn"/>
-
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/eventLevelRG">
-
-        <RadioButton
-            android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="easy"
-            android:id="@+id/eventEasyRB"/>
+            android:orientation="vertical">
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="medium"
-            android:id="@+id/eventMediumRB"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:gravity="center_vertical"
+                android:hint="@string/set_date"
+                android:padding="10dp"
+                android:textSize="17sp"
+                android:textColor="@color/lightBlue2"
+                android:background="@drawable/edit_text_background"
+                android:drawablePadding="15dp"
+                android:drawableStart="@drawable/calender_icon"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/eventDateEt"
+                />
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="expert"
-            android:id="@+id/eventExpertRB"/>
-    </RadioGroup>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:gravity="center_vertical"
+                android:hint="@string/set_time"
+                android:textSize="17sp"
+                android:textColor="@color/lightBlue2"
+                android:background="@drawable/edit_text_background"
+                android:drawablePadding="15dp"
+                android:drawableStart="@drawable/clock_icon"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/eventTimeEt"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="DONE"
-        android:id="@+id/doneBtn"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:gravity="center_vertical"
+                android:hint="@string/set_location"
+                android:textSize="17sp"
+                android:textColor="@color/lightBlue2"
+                android:background="@drawable/edit_text_background"
+                android:drawablePadding="15dp"
+                android:drawableStart="@drawable/location_icon"
+                android:id="@+id/eventLocationEt"
+                android:layout_marginBottom="15dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:text="@string/activity_level"
+                android:textColor="@color/DarkBlue"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/activity_level_tv"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
 
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginEnd="20dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/easy_gray"
+                        android:id="@+id/image_easy"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="@string/easy"
+                        android:id="@+id/easy_tv"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginEnd="20dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/medium_gray"
+                        android:id="@+id/image_medium"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="@string/active"
+                        android:id="@+id/medium_tv"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    >
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/hard_gray"
+                        android:id="@+id/image_hard"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="@string/medium"
+                        android:id="@+id/hard_tv"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:text="@string/event_status"
+                    android:textColor="@color/DarkBlue"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="15dp" />
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/event_status">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="@string/public_event"
+                        android:id="@+id/public_event"
+                        android:textColor="@color/darkGray"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="@color/darkGray"
+                        android:text="@string/private_event"
+                        android:id="@+id/private_event"/>
+                </RadioGroup>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:textSize="17sp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="@string/invite_friends_btn"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:background="@drawable/blue_btn"
+                    android:layout_marginTop="17dp"
+                    android:id="@+id/inviteFriendsBtn"/>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="20dp">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:textSize="17sp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="17dp"
+                    android:text="@string/done_btn"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:background="@drawable/orange_btn"
+                    android:id="@+id/doneBtn"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"/>
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
