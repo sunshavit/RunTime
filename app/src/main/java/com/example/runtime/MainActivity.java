@@ -465,7 +465,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     @Override
 
     public void toHomeFromCreateEvent() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout, new HomeFragment(), HOME_TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new HomeFragment(), HOME_TAG).commit();}
 
     public void onChangeUserSuccess() {
         fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
