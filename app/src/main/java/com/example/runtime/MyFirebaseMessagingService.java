@@ -58,7 +58,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 createRequestAcceptedNotif(title, body, userId);
             }
 
-
             else if(remoteMessage.getData().get("messageType").equals("message")){
                 String title = remoteMessage.getData().get("title");
                 String body = remoteMessage.getData().get("body");
