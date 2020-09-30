@@ -22,4 +22,6 @@
     <string name="mutual">Mutual Friends</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="insert_text">enter text</string>
+
 </resources>
