@@ -34,9 +34,13 @@ public class MessagesVM extends ViewModel {
                         String userId = snapshot1.getKey();
                         Log.d("sun", "inside first listener");
                         Log.d("sun",userId );
-                        usersIdFromDatabase.add(userId);
-                        getFriends(userId);
+                        if(!userId.equals("false")){
+                            usersIdFromDatabase.add(userId);
+                            getFriends(userId);
+                        }
+
                     }
+                    //usersIdFromDatabase.remove("false");
                 }
 
             }
