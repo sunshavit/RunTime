@@ -63,6 +63,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String body = remoteMessage.getData().get("body");
                 Intent intent = new Intent("messagesReceiver");
                 intent.putExtra("message",body);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                 createNotifMessages(title,body);
 
             }
