@@ -24,4 +24,25 @@
     <string name="join_btn">הצטרף!</string>
     <string name="cancel_join_btn">ביטול</string>
     <string name="events_recycler_title">אירועים בקרבת מקום</string>
+    <string name="accept">אשר</string>
+    <string name="remove">מחק</string>
+    <string name="join">הצטרף</string>
+    <string name="add">הוסף</string>
+    <string name="cancel">בטל</string>
+    <string name="sent_request">נשלחה בקשה</string>
+    <string name="invitations">הזמנות</string>
+    <string name="upcoming">אירועים קרובים</string>
+    <string name="friends">חברים</string>
+    <string name="requests">בקשות</string>
+    <string name="find_new_runners">מצא רצים חדשים</string>
+    <string name="meters_away">מטרים ממך</string>
+    <string name="runners">משתתפים</string>
+    <string name="accepted_your_request">אישר\\ה את בקשת החברות שלך</string>
+    <string name="send_them_a_message">שלח\\י להם הודעה!</string>
+    <string name="manager">מנהל</string>
+    <string name="managed">אירועים שלי</string>
+    <string name="edit">ערוך</string>
+    <string name="mutual">חברים משותפים</string>
+    <string name="male">גבר</string>
+    <string name="female">אישה</string>
 </resources>
