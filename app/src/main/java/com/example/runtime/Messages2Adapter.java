@@ -1,24 +1,27 @@
 package com.example.runtime;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.runtime.model.Message;
-import com.example.runtime.model.ModelWithID;
 
 //TODO choose message
 //TODO forward
 //TODO delete message
-public class MessageAdapter extends ListAdapter<ModelWithID<Message>, MessageAdapter.Message2ViewHolder> {
-    public MessageAdapter() {
-        super(MessageAdapter.DIFF_CALLBACK);
+public class Messages2Adapter extends ListAdapter<Message, Messages2Adapter.Message2ViewHolder> {
+    public Messages2Adapter() {
+        super(Messages2Adapter.DIFF_CALLBACK);
     }
 
     @NonNull
@@ -30,7 +33,11 @@ public class MessageAdapter extends ListAdapter<ModelWithID<Message>, MessageAda
 
     @Override
     public void onBindViewHolder(Message2ViewHolder holder, int position) {
-        Message msg = getItem(position).getModel();
+        Message msg = getItem(position);
+        if(msg.getUserIdSent().equals(UserInstance.getInstance().getUser().getUserId())) {
+            holder.message.setBackgroundColor(Color.LTGRAY);
+
+        }
         holder.message.setText(msg.getContent());
         holder.time.setText(msg.getTime());
     }
@@ -46,17 +53,17 @@ public class MessageAdapter extends ListAdapter<ModelWithID<Message>, MessageAda
         }
     }
 
-    private static final DiffUtil.ItemCallback<ModelWithID<Message>> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<ModelWithID<Message>>() {
+    private static final DiffUtil.ItemCallback<Message> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Message>() {
                 @Override
                 public boolean areItemsTheSame(
-                        @NonNull ModelWithID<Message> oldMsg, @NonNull ModelWithID<Message> newMsg) {
-                    return oldMsg.getId().equals(newMsg.getId());
+                        @NonNull Message oldMsg, @NonNull Message newMsg) {
+                    return oldMsg.equals(newMsg);
                 }
 
                 @Override
                 public boolean areContentsTheSame(
-                        @NonNull ModelWithID<Message> oldMsg, @NonNull ModelWithID<Message> newMsg) {
+                        @NonNull Message oldMsg, @NonNull Message newMsg) {
                     return oldMsg.equals(newMsg);
                 }
             };

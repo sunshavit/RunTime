@@ -1,11 +1,12 @@
 package com.example.runtime;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class EditProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage {
+public class EditProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage,DataBaseClass.OnSaveImageListener {
 
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
     private UserInstance userInstance = UserInstance.getInstance();
@@ -14,6 +15,7 @@ public class EditProfileVM extends ViewModel implements DataBaseClass.OnGetUserI
 
     public EditProfileVM() {
         dataBaseClass.setCallBackGetImage(this);
+        dataBaseClass.setCallBackImage(this);
     }
 
     public void getImageFromData(){
@@ -26,6 +28,7 @@ public class EditProfileVM extends ViewModel implements DataBaseClass.OnGetUserI
 
     public void saveUserImageEdit(Uri uri){
         dataBaseClass.saveProfilePicture(uri);
+        dataBaseClass.changeUser(userInstance.getUser());
     }
 
     public void saveUserEdit(){
@@ -35,10 +38,20 @@ public class EditProfileVM extends ViewModel implements DataBaseClass.OnGetUserI
     @Override
     public void onSuccessGetImage(String uri) {
         liveDataImage.setValue(uri);
+        Log.d("sun",uri);
     }
 
     @Override
     public void onFailedGetImage() {
+    }
+
+    @Override
+    public void onSuccessImage() {
+        //add prograss bar
+    }
+
+    @Override
+    public void onFailedImage() {
 
     }
 }

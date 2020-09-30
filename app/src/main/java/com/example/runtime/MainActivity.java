@@ -142,6 +142,8 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                         }
                     };
 
+
+
                     dataBaseClass.isUserExists(registerClass.getUserId(), listener);
                     //UserInstance userInstance = UserInstance.getInstance();
                     /*if (userInstance.getUser().getGender() != null){
@@ -197,6 +199,8 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                 return false;
             }
         });
+        registerClass.addStateListener(authStateListener);
+
     }
 
     @Override
@@ -224,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     @Override
     protected void onStart() {
         super.onStart();
-        registerClass.addStateListener(authStateListener);
+        //registerClass.addStateListener(authStateListener);
 
     }
 
@@ -238,7 +242,13 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     protected void onStop() {
         super.onStop();
         Toast.makeText(this, "welcome" , Toast.LENGTH_SHORT).show();
-       registerClass.removeStateListener(authStateListener);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        registerClass.removeStateListener(authStateListener);
     }
 
     @Override

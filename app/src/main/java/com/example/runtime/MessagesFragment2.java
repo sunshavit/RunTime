@@ -1,6 +1,9 @@
 package com.example.runtime;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +17,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.runtime.model.Message;
-import com.example.runtime.model.ModelWithID;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.Collections;
+import org.json.JSONException;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -29,12 +33,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MessagesFragment2 extends Fragment {
 
     Messages2VM messagesVM;
-    private MessageAdapter adapter;
+    private Messages2Adapter adapter;
+    BroadcastReceiver receiver;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        messagesVM = new ViewModelProvider(getActivity()).get(Messages2VM.class);
+        messagesVM = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(Messages2VM.class);
     }
 
     public static MessagesFragment2 newInstance(User user) {
@@ -42,6 +47,7 @@ public class MessagesFragment2 extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("id", user.getUserId());
         bundle.putString("name", user.getFullName());
+        bundle.putString("token",user.getUserToken());
         messagesFragment2.setArguments(bundle);
         return messagesFragment2;
     }
@@ -52,6 +58,8 @@ public class MessagesFragment2 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.messages_fragment2, container, false);
+        messagesVM.setActiveConversationFriendId(getArguments().getString("id"));
+        messagesVM.getAllMessages();
         final CircleImageView circleImageView = root.findViewById(R.id.messagesImage);
         final TextView textViewName = root.findViewById(R.id.messagesTVName);
         final Button buttonSend = root.findViewById(R.id.sendBTN);
@@ -74,12 +82,12 @@ public class MessagesFragment2 extends Fragment {
             }
         });
 
-        adapter = new MessageAdapter();
+        adapter = new Messages2Adapter();
         rvMessage.setAdapter(adapter);
 
-        messagesVM.getMessagesLiveData(getArguments().getString("id")).observe(getViewLifecycleOwner(), new Observer<List<ModelWithID<Message>>>() {
+        messagesVM.getMessagesLiveData(getArguments().getString("id")).observe(getViewLifecycleOwner(), new Observer<List<Message>>() {
             @Override
-            public void onChanged(List<ModelWithID<Message>> messages) {
+            public void onChanged(List<Message> messages) {
                 adapter.submitList(messages);
             }
         });
@@ -87,10 +95,29 @@ public class MessagesFragment2 extends Fragment {
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                messagesVM.sendMessage(editTextMessage.getText().toString());
+                try {
+                    messagesVM.sendMessage(editTextMessage.getText().toString(),getArguments().getString("token"),getArguments().getString("name"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+            }
+        };
+        IntentFilter filter = new IntentFilter("messagesReceiver");
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver,filter);
+
         return root;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receiver);
     }
 }
