@@ -106,7 +106,7 @@ public class MessagesFragment2 extends Fragment {
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-
+                messagesVM.addToList(intent.getStringExtra("message"));
             }
         };
         IntentFilter filter = new IntentFilter("messagesReceiver");
