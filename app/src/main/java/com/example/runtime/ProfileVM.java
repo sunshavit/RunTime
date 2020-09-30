@@ -33,7 +33,7 @@ public class ProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage
     }
 
     public String getAddress(Context context, double latitude, double longitude){
-        if(latitude != 0 || longitude != 0){
+        if(latitude!=0 || longitude!=0){
             Geocoder geocoder = new Geocoder(context , Locale.getDefault());
             try {
                 return geocoder.getFromLocation(latitude,longitude,1).get(0).getLocality();
@@ -42,7 +42,7 @@ public class ProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage
             }
         }
 
-        return " ";
+        return "";
     }
 
     public int getAge(int year, int month, int day){

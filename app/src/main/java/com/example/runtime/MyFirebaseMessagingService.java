@@ -126,10 +126,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 });
 
 
-    }
-
-
-
 }
 
     private void createNotifMessages(String title, String body) {

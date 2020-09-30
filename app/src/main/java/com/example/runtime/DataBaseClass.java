@@ -332,6 +332,7 @@ public class DataBaseClass {
     public void retrieveAllEventsList(ValueEventListener listener){
         databaseReference = firebaseDatabase.getReference();
         databaseReference.child("events").addListenerForSingleValueEvent(listener);
+    }
 
     public void getUserWithId(ValueEventListener listener, String id) {
         final DatabaseReference users = firebaseDatabase.getReference("user");
@@ -495,12 +496,6 @@ public class DataBaseClass {
     }
 
 
-    public void setCallBackGetImage(OnGetUserImage callBackGetImage) {
-        this.callBackGetImage = callBackGetImage;
-
-
-    }
-
     public void createNewEvent(Event event, String userId) {
         databaseReference = firebaseDatabase.getReference(); //to get root
         DatabaseReference events = databaseReference.child("events");
@@ -540,10 +535,6 @@ public class DataBaseClass {
 
     }
 
-
-
-
-    }
 
 }
 
