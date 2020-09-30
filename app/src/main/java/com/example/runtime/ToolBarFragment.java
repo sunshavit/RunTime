@@ -36,10 +36,4 @@ public class ToolBarFragment extends Fragment {
         return root;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId()==android.R.id.home)
-            Toast.makeText(getContext(),"home",Toast.LENGTH_LONG);
-        return super.onOptionsItemSelected(item);
-    }
 }

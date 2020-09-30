@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
@@ -65,7 +67,21 @@ public class EditProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.edit_profile_fragment,container,false);
 
+        final Context context=getContext();
         imageViewProfile = root.findViewById(R.id.imageEditProfile);
+        editProfileVM.getImageFromData();
+
+        Observer<String> resultObserverImage = new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Glide.with(context).load(s).into(imageViewProfile);
+                Log.d("sun","aaaaaaaaaaaaaaaaa");
+            }
+        };
+
+
+        editProfileVM.getImageLivedata().observe(this , resultObserverImage);
+
         final EditText editTextFullName = root.findViewById(R.id.fullNameEditProfileEt);
 
         gender = userInstance.getUser().getGender();
@@ -90,8 +106,8 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        RadioGroup radioGroupGender = root.findViewById(R.id.genderGroup);
-        RadioGroup radioGroupLevel = root.findViewById(R.id.levelGroup);
+        RadioGroup radioGroupGender = root.findViewById(R.id.genderGroupEditProfile);
+        RadioGroup radioGroupLevel = root.findViewById(R.id.levelGroupEditProfile);
 
         radioGroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -131,7 +147,7 @@ public class EditProfileFragment extends Fragment {
         });
 
 
-        final EditText editTextDate = root.findViewById(R.id.dateET);
+        final EditText editTextDate = root.findViewById(R.id.dateEditProfileET);
 
         editTextDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,8 +186,9 @@ public class EditProfileFragment extends Fragment {
                 userInstance.getUser().setYear(yearOfBirth);
                 userInstance.getUser().setMonth(monthOfBirth);
                 userInstance.getUser().setDayOfMonth(dayOfMonthOfBirth);
+                editProfileVM.saveUserEdit();
                 if(filePath!=null)
-                    editProfileVM.saveUserEdit(filePath);
+                    editProfileVM.saveUserImageEdit(filePath);
             }
         });
 

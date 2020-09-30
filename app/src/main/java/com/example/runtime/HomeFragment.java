@@ -34,19 +34,27 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
 
     findPeopleListener findPeopleCallback;
     CreateNewEventListener createnewEventCallBack;
+    findEventsListener findEventsCallback;
 
     interface CreateNewEventListener{
-        void onCreateNewEvent();
+        void onCreateNewEvent(boolean isNew);
     }
 
     interface findPeopleListener{
         void onFindPeopleClicked();
     }
 
+    interface findEventsListener{
+        void onFindEventsClicked();
+    }
+
     public void setFindPeopleCallback(findPeopleListener findPeopleCallback) {
         this.findPeopleCallback = findPeopleCallback;
     }
 
+    public void setFindEventsCallback(findEventsListener findEventsCallback) {
+        this.findEventsCallback = findEventsCallback;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -98,7 +106,7 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
         buttonNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createnewEventCallBack.onCreateNewEvent();
+                createnewEventCallBack.onCreateNewEvent(true);
             }
         });
 
@@ -107,6 +115,14 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
             @Override
             public void onClick(View v) {
                 findPeopleCallback.onFindPeopleClicked();
+            }
+        });
+
+        Button findEventsBtn = root.findViewById(R.id.findUpcomingEventsBT);
+        findEventsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findEventsCallback.onFindEventsClicked();
             }
         });
         return root;

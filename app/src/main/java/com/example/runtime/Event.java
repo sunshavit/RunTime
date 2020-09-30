@@ -23,13 +23,14 @@ public class Event {
     private double latitude;
     private String manager;
     private String runningLevel;
+    private String eventStatus;
     private HashMap<String,Boolean> runners = new HashMap<>();
 
     public Event() {
     }
 
 
-    public Event( int year, int month, int dayOfMonth, int hourOfDay, int minute, double longitude,double latitude, String manager, String runningLevel) {
+    public Event( int year, int month, int dayOfMonth, int hourOfDay, int minute, double longitude,double latitude, String runningLevel, String eventStatus) {
         this.year = year;
         this.month = month;
         this.dayOfMonth = dayOfMonth;
@@ -37,10 +38,18 @@ public class Event {
         this.minute = minute;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.manager = manager;
         this.runningLevel = runningLevel;
+        this.eventStatus  = eventStatus;
 
         runners.put("false",false);
+    }
+
+    public String getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(String eventStatus) {
+        this.eventStatus = eventStatus;
     }
 
     public String getEventId() {

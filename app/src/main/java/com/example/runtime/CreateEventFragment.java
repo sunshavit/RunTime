@@ -4,54 +4,89 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CreateEventFragment extends Fragment {
 
-    //GoogleMap map;
     private CreateEventVM viewModel;
-    private String eventId;
     private int eventYear;
     private int eventMonth;
     private int eventDayOfMonth;
     private int eventHourOfDay;
     private int eventMinute;
-    private long longitude;
-    private long latitude;
-    private String manager;
     private String runningLevel;
+    private String eventStatus;
     private ArrayList<String> runners;
-    EditText locationEt;
+    private TextView locationEt;
+    private TextView dateEt;
+    private static Bundle bundle;
+    private String eventDate;
+    private String eventTime;
 
     interface OnMapListener{
         void onMapOkClick();
     }
 
+    interface OnBackFromCreateEventListener{
+        void toHomeFromCreateEvent();
+    }
+
     private OnMapListener mapCallback;
+    private OnBackFromCreateEventListener backFromCreateEventCallback;
+
+    private static CreateEventFragment createEventFragment = null;
+
+    public static CreateEventFragment getInstance(boolean isNew){
+        bundle = new Bundle();
+        if(createEventFragment == null || isNew ){
+            bundle.putBoolean("isNew", true);
+            createEventFragment = new CreateEventFragment();
+        }
+        else
+        {
+            bundle.putBoolean("isNew", false);
+        }
+
+        createEventFragment.setArguments(bundle);
+        return createEventFragment;
+    };
+
+    private CreateEventFragment() {
+
+    }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -63,6 +98,13 @@ public class CreateEventFragment extends Fragment {
             throw new ClassCastException("Activity must implement OnMapListener");
         }
 
+        try {
+            backFromCreateEventCallback = (CreateEventFragment.OnBackFromCreateEventListener)context;
+        }
+        catch (ClassCastException e){
+            throw new ClassCastException("Activity must implement OnBackFromCreateEventListener");
+        }
+
         viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
     }
 
@@ -71,12 +113,62 @@ public class CreateEventFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root=inflater.inflate(R.layout.create_event_fragment,container,false);
 
-        final EditText dateEt=root.findViewById(R.id.eventDateEt);
-        final EditText timeEt=root.findViewById(R.id.eventTimeEt);
+        dateEt=root.findViewById(R.id.eventDateEt);
+        final TextView timeEt=root.findViewById(R.id.eventTimeEt);
         locationEt=root.findViewById(R.id.eventLocationEt);
         Button InviteFriendsBtn=root.findViewById(R.id.inviteFriendsBtn);
-        RadioGroup eventLevelRG=root.findViewById(R.id.eventLevelRG);
+        final ImageView easyImageIv = root.findViewById(R.id.image_easy);
+        final ImageView mediumImageIv = root.findViewById(R.id.image_medium);
+        final ImageView hardImageIv = root.findViewById(R.id.image_hard);
+        final TextView easyTv = root.findViewById(R.id.easy_tv);
+        final TextView mediumTv = root.findViewById(R.id.medium_tv);
+        final TextView hardTv = root.findViewById(R.id.hard_tv);
+       // RadioGroup eventLevelRG=root.findViewById(R.id.eventLevelRG);
+        final RadioGroup eventStatusRg = root.findViewById(R.id.event_status);
+        RadioButton publicRb = root.findViewById(R.id.public_event);
+        RadioButton privateRb = root.findViewById(R.id.private_event);
+
         Button doneBtn=root.findViewById(R.id.doneBtn);
+
+
+   Toast.makeText(getContext(),String.valueOf(getArguments().getBoolean("isNew")),Toast.LENGTH_LONG).show();
+        if(getArguments()!=null){
+            if(getArguments().getBoolean("isNew")){
+                viewModel.setEventDate("");
+                viewModel.setEventTime("");
+                viewModel.setStreetAddress("");
+                viewModel.setEasyImageView(R.drawable.easy_gray);
+                viewModel.setMediumImageView(R.drawable.medium_gray);
+                viewModel.setHardImageView(R.drawable.hard_gray);
+                viewModel.setEasyTextView(Color.parseColor("#808080"));
+                viewModel.setMediumTextView(Color.parseColor("#808080"));
+                viewModel.setHardTextView(Color.parseColor("#808080"));
+                viewModel.setPublicChecked(false);
+                viewModel.setPrivateChecked(false);
+                bundle.putBoolean("isNew", false);
+            }
+        }
+
+        dateEt.setText(viewModel.getEventDate());
+        timeEt.setText(viewModel.getEventTime());
+        easyTv.setTextColor(viewModel.getEasyTextView());
+        mediumTv.setTextColor(viewModel.getMediumTextView());
+        hardTv.setTextColor(viewModel.getHardTextView());
+        publicRb.setChecked(viewModel.isPublicChecked());
+        privateRb.setChecked(viewModel.isPrivateChecked());
+
+        if(viewModel.getIsFirstLaunch()){
+            easyImageIv.setImageResource(R.drawable.easy_gray);
+            mediumImageIv.setImageResource(R.drawable.medium_gray);
+            hardImageIv.setImageResource(R.drawable.hard_gray);
+        }
+        else {
+            easyImageIv.setImageResource(viewModel.getEasyImageView());
+            mediumImageIv.setImageResource(viewModel.getMediumImageView());
+            hardImageIv.setImageResource(viewModel.getHardImageView());
+        }
+
+
 
         dateEt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,10 +186,27 @@ public class CreateEventFragment extends Fragment {
                         eventYear=year;
                         eventMonth=month+1;
                         eventDayOfMonth=dayOfMonth;
-                        dateEt.setText(eventDayOfMonth+"/"+eventMonth+'/'+eventYear);
+
+                        String eventMonth1;
+                        String eventDayOfMonth1;
+
+                        if(eventMonth < 10)
+                           eventMonth1 = "0"+eventMonth;
+                        else
+                            eventMonth1=eventMonth+"";
+
+                        if(eventDayOfMonth < 10)
+                            eventDayOfMonth1 = "0"+eventDayOfMonth;
+                        else
+                            eventDayOfMonth1 = eventDayOfMonth+"";
+
+                        eventDate=eventDayOfMonth1+"/"+eventMonth1+'/'+eventYear;
+                        dateEt.setText(eventDate);
+                        viewModel.setEventDate(eventDate);
 
                     }
                 },year1,month1,dayOfMonth1);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
                 datePickerDialog.show();
 
             }
@@ -131,7 +240,10 @@ public class CreateEventFragment extends Fragment {
 
                         eventHourOfDay=hourOfDay;
                         eventMinute=minute;
-                        timeEt.setText(chosenHour+":"+chosenMinute);
+
+                        eventTime = chosenHour+":"+chosenMinute;
+                        timeEt.setText(eventTime);
+                        viewModel.setEventTime(eventTime);
                     }
                 }, currentHourOfDay,currentMinute,true);
                 timePickerDialog.show();
@@ -141,57 +253,126 @@ public class CreateEventFragment extends Fragment {
         locationEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 mapCallback.onMapOkClick();
-                //Intent intent = new Intent(getActivity(), MapActivity.class);
-                //startActivity(intent);
 
             }
         });
 
-        eventLevelRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        easyImageIv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
-                    case R.id.easyRBPartner:{
-                        runningLevel = "easy";
-                        break;
-                    }
-                    case R.id.mediumRBPartner:{
-                        runningLevel = "medium";
-                        break;
-                    }
-                    case R.id.expertRBPartner:{
-                        runningLevel = "expert";
-                        break;
-                    }
-                }
+            public void onClick(View v) {
+                viewModel.setIsFirstLaunch(false);
+                easyImageIv.setImageResource(R.drawable.easy);
+                viewModel.setEasyImageView(R.drawable.easy);
+                easyTv.setTextColor(Color.parseColor("#056378"));
+                viewModel.setEasyTextView(Color.parseColor("#056378"));
+                mediumImageIv.setImageResource(R.drawable.medium_gray);
+                viewModel.setMediumImageView(R.drawable.medium_gray);
+                mediumTv.setTextColor(Color.parseColor("#808080"));
+                viewModel.setMediumTextView(Color.parseColor("#808080"));
+                hardImageIv.setImageResource(R.drawable.hard_gray);
+                viewModel.setHardImageView(R.drawable.hard_gray);
+                hardTv.setTextColor(Color.parseColor("#808080"));
+                viewModel.setHardTextView(Color.parseColor("#808080"));
+                runningLevel = "easy";
+
             }
         });
+
+        mediumImageIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.setIsFirstLaunch(false);
+                easyImageIv.setImageResource(R.drawable.easy_gray);
+                viewModel.setEasyImageView(R.drawable.easy_gray);
+                easyTv.setTextColor(Color.parseColor("#808080"));
+                viewModel.setEasyTextView(Color.parseColor("#808080"));
+                mediumImageIv.setImageResource(R.drawable.medium);
+                viewModel.setMediumImageView(R.drawable.medium);
+                mediumTv.setTextColor(Color.parseColor("#056378"));
+                viewModel.setMediumTextView(Color.parseColor("#056378"));
+                hardImageIv.setImageResource(R.drawable.hard_gray);
+                viewModel.setHardImageView(R.drawable.hard_gray);
+                hardTv.setTextColor(Color.parseColor("#808080"));
+                viewModel.setHardTextView(Color.parseColor("#808080"));
+                runningLevel = "medium";
+
+            }
+        });
+
+        hardImageIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.setIsFirstLaunch(false);
+                easyImageIv.setImageResource(R.drawable.easy_gray);
+                viewModel.setEasyImageView(R.drawable.easy_gray);
+                easyTv.setTextColor(Color.parseColor("#808080"));
+                viewModel.setEasyTextView(Color.parseColor("#808080"));
+                mediumImageIv.setImageResource(R.drawable.medium_gray);
+                viewModel.setMediumImageView(R.drawable.medium_gray);
+                mediumTv.setTextColor(Color.parseColor("#808080"));
+                viewModel.setMediumTextView(Color.parseColor("#808080"));
+                hardImageIv.setImageResource(R.drawable.hard);
+                viewModel.setHardImageView(R.drawable.hard);
+                hardTv.setTextColor(Color.parseColor("#056378"));
+                viewModel.setHardTextView(Color.parseColor("#056378"));
+                runningLevel = "expert";
+            }
+        });
+
+     eventStatusRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+         @Override
+         public void onCheckedChanged(RadioGroup group, int checkedId) {
+             switch (checkedId){
+                 case R.id.public_event:{
+                     eventStatus = "publicEvent";
+                     viewModel.setPublicChecked(true);
+                     break;
+                 }
+                 case R.id.private_event:{
+                     eventStatus = "privateEvent";
+                     viewModel.setPrivateChecked(true);
+                     break;
+                 }
+             }
+         }
+     });
+
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.setEventData(eventYear,eventMonth,eventDayOfMonth,eventHourOfDay,
-                        eventMinute,manager,runningLevel);
+                if(dateEt.getText().equals("") || timeEt.getText().equals("") ||
+                       locationEt.getText().equals("")|| runningLevel==null || eventStatus==null ){
+                    Snackbar.make(getView(),R.string.all_fields, Snackbar.LENGTH_LONG).show();
+
+                }
+                else{
+                    viewModel.setEventData(eventYear,eventMonth,eventDayOfMonth,eventHourOfDay,
+                            eventMinute,runningLevel,eventStatus);
+                    Snackbar.make(getView(),R.string.new_event_snack_bar, Snackbar.LENGTH_LONG).show();
+                    backFromCreateEventCallback.toHomeFromCreateEvent();
+
+                }
+
             }
         });
+
+
 
         viewModel.getStreetAddress().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 locationEt.setText(s);
+
             }
         });
 
         return root;
-    }
-
-    public void updateLocationEt(String streetAddress){
-        locationEt.setText(streetAddress);
-        Toast.makeText(getContext(),streetAddress+"updateLocationFun",Toast.LENGTH_LONG).show();
-
-    }
-
+        }
 
 
 }
+
+
