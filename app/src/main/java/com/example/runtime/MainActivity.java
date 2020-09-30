@@ -257,11 +257,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Crea
                 break;
             case "group":
                 Toast.makeText(this,"group", Toast.LENGTH_LONG).show();
-                //fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new FriendsFragment(),"friends").commit();
                 break;
             case "location":
                 Toast.makeText(this,"loction", Toast.LENGTH_LONG).show();
-                //fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new EventsFragment(),"events").commit();
                 break;
             case "profile":
                 Toast.makeText(this,"profile", Toast.LENGTH_LONG).show();
