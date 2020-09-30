@@ -3,9 +3,12 @@ package com.example.runtime;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+
+
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -13,7 +16,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -51,6 +57,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String userId = remoteMessage.getData().get("userId");
                 createRequestAcceptedNotif(title, body, userId);
             }
+
+
             else if(remoteMessage.getData().get("messageType").equals("message")){
                 String title = remoteMessage.getData().get("title");
                 String body = remoteMessage.getData().get("body");
@@ -59,6 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 createNotifMessages(title,body);
 
             }
+
         }
 
         // Check if message contains a notification payload.
@@ -119,6 +128,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
+
+
+}
+
     private void createNotifMessages(String title, String body) {
 
         final int NOTIF_ID = 11;
@@ -138,3 +151,4 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
 }
+

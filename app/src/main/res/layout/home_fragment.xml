@@ -45,7 +45,7 @@
        android:layout_height="wrap_content"
        android:layout_marginTop="10dp"
        android:id="@+id/findPeopleBtn"
-    android:text="Find new runners"/>
+    android:text="@string/find_new_runners"/>
 
    <Button
        android:layout_width="match_parent"

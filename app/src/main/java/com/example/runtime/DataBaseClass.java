@@ -1,6 +1,7 @@
 package com.example.runtime;
 
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -349,8 +350,148 @@ public class DataBaseClass {
         return storageReference1;
     }
 
+
+    public void retrieveFriendsIds(String UserId, ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(UserId);
+        currentUser.child("myFriends").addListenerForSingleValueEvent(listener);
+
+    }
+
+    public void retrieveUpcomingEventsIds (String userId, ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        currentUser.child("myEvents").addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveAllEvents(ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        databaseReference.child("events").addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveFriendsRequestsIds(String UserId, ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(UserId);
+        currentUser.child("friendsRequests").addListenerForSingleValueEvent(listener);
+
+    }
+
+    public void retrieveInvitationsIds (String userId, ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        currentUser.child("eventRequests").addListenerForSingleValueEvent(listener);
+    }
+
+
+    public void setCallBackGetImage(OnGetUserImage callBackGetImage){
+          this.callBackGetImage = callBackGetImage;
+
+    }
+
+    public void joinToEvent(String userId, String eventId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        DatabaseReference invitations = currentUser.child("eventRequests");
+        invitations.child(eventId).removeValue();
+        DatabaseReference upcomingEvents = currentUser.child("myEvents");
+        upcomingEvents.child(eventId).setValue(eventId);
+        DatabaseReference events = databaseReference.child("events");
+        DatabaseReference currentEvent = events.child(eventId);
+        DatabaseReference eventRunners = currentEvent.child("runners");
+        eventRunners.child(userId).setValue(true);
+    }
+
+    public void removeEventFromInvitations (String userId, String eventId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        DatabaseReference invitations = currentUser.child("eventRequests");
+        invitations.child(eventId).removeValue();
+    }
+
+    public void acceptFriendRequest(String userId, String friendId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        DatabaseReference userRequests = currentUser.child("friendsRequests");
+        userRequests.child(friendId).removeValue();
+        DatabaseReference userFriends = currentUser.child("myFriends");
+        userFriends.child(friendId).setValue(true);
+        DatabaseReference friendLists = userLists.child(friendId);
+        DatabaseReference friendSentRequests = friendLists.child("sentFriendsRequests");
+        friendSentRequests.child(userId).removeValue();
+        DatabaseReference friendsFriends = friendLists.child("myFriends");
+        friendsFriends.child(userId).setValue(true);
+    }
+
+    public void removeFriendRequest(String userId, String strangerId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        DatabaseReference userRequests = currentUser.child("friendsRequests");
+        userRequests.child(strangerId).removeValue();
+
+        DatabaseReference strangerLists = userLists.child(strangerId);
+        DatabaseReference strangerSentRequests = strangerLists.child("sentFriendsRequests");
+        strangerSentRequests.child(userId).removeValue();
+    }
+
+    public void removeUpcomingEvent(String userId, String eventId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        DatabaseReference userUpcomingEvents = currentUser.child("myEvents");
+        userUpcomingEvents.child(eventId).removeValue();
+
+        DatabaseReference events = databaseReference.child("events");
+        DatabaseReference currentEvent = events.child(eventId);
+        DatabaseReference runners = currentEvent.child("runners");
+        runners.child(userId).removeValue();
+    }
+
+    public void removeFriend(String userId, String friendId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        DatabaseReference userFriends = currentUser.child("myFriends");
+        userFriends.child(friendId).removeValue();
+
+        DatabaseReference friend = userLists.child(friendId);
+        DatabaseReference friendFriends = friend.child("myFriends");
+        friendFriends.child(userId).removeValue();
+    }
+
+    public void retrieveRunnersIds(String eventId, ValueEventListener listener ){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference events = databaseReference.child("events");
+        DatabaseReference currentEvent = events.child(eventId);
+        currentEvent.child("runners").addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveEventManagerId(String eventId, ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference events = databaseReference.child("events");
+        DatabaseReference currentEvent = events.child(eventId);
+        currentEvent.child("manager").addListenerForSingleValueEvent(listener);
+    }
+
+    public void retrieveManagedEventsIds(String userId, ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        currentUser.child("managedEvents").addListenerForSingleValueEvent(listener);
+
+    }
+
+
     public void setCallBackGetImage(OnGetUserImage callBackGetImage) {
         this.callBackGetImage = callBackGetImage;
+
 
     }
 
@@ -371,20 +512,17 @@ public class DataBaseClass {
         managedEvents.child(eventKey).setValue(eventKey);
 
 
-        // public void updateName(String name){
-        //  DatabaseReference databaseReferenceNew = firebaseDatabase.getReference().child("user").child(registerClass.getUserId());
-        // databaseReferenceNew.child("fullName").setValue(name);
-        //    }
 
-        // public void updateRunningLevel(String level){
-        //  DatabaseReference databaseReferenceNew = firebaseDatabase.getReference().child("user").child(registerClass.getUserId());
-        //  databaseReferenceNew.child("runningLevel").setValue(level);
-        // }
+
+    }
+
+
 
 
     }
 
 }
+
 
 
 
