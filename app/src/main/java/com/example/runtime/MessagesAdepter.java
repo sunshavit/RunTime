@@ -1,6 +1,7 @@
 package com.example.runtime;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessagesAdepter extends RecyclerView.Adapter<MessagesAdepter.MessagesViewHolder> {
-    private ArrayList<User> friend;
+    private ArrayList<User> friend = new ArrayList<>();
     private Context context;
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
     private MessagesLitener messagesLitener;
@@ -68,6 +69,7 @@ public class MessagesAdepter extends RecyclerView.Adapter<MessagesAdepter.Messag
     public void onBindViewHolder(@NonNull MessagesViewHolder holder, int position) {
         float density = context.getResources().getDisplayMetrics().density;
         User user=friend.get(position);
+        Log.d("userrrrr", "aaa");
         StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(user.getUserId());
         Glide.with(this.context).load(userImageRef).override((int)(120*density),(int)(120*density)).into(holder.image);
         holder.textViewName.setText(user.getFullName());

@@ -2,6 +2,7 @@ package com.example.runtime;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,10 @@ public class MessagesFragment extends Fragment {
         messagesVM.getFriends().observe(this, new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
+                for( User user: users){
+                    Log.d("sometag", user.getUserId());
+                }
+
                 friends.clear();
                 friends.addAll(users);
                 adapter.notifyDataSetChanged();
