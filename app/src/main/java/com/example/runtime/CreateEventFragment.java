@@ -1,19 +1,13 @@
 package com.example.runtime;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -50,7 +44,6 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
     private String eventDate;
     private String eventTime;
 
-    private InviteFriendsDialog inviteFriendsDialog;
     private ArrayList<String> invitedFriendsIds;
 
     interface OnMapListener{
@@ -103,20 +96,12 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
             throw new ClassCastException("Activity must implement OnBackFromCreateEventListener");
         }
 
-
-        //viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
-        //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
         viewModel = new ViewModelProvider(getActivity()).get(CreateEventVM.class);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        dateEt.setText(viewModel.getEventDate());
-
-       // viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
-        //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
-
     }
 
     @Nullable
@@ -139,14 +124,8 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
         RadioButton privateRb = root.findViewById(R.id.private_event);
 
         Button doneBtn=root.findViewById(R.id.doneBtn);
-/*
-        Bundle bundle = this.getArguments();
-        String streetAddress = bundle.getString("streetAddress");
-        final double longitude = bundle.getDouble("longitude");
-        final double latitude = bundle.getDouble("latitude");
-        locationEt.setText(streetAddress);*/
 
-   Toast.makeText(getContext(),String.valueOf(getArguments().getBoolean("isNew")),Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(),String.valueOf(getArguments().getBoolean("isNew")),Toast.LENGTH_LONG).show();
         if(getArguments()!=null){
             if(getArguments().getBoolean("isNew")){
                 viewModel.setEventDate("");
@@ -160,9 +139,23 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
                 viewModel.setHardTextView(Color.parseColor("#808080"));
                 viewModel.setPublicChecked(false);
                 viewModel.setPrivateChecked(false);
+
+                viewModel.setEventStatus(null);
+                viewModel.setRunningLevel(null);
+
                 bundle.putBoolean("isNew", false);
             }
         }
+
+
+        eventYear = viewModel.getEventYear();
+        eventMonth = viewModel.getEventMonth();
+        eventDayOfMonth = viewModel.getEventDayOfMonth();
+        eventHourOfDay = viewModel.getEventHourOfDay();
+        eventMinute = viewModel.getEventMinute();
+        runningLevel = viewModel.getRunningLevel();
+        eventStatus = viewModel.getEventStatus();
+
 
         dateEt.setText(viewModel.getEventDate());
         timeEt.setText(viewModel.getEventTime());
@@ -171,24 +164,16 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
         hardTv.setTextColor(viewModel.getHardTextView());
         publicRb.setChecked(viewModel.isPublicChecked());
         privateRb.setChecked(viewModel.isPrivateChecked());
-
-        if(viewModel.getIsFirstLaunch()){
-            easyImageIv.setImageResource(R.drawable.easy_gray);
-            mediumImageIv.setImageResource(R.drawable.medium_gray);
-            hardImageIv.setImageResource(R.drawable.hard_gray);
-        }
-        else {
-            easyImageIv.setImageResource(viewModel.getEasyImageView());
-            mediumImageIv.setImageResource(viewModel.getMediumImageView());
-            hardImageIv.setImageResource(viewModel.getHardImageView());
-        }
+        easyImageIv.setImageResource(viewModel.getEasyImageView());
+        mediumImageIv.setImageResource(viewModel.getMediumImageView());
+        hardImageIv.setImageResource(viewModel.getHardImageView());
 
         dateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar=Calendar.getInstance();
                 int year1=calendar.get(calendar.YEAR);
-                int month1=calendar.get(calendar.MONTH);
+                final int month1=calendar.get(calendar.MONTH);
                 int dayOfMonth1=calendar.get(calendar.DAY_OF_MONTH);
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
@@ -205,7 +190,7 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
                         String eventDayOfMonth1;
 
                         if(eventMonth < 10)
-                           eventMonth1 = "0"+eventMonth;
+                            eventMonth1 = "0"+eventMonth;
                         else
                             eventMonth1=eventMonth+"";
 
@@ -217,6 +202,9 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
                         eventDate=eventDayOfMonth1+"/"+eventMonth1+'/'+eventYear;
                         dateEt.setText(eventDate);
                         viewModel.setEventDate(eventDate);
+                        viewModel.setEventYear(year);
+                        viewModel.setEventMonth(month+1);
+                        viewModel.setEventDayOfMonth(dayOfMonth);
 
                     }
                 },year1,month1,dayOfMonth1);
@@ -258,6 +246,8 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
                         eventTime = chosenHour+":"+chosenMinute;
                         timeEt.setText(eventTime);
                         viewModel.setEventTime(eventTime);
+                        viewModel.setEventHourOfDay(hourOfDay);
+                        viewModel.setEventMinute(minute);
                     }
                 }, currentHourOfDay,currentMinute,true);
                 timePickerDialog.show();
@@ -290,6 +280,7 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
                 hardTv.setTextColor(Color.parseColor("#808080"));
                 viewModel.setHardTextView(Color.parseColor("#808080"));
                 runningLevel = "easy";
+                viewModel.setRunningLevel("easy");
 
             }
         });
@@ -311,6 +302,7 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
                 hardTv.setTextColor(Color.parseColor("#808080"));
                 viewModel.setHardTextView(Color.parseColor("#808080"));
                 runningLevel = "medium";
+                viewModel.setRunningLevel("medium");
 
             }
         });
@@ -332,33 +324,34 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
                 hardTv.setTextColor(Color.parseColor("#056378"));
                 viewModel.setHardTextView(Color.parseColor("#056378"));
                 runningLevel = "expert";
+                viewModel.setRunningLevel("expert");
             }
         });
 
-     eventStatusRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-         @Override
-         public void onCheckedChanged(RadioGroup group, int checkedId) {
-             switch (checkedId){
-                 case R.id.public_event:{
-                     eventStatus = "publicEvent";
-                     viewModel.setPublicChecked(true);
-                     break;
-                 }
-                 case R.id.private_event:{
-                     eventStatus = "privateEvent";
-                     viewModel.setPrivateChecked(true);
-                     break;
-                 }
-             }
-         }
-     });
+        eventStatusRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.public_event:{
+                        eventStatus = "publicEvent";
+                        viewModel.setPublicChecked(true);
+                        viewModel.setEventStatus("publicEvent");
+                        break;
+                    }
+                    case R.id.private_event:{
+                        eventStatus = "privateEvent";
+                        viewModel.setPrivateChecked(true);
+                        viewModel.setEventStatus("privateEvent");
+                        break;
+                    }
+                }
+            }
+        });
 
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-     /*           Log.d("details",dateEt.getText().toString()+""+ timeEt.getText().toString()+""+
-                        locationEt.getText()+""+runningLevel+""+eventStatus);*/
                 if(dateEt.getText().equals("") || timeEt.getText().equals("") ||
                        locationEt.getText().equals("")|| runningLevel==null || eventStatus==null ){
                     Snackbar.make(getView(),R.string.all_fields, Snackbar.LENGTH_LONG).show();
@@ -398,7 +391,7 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
 
 
         return root;
-        }
+    }
 
     @Override
     public void onFinishEditDialog(ArrayList<String> invitedFriendsIds) {

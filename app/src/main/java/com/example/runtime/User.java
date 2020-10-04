@@ -7,7 +7,6 @@ public class User {
     private int month;
     private int dayOfMonth;
     private String runningLevel;
-    private boolean isActive;
     private double longitude;
     private double latitude;
     private String userId;
@@ -16,14 +15,13 @@ public class User {
     public User() {
     }
 
-    public User(String userToken, String userId, String fullName, String gender, int year, int month, int dayOfMonth, String runningLevel, boolean isOnline, double longitude, double latitude) {
+    public User(String userToken, String userId, String fullName, String gender, int year, int month, int dayOfMonth, String runningLevel, double longitude, double latitude) {
         this.fullName = fullName;
         this.gender = gender;
         this.year = year;
         this.month = month;
         this.dayOfMonth = dayOfMonth;
         this.runningLevel = runningLevel;
-        this.isActive = isOnline;
         this.longitude = longitude;
         this.latitude = latitude;
         this.userToken = userToken;
@@ -110,12 +108,5 @@ public class User {
         this.runningLevel = runningLevel;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 
 }

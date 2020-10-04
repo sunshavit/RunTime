@@ -56,9 +56,9 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     private static final String MESSAGES_TAG2 = "messagestag2";
     final String HOME_TAG="homeTag";
     final String CREATEEVENT_TAG="eventtag";
-
+    final String FRIEND_TAB_TAG = "friendTabTag";
     final String MAP_TAG="map_tag";
-
+    final String SIGN_IN = "signIn";
     final String TOOLBAR_TAG="toolbartag";
 
     final String FIND_PEOPLE = "findPeople";
@@ -75,14 +75,13 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     private FirebaseDatabase firebaseDatabase ;
     private boolean isPreferencesCreated;
     private boolean isUserListsCreated;
-    private HomeFragment homeFragment;
+   // private HomeFragment homeFragment;
     private UserInstance userInstance;
     private DrawerLayout drawerLayout;
 
     CreateEventFragment createEventFragment;
     RelativeLayout toolbarLayout;
     String isNull;
-
 
 
 
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
     SharedPreferences sp;
 
-
+    MapFragment mapFragment = new MapFragment();
 
 
 
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         setContentView(R.layout.activity_main);
 
 
-        homeFragment = new HomeFragment();
+        //homeFragment = new HomeFragment();
         fragmentManager = getSupportFragmentManager();
 
         sp = getSharedPreferences("details", MODE_PRIVATE);
@@ -152,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                                 if (snapshot.hasChild("gender")){
                                if (!sp.getBoolean("isChangingConfigurations", false)){
                                  Log.d("home", "snapshot");
-                                    fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+                                    fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
                                     //fragmentTransaction.commit();
 
                   //  Log.d("bug", "first condition");
@@ -215,12 +214,15 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                 }
 
                 else {
-                    fragmentManager.beginTransaction().replace(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG).commit();
-                    toolBarFragment =getSupportFragmentManager().findFragmentByTag(TOOLBAR_TAG);
-                    if(toolBarFragment!=null) {
-                        fragmentManager.beginTransaction().remove(toolBarFragment).commit();
-                        fragmentManager.beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(NAV_TAG)).commit();
+                    if (!sp.getBoolean("isChangingConfigurations", false)){
+                        fragmentManager.beginTransaction().replace(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG).commit();
+                        toolBarFragment =getSupportFragmentManager().findFragmentByTag(TOOLBAR_TAG);
+                        if(toolBarFragment!=null) {
+                            fragmentManager.beginTransaction().remove(toolBarFragment).commit();
+                            fragmentManager.beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(NAV_TAG)).commit();
+                        }
                     }
+
                 }
 
             }
@@ -235,10 +237,20 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.signOutSidebar:
+                        SharedPreferences.Editor editor=sp.edit();
+                        editor.putBoolean("isChangingConfigurations",false);
+                        editor.commit();
+
+                        Fragment fragment = fragmentManager.findFragmentByTag(FRIEND_TAB_TAG);
+                        if(fragment!=null){
+                            fragmentManager.beginTransaction().remove(fragment);
+                        }
+
+
                         registerClass.signOut();
                         break;
                     case R.id.editProfileSidebar:
-                        fragmentManager.beginTransaction().replace(R.id.rootLayout, new EditProfileFragment(), "editProfile").commit();
+                        fragmentManager.beginTransaction().replace(R.id.rootLayout, new EditProfileFragment(), "editProfile").addToBackStack(null).commit();
                         break;
                 }
                 return false;
@@ -273,12 +285,12 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
     @Override
     public void onSignInClick() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignInFragment(),SIGNUP1TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignInFragment(),SIGN_IN).commit();
     }
 
     @Override
     public void onSignUpClick() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp1Fragment(),SIGNUP1TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp1Fragment(),SIGNUP1TAG).addToBackStack(null).commit();
     }
 
 
@@ -326,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
     @Override
     public void onSuccessSignUp(String userId) {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout, new SignUp2Fragment(), SIGNUP2TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new SignUp2Fragment(), SIGNUP2TAG).addToBackStack(null).commit();
         Toast.makeText(this, "welcome" + userId, Toast.LENGTH_SHORT).show();
 
     }
@@ -349,11 +361,11 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         switch (page){
             case "home":
                 Toast.makeText(this,"home", Toast.LENGTH_LONG).show();
-                fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).addToBackStack(null).commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).addToBackStack(null).commit();
                 break;
             case "group":
                 Toast.makeText(this,"group", Toast.LENGTH_LONG).show();
-                fragmentManager.beginTransaction().replace(R.id.rootLayout,new FriendsFragment(),"friends").addToBackStack(null).commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new FriendsFragment(),FRIEND_TAB_TAG).addToBackStack(null).commit();
                 break;
             case "location":
                 Toast.makeText(this,"loction", Toast.LENGTH_LONG).show();
@@ -391,8 +403,8 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
     @Override
     public void onSuccessCreate() {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).addToBackStack(null).commit();
 
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp3Fragment(),SIGNUP3TAG).commit();
     }
 
     @Override
@@ -417,9 +429,12 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     @Override
     public void onSuccessSignIn(String userId) {
 
+        for(int i=0; i<fragmentManager.getBackStackEntryCount(); i++){
+            fragmentManager.popBackStack();
+        }
         fragmentManager.beginTransaction().replace(R.id.toolbarLayout,new ToolBarFragment(),TOOLBAR_TAG).commit();
 
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
 
         fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),NAV_TAG).commit();
 
@@ -454,10 +469,23 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     public void moveToHomeFragment(){
         if (isPreferencesCreated && isUserListsCreated){
 
-            fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+            for(int i=0; i<fragmentManager.getBackStackEntryCount(); i++){
+                fragmentManager.popBackStack();
+            }
 
+            fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
             fragmentManager.beginTransaction().replace(R.id.toolbarLayout,new ToolBarFragment(),TOOLBAR_TAG).commit();
             fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),"nav").commit();
+
+         /*   Fragment fragment = fragmentManager.findFragmentByTag(SIGNUP1TAG);
+            fragmentManager.beginTransaction().remove(fragment).commit();
+
+            Fragment fragment1 = fragmentManager.findFragmentByTag(SIGNUP2TAG);
+            fragmentManager.beginTransaction().remove(fragment1).commit();
+
+            Fragment fragment2 = fragmentManager.findFragmentByTag(SIGNUP3TAG);
+            fragmentManager.beginTransaction().remove(fragment2).commit();*/
+
 
         }
         else
@@ -492,34 +520,24 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
     @Override
     public void onMapOkClick() {
+        getSupportFragmentManager().popBackStack();
         fragmentManager.beginTransaction().replace(R.id.rootLayout, new MapFragment(), MAP_TAG).addToBackStack(null).commit();
     }
 
     @Override
     public void onCreateEventFromMap(boolean isNew) {
-
-        for(int i=1; i<getSupportFragmentManager().getBackStackEntryCount() ; i++){
-            getSupportFragmentManager().popBackStack();
-        }
-
+        getSupportFragmentManager().popBackStack();
         fragmentManager.beginTransaction().replace(R.id.rootLayout, CreateEventFragment.getCreateEventFragment(false), CREATEEVENT_TAG).addToBackStack(null).commit();
-           // for(int i=1; i<getSupportFragmentManager().getBackStackEntryCount() ; i++){
-
-       // fragmentManager.beginTransaction().replace(R.id.rootLayout, CreateEventFragment.getInstance(false), CREATEEVENT_TAG).addToBackStack(null).commit();
-            /*for(int i=1; i<getSupportFragmentManager().getBackStackEntryCount() ; i++){
-
-                getSupportFragmentManager().popBackStack();
-            }*/
     }
 
     @Override
 
     public void toHomeFromCreateEvent() {
         //fragmentManager.beginTransaction().replace(R.id.rootLayout, new HomeFragment(), HOME_TAG).commit();}
-        fragmentManager.beginTransaction().replace(R.id.rootLayout, homeFragment, HOME_TAG).commit();}
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new HomeFragment(), HOME_TAG).commit();}
 
     public void onChangeUserSuccess() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
     }
 
     @Override

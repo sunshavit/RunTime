@@ -116,15 +116,6 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
         viewModel.getLocation().observe(getViewLifecycleOwner(),observerLocation);
 
 
-        ToggleButton activeBtn = root.findViewById(R.id.active_btn);
-        activeBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    viewModel.updateActive(isChecked);
-
-            }
-        });
-
         Button buttonNewEvent = root.findViewById(R.id.createNewEventBT);
 
         buttonNewEvent.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +130,7 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
                 fragmentTransaction.replace(R.id.rootLayout, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+
             }
         });
 
