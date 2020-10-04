@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,7 +78,7 @@ public class Messages2VM extends AndroidViewModel {
 
     public void addToList(String message){
         List<Message> list = new ArrayList<>(messageListLiveData.getValue() == null ? new ArrayList<Message>() : messageListLiveData.getValue());
-        String pattern = "yyyy-MM-dd HH:mm";
+        String pattern = "dd-MM-yyyy HH:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
         list.add(new Message(message,date,list.size(),activeConversationFriendId));
@@ -88,7 +89,7 @@ public class Messages2VM extends AndroidViewModel {
         List<Message> list = new ArrayList<>(messageListLiveData.getValue() == null ? new ArrayList<Message>() : messageListLiveData.getValue());
 
         //TODO change it to whatever
-        String pattern = "yyyy-MM-dd HH:mm";
+        String pattern = "dd-MM-yyyy HH:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
         Message msg = new Message(message, date,list.size(),user.getUserId());
@@ -122,6 +123,11 @@ public class Messages2VM extends AndroidViewModel {
         dataBaseClass.retrieveMessages(activeConversationFriendId,valueEventListener);
     }
 
+    public void saveIfOpen(boolean open,String id){
+        dataBaseClass.saveIfOpenTheLastMessage(open,id);
+    }
+
+
     private void createNotificationMessage(String token,Message message,String name) throws JSONException {
 
         Log.d("tag2", "inside create friendRequestNotificationMessage");
@@ -133,6 +139,8 @@ public class Messages2VM extends AndroidViewModel {
         //JSONObject notificationObject = new JSONObject();
         data.put("title", "New message from "+ name);
         data.put("body",message.getContent());
+        data.put("userId",UserInstance.getInstance().getUser().getUserId());
+        data.put("time",message.getTime());
         rootObject.put("data", data);
 
         String url = "https://fcm.googleapis.com/fcm/send";
