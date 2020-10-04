@@ -45,6 +45,10 @@
     <string name="mutual">חברים משותפים</string>
     <string name="male">גבר</string>
     <string name="female">אישה</string>
+    <string name="my_friends">החברים שלי</string>
+    <string name="insert_text">הזן טקסט</string>
+    <string name="invite">הזמן</string>
+    <string name="un_invite">הסר הזמנה</string>
     <string name="insert_text">הוסף טקסט</string>
     <string name="is_sure_cancel_event">האם לבטל את האירוע הזה?</string>
     <string name="cancel_event">בטל אירוע</string>
@@ -66,4 +70,5 @@
     <string name="added_to_friends">נוסף לרשימת החברים שלך</string>
     <string name="sign_up_with_email">הרשמה עם אימייל</string>
     <string name="sign_in">התחברות</string>
+
 </resources>

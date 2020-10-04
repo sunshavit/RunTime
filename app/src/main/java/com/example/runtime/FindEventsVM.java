@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,15 +14,18 @@ import java.util.ArrayList;
 
 public class FindEventsVM extends AndroidViewModel {
 
-    MutableLiveData<ArrayList<Event>> relevantEvents = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<Event>> relevantEvents = new MutableLiveData<>();
     private ArrayList<Event> eventsFromDatabase = new ArrayList<>();
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
-    ArrayList<Event> relevant = new ArrayList<>();
+    private ArrayList<Event> relevantEventsTemp = new ArrayList<>();
     private User currentUser;
+    private MutableLiveData<ArrayList<String>> myEvents = new MutableLiveData<>();
+    private ArrayList<String> myEventsTemp = new ArrayList<>();
 
     public FindEventsVM(@NonNull Application application) {
         super(application);
         retrieveEventsList();
+        setMyEvents();
     }
 
     //distance calculation
@@ -52,6 +54,8 @@ public class FindEventsVM extends AndroidViewModel {
     public MutableLiveData<ArrayList<Event>> getRelevantEvents(){
         return relevantEvents;
     }
+
+    public MutableLiveData<ArrayList<String>> getMyEvents(){return  myEvents;}
 
     public void retrieveEventsList(){
         getAllEventsList();
@@ -98,20 +102,50 @@ public class FindEventsVM extends AndroidViewModel {
             double distance = haversine(event.getLatitude(), event.getLongitude(), latitude, longitude);
 
             if(distance < 20 && event.getEventStatus().equals("publicEvent") && !event.getManager().equals(currentUser.getUserId())){
-                relevant.add(event);
+                relevantEventsTemp.add(event);
             }
         }
 
-        relevantEvents.setValue(relevant);
+        relevantEvents.setValue(relevantEventsTemp);
 
     }
 
+    // add event to user "myEvents" list.
     public void onJoinEvent(String eventId,String userId) {
         dataBaseClass.addEventToMyEventsList(eventId,userId);
     }
 
+    // remove event to user "myEvents" list.
     public void onCancelJoinEvent(String eventId,String userId) {
         dataBaseClass.removeEventFromMyEventsList(eventId,userId);
     }
+
+    // update myEvents list from database.
+    public void setMyEvents(){
+        getCurrentUser();
+        myEventsTemp.clear();
+
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                        myEventsTemp.add(snapshot1.getKey());
+                    }
+                }
+                myEventsTemp.remove("false");
+                myEvents.setValue(myEventsTemp);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        dataBaseClass.retrieveMyEvents(listener,currentUser.getUserId());
+
+    }
+
 }
 

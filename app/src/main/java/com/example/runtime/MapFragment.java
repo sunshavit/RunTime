@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -62,7 +64,9 @@ public class MapFragment extends Fragment {
             throw new ClassCastException("Activity must implement OnCreateEventListener");
         }
 
-        viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+         viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+        //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
+
         //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
 
 
@@ -195,6 +199,16 @@ public class MapFragment extends Fragment {
                 //createEventCallback.onInputSent(streetAddress);
                 viewModel.setStreetAddress(streetAddress);
                 createEventCallback.onCreateEventFromMap(false);
+
+               /* Bundle bundle = new Bundle();
+                bundle.putDouble("latitude",latitude);
+                bundle.putDouble("longitude", longitude);
+                bundle.putString("streetAddress",streetAddress);
+                CreateEventFragment createEventFragment = CreateEventFragment.getCreateEventFragment(false);
+                createEventFragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.rootLayout,createEventFragment).commit();*/
+
+
 
             }
         });

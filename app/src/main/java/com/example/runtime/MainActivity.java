@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -17,7 +16,6 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -26,7 +24,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,8 +34,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-
-import static java.security.AccessController.getContext;
 
 
 public class MainActivity extends AppCompatActivity implements MessagesFragment.OnClickOnMessages, DataBaseClass.OnChangeUserListener, HomeFragment.CreateNewEventListener, BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
@@ -90,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
 
 
+
     // private FirebaseStorage firebaseStorage;
     RegisterClass registerClass;
     DataBaseClass dataBaseClass;
@@ -101,15 +97,19 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         homeFragment = new HomeFragment();
         fragmentManager = getSupportFragmentManager();
 
         sp = getSharedPreferences("details", MODE_PRIVATE);
+
 
         userInstance = UserInstance.getInstance();
         registerClass = RegisterClass.getInstance();
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
 
         //registerClass.stateListener();
-       createEventFragment = CreateEventFragment.getInstance(false);
+       createEventFragment = CreateEventFragment.getCreateEventFragment(false);
 
 
         toolbarLayout = findViewById(R.id.toolbarLayout);
@@ -144,64 +144,75 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
                 final FirebaseUser user=firebaseAuth.getCurrentUser();
                 if(user!=null) { //sign up or sign in
-                    Log.d("bug", "first condition");
 
-
-
-                    ValueEventListener listener = new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.hasChild("gender")){
-
-
-                                if (!sp.getBoolean("isChangingConfigurations", false)){
-                                    Log.d("home", "snapshot");
+                        ValueEventListener listener = new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.hasChild("gender")){
+                               if (!sp.getBoolean("isChangingConfigurations", false)){
+                                 Log.d("home", "snapshot");
                                     fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
                                     //fragmentTransaction.commit();
-                                    Log.d("bug", "inside value event listener");
+
+                  //  Log.d("bug", "first condition");
+
+
 
                                     fragmentManager.beginTransaction().replace(R.id.toolbarLayout,new ToolBarFragment(),TOOLBAR_TAG).commit();
 
-                                    fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),NAV_TAG).commit();
 
+                                    fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),NAV_TAG).commit();}
+                                  
                                 }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+
+                                //if (!sp.getBoolean("isChangingConfigurations", false)){
+                                  //  Log.d("home", "snapshot");
+                                   // fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+                                    //fragmentTransaction.commit();
+                                   // Log.d("bug", "inside value event listener");
+
+                                   // fragmentManager.beginTransaction().replace(R.id.toolbarLayout,new ToolBarFragment(),TOOLBAR_TAG).commit();
+
+                                   // fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),NAV_TAG).commit();
+
+                               // }
 
 
 
                             }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    };
+                        };
 
 
 
-                    dataBaseClass.isUserExists(registerClass.getUserId(), listener);
-                    //UserInstance userInstance = UserInstance.getInstance();
-                    /*if (userInstance.getUser().getGender() != null){
+                        dataBaseClass.isUserExists(registerClass.getUserId(), listener);
+                        //UserInstance userInstance = UserInstance.getInstance();
 
 
-                    }*/
+
+
+
+                        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                if (task.isSuccessful()){
+                                    String token = task.getResult().getToken();
+                                    dataBaseClass.saveUserToken(token);
+                                }
+                            }
+                        });
+
+
+
                     getLocationUpdates();
 
-                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                            if (task.isSuccessful()){
-                                String token = task.getResult().getToken();
-                                dataBaseClass.saveUserToken(token);
-                            }
-                        }
-                    });
-
-
-
-                    //dataBaseClass.updateActive(true);
-                    //Toast.makeText(MainActivity.this,user.getUid(),Toast.LENGTH_LONG).show();
+                    //dataBaseClass.updateActive(true)//Toast.makeText(MainActivity.this,user.getUid(),Toast.LENGTH_LONG).show();
                 }
+
                 else {
                     fragmentManager.beginTransaction().replace(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG).commit();
                     toolBarFragment =getSupportFragmentManager().findFragmentByTag(TOOLBAR_TAG);
@@ -244,11 +255,16 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
         //createEventFragment = CreateEventFragment.getInstance();
 
-        createEventFragment = CreateEventFragment.getInstance(true);
+        createEventFragment = CreateEventFragment.getCreateEventFragment(true);
         fragmentManager.beginTransaction().replace(R.id.rootLayout,createEventFragment ,CREATEEVENT_TAG).addToBackStack(null).commit();
         //to remove toolbar and navigation bar.
+
+       // navigationFragment =getSupportFragmentManager().findFragmentByTag(NAV_TAG);
+       /* if(navigationFragment!=null) {
+
         /*navigationFragment =getSupportFragmentManager().findFragmentByTag(NAV_TAG);
         if(navigationFragment!=null) {
+
             toolbarLayout.setVisibility(View.GONE);
             fragmentManager.beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(NAV_TAG)).commit();
         }*/
@@ -332,23 +348,23 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         switch (page){
             case "home":
                 Toast.makeText(this,"home", Toast.LENGTH_LONG).show();
-                fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,homeFragment,HOME_TAG).addToBackStack(null).commit();
                 break;
             case "group":
                 Toast.makeText(this,"group", Toast.LENGTH_LONG).show();
-                fragmentManager.beginTransaction().replace(R.id.rootLayout,new FriendsFragment(),"friends").commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new FriendsFragment(),"friends").addToBackStack(null).commit();
                 break;
             case "location":
                 Toast.makeText(this,"loction", Toast.LENGTH_LONG).show();
-                fragmentManager.beginTransaction().replace(R.id.rootLayout,new EventsFragment(),"events").commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new EventsFragment(),"events").addToBackStack(null).commit();
                 break;
             case "profile":
                 Toast.makeText(this,"profile", Toast.LENGTH_LONG).show();
-                fragmentManager.beginTransaction().replace(R.id.rootLayout,new ProfileFragment(),PROFiLE_TAG).commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new ProfileFragment(),PROFiLE_TAG).addToBackStack(null).commit();
                 break;
             case "message":
                 Toast.makeText(this,"message", Toast.LENGTH_LONG).show();
-                fragmentManager.beginTransaction().replace(R.id.rootLayout,new MessagesFragment(),MESSAGES_TAG).commit();
+                fragmentManager.beginTransaction().replace(R.id.rootLayout,new MessagesFragment(),MESSAGES_TAG).addToBackStack(null).commit();
                 break;
         }
     }
@@ -484,8 +500,13 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         for(int i=1; i<getSupportFragmentManager().getBackStackEntryCount() ; i++){
             getSupportFragmentManager().popBackStack();
         }
-        fragmentManager.beginTransaction().replace(R.id.rootLayout, CreateEventFragment.getInstance(false), CREATEEVENT_TAG).addToBackStack(null).commit();
+
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, CreateEventFragment.getCreateEventFragment(false), CREATEEVENT_TAG).addToBackStack(null).commit();
+           // for(int i=1; i<getSupportFragmentManager().getBackStackEntryCount() ; i++){
+
+       // fragmentManager.beginTransaction().replace(R.id.rootLayout, CreateEventFragment.getInstance(false), CREATEEVENT_TAG).addToBackStack(null).commit();
             /*for(int i=1; i<getSupportFragmentManager().getBackStackEntryCount() ; i++){
+
                 getSupportFragmentManager().popBackStack();
             }*/
     }
@@ -505,6 +526,8 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         Toast.makeText(MainActivity.this,"failed",Toast.LENGTH_LONG).show();
 
     }
+
+
 }
 
 
