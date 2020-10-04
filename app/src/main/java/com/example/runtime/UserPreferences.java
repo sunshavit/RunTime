@@ -6,6 +6,7 @@ public class UserPreferences {
     private String gender;
     private String runingLevel;
 
+
     public UserPreferences() {
     }
 

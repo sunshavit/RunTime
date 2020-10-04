@@ -93,8 +93,11 @@ public class CreateEventVM extends AndroidViewModel {
             userTokenFromDatabase(invitedFriendsIds);
         }
 
+    }
 
-
+    Event getEventData(){
+        Event event = new Event(eventYear,eventMonth,eventDayOfMonth,eventHourOfDay,eventMinute,longitude,latitude,runningLevel,eventStatus);
+        return event;
     }
 
 
@@ -253,5 +256,61 @@ public class CreateEventVM extends AndroidViewModel {
         queue.add(request);
         queue.start();
 
+    }
+
+    public int getEventYear() {
+        return eventYear;
+    }
+
+    public void setEventYear(int eventYear) {
+        this.eventYear = eventYear;
+    }
+
+    public int getEventMonth() {
+        return eventMonth;
+    }
+
+    public void setEventMonth(int eventMonth) {
+        this.eventMonth = eventMonth;
+    }
+
+    public int getEventDayOfMonth() {
+        return eventDayOfMonth;
+    }
+
+    public void setEventDayOfMonth(int eventDayOfMonth) {
+        this.eventDayOfMonth = eventDayOfMonth;
+    }
+
+    public int getEventHourOfDay() {
+        return eventHourOfDay;
+    }
+
+    public void setEventHourOfDay(int eventHourOfDay) {
+        this.eventHourOfDay = eventHourOfDay;
+    }
+
+    public int getEventMinute() {
+        return eventMinute;
+    }
+
+    public void setEventMinute(int eventMinute) {
+        this.eventMinute = eventMinute;
+    }
+
+    public String getRunningLevel() {
+        return runningLevel;
+    }
+
+    public void setRunningLevel(String runningLevel) {
+        this.runningLevel = runningLevel;
+    }
+
+    public String getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(String eventStatus) {
+        this.eventStatus = eventStatus;
     }
 }

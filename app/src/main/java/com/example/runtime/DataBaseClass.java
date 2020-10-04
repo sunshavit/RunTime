@@ -320,6 +320,13 @@ public class DataBaseClass {
         });
     }
 
+
+    public void getImageUserId(String userId, OnSuccessListener listener) {
+        StorageReference reference = storageReference.child("profileImages/" + userId);
+        reference.getDownloadUrl().addOnSuccessListener(listener);}
+
+
+
     public void getUser(ValueEventListener listener) {
         final DatabaseReference users = firebaseDatabase.getReference("user");
         users.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
