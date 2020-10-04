@@ -55,7 +55,7 @@ public class InvitationsTabAdapter extends RecyclerView.Adapter<InvitationsTabAd
         try {
             if (geocoder.getFromLocation(latitude,longitude,1) != null){
                 if (geocoder.getFromLocation(latitude,longitude,1).size() > 0){
-                    address = geocoder.getFromLocation(latitude,longitude,1).get(0).getLocality();
+                    address = geocoder.getFromLocation(latitude,longitude,1).get(0).getAddressLine(0);
                 }
             }
         } catch (IOException e){
@@ -72,6 +72,9 @@ public class InvitationsTabAdapter extends RecyclerView.Adapter<InvitationsTabAd
         int hourOfDay = invitations.get(position).getHourOfDay();
         int minutes = invitations.get(position).getMinute();
         String time = hourOfDay + ":" + minutes;
+        if (minutes < 10){
+            time = hourOfDay + ":0" + minutes;
+        }
         holder.invitationTimeTV.setText(time);
     }
 

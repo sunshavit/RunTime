@@ -14,6 +14,8 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 
@@ -128,7 +130,15 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
         buttonNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createnewEventCallBack.onCreateNewEvent(true);
+                //createnewEventCallBack.onCreateNewEvent(true);
+
+                Fragment fragment = CreateEventFragment.getInstance(true);
+                FragmentManager fragmentManager = getFragmentManager();
+                assert fragmentManager != null;
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.rootLayout, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
@@ -136,7 +146,14 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
         findPeopleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                findPeopleCallback.onFindPeopleClicked();
+                //findPeopleCallback.onFindPeopleClicked();
+                Fragment fragment = new FindPeopleFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                assert fragmentManager != null;
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.rootLayout, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
@@ -144,7 +161,14 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
         findEventsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                findEventsCallback.onFindEventsClicked();
+                //findEventsCallback.onFindEventsClicked();
+                Fragment fragment = new FindEventsFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                assert fragmentManager != null;
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.rootLayout, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
         return root;

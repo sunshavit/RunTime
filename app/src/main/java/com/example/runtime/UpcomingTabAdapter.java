@@ -55,7 +55,7 @@ public class UpcomingTabAdapter extends RecyclerView.Adapter<UpcomingTabAdapter.
         try {
             if (geocoder.getFromLocation(latitude,longitude,1) != null){
                 if (geocoder.getFromLocation(latitude,longitude,1).size() > 0){
-                    address = geocoder.getFromLocation(latitude,longitude,1).get(0).getLocality();
+                    address = geocoder.getFromLocation(latitude,longitude,1).get(0).getAddressLine(0);
                 }
             }
 
@@ -73,6 +73,10 @@ public class UpcomingTabAdapter extends RecyclerView.Adapter<UpcomingTabAdapter.
         int hourOfDay = upcomingEvents.get(position).getHourOfDay();
         int minutes = upcomingEvents.get(position).getMinute();
         String time = hourOfDay + ":" + minutes;
+        if (minutes < 10){
+            time = hourOfDay + ":0" + minutes;
+        }
+
         holder.upcomingTime.setText(time);
     }
 

@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -86,6 +88,8 @@ public class FriendsRequestsTabFragment extends Fragment implements FriendsReque
     @Override
     public void onRequestAccepted(String userId, String newFriendId, String fullName, String token) throws JSONException {
         viewModel.onRequestAccepted(userId, newFriendId, fullName, token);
+        String addedToFriends = getString(R.string.added_to_friends);
+        Snackbar.make(swipeRefreshLayout, fullName + " " + addedToFriends, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

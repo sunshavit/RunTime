@@ -2,6 +2,7 @@ package com.example.runtime;
 
 
 import android.app.Application;
+import android.location.Geocoder;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -28,16 +29,20 @@ import com.google.firebase.storage.StorageReference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class FindPeopleVM extends AndroidViewModel {
 
     MutableLiveData<ArrayList<User>> relevantUsers = new MutableLiveData<>();
     MutableLiveData<ArrayList<String>> recentSentRequests = new MutableLiveData<>();
+
+    MutableLiveData<String> addressLiveData = new MutableLiveData<>();
     ArrayList<String> recentSentRequestsArrayList = new ArrayList<>();
     ArrayList<User> relevant = new ArrayList<>();
 
@@ -57,12 +62,6 @@ public class FindPeopleVM extends AndroidViewModel {
         getSentRequests();
     }
 
-
-
-   /* public FindPeopleVM() {
-        retrieveUsersList();
-        getSentRequests();
-    }*/
 
     public void retrieveUsersList(){
 
@@ -118,11 +117,6 @@ public class FindPeopleVM extends AndroidViewModel {
         return relevantUsers;
     }
 
-    public String getLocationGeoCode(){
-        //retrieve location and geocode it
-        return null;
-    }
-
 
     //trying
 
@@ -144,8 +138,8 @@ public class FindPeopleVM extends AndroidViewModel {
                         usersFromDatabase.add(user);
 
                     }
-                    Log.d("tag1", usersFromDatabase.get(0).getGender());
-                    Log.d("tag1", usersFromDatabase.toString());
+                    //Log.d("tag1", usersFromDatabase.get(0).getGender());
+                   // Log.d("tag1", usersFromDatabase.toString());
                     getUserPreferences();
                 }
             }
@@ -186,9 +180,32 @@ public class FindPeopleVM extends AndroidViewModel {
 
         currentUser = UserInstance.getInstance().getUser();
         getFriendsIds();
+        getUserAddress();
     }
 
-        //use sun's class
+    private void getUserAddress() {
+        double longitude = currentUser.getLongitude();
+        double latitude = currentUser.getLatitude();
+        Geocoder geocoder = new Geocoder(getApplication().getApplicationContext(), Locale.getDefault());
+
+        String address = "";
+        try {
+            if (geocoder.getFromLocation(latitude,longitude,1) != null){
+                if (geocoder.getFromLocation(latitude,longitude,1).size() > 0){
+
+                   // address = geocoder.getFromLocation(latitude,longitude,1).get(0).getLocality();
+                    address = geocoder.getFromLocation(latitude,longitude,1).get(0).getAddressLine(0);
+
+                }
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        addressLiveData.setValue(address);
+    }
+
+
+    //use sun's class
         //dataBaseClass.retrieveUserDetails(listener);
 
     private void getFriendsIds(){
@@ -356,10 +373,13 @@ public class FindPeopleVM extends AndroidViewModel {
 
         final JSONObject rootObject = new JSONObject();
         rootObject.put("to", token);
-        JSONObject notificationObject = new JSONObject();
-        notificationObject.put("title", "New friend request!");
-        notificationObject.put("body", "don't  keep them waiting");
-        rootObject.put("notification", notificationObject);
+        JSONObject data = new JSONObject();
+        String friendRequest = getApplication().getString(R.string.new_friend_request);
+        String dontKeep = getApplication().getString(R.string.do_not_keep_wait);
+        data.put("messageType", "friendRequest");
+        data.put("title", friendRequest);
+        data.put("body", dontKeep);
+        rootObject.put("data", data);
 
         String url = "https://fcm.googleapis.com/fcm/send";
 
@@ -407,6 +427,10 @@ public class FindPeopleVM extends AndroidViewModel {
 
     public MutableLiveData<Boolean> getSwipeLayoutBool(){
         return swipeLayoutBool;
+    }
+
+    public MutableLiveData<String> getAddressLiveData(){
+        return addressLiveData;
     }
 
 }

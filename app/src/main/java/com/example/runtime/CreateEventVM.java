@@ -64,6 +64,10 @@ public class CreateEventVM extends AndroidViewModel {
 
         MutableLiveData<String> streetAddress = new MutableLiveData<>();
 
+    public CreateEventVM(@NonNull Application application) {
+        super(application);
+    }
+
     public MutableLiveData<String> getStreetAddress(){
         return streetAddress;
     }

@@ -23,8 +23,8 @@ public class ManagedTabAdapter extends RecyclerView.Adapter<ManagedTabAdapter.Ma
 
     interface ManagedListener{
         void onRunnersClicked(String eventId);
-        void onCancelButtonClicked(String eventId);
-        void onEditBtnClicked(String eventId);
+        void onCancelButtonClicked(Event event);
+
     }
 
     ManagedListener managedCallback;
@@ -54,7 +54,7 @@ public class ManagedTabAdapter extends RecyclerView.Adapter<ManagedTabAdapter.Ma
         try {
             if (geocoder.getFromLocation(latitude,longitude,1) != null){
                 if (geocoder.getFromLocation(latitude,longitude,1).size() > 0){
-                    address = geocoder.getFromLocation(latitude,longitude,1).get(0).getLocality();
+                    address = geocoder.getFromLocation(latitude,longitude,1).get(0).getAddressLine(0);
                 }
             }
 
@@ -72,6 +72,9 @@ public class ManagedTabAdapter extends RecyclerView.Adapter<ManagedTabAdapter.Ma
         int hourOfDay = managedEvents.get(position).getHourOfDay();
         int minutes = managedEvents.get(position).getMinute();
         String time = hourOfDay + ":" + minutes;
+        if (minutes < 10){
+            time = hourOfDay + ":0" + minutes;
+        }
         holder.managedTime.setText(time);
     }
 
@@ -87,7 +90,7 @@ public class ManagedTabAdapter extends RecyclerView.Adapter<ManagedTabAdapter.Ma
         TextView managedTime;
         LinearLayout runners;
         Button cancelBtn;
-        Button editBtn;
+
 
         public ManagedViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -96,7 +99,7 @@ public class ManagedTabAdapter extends RecyclerView.Adapter<ManagedTabAdapter.Ma
             managedTime = itemView.findViewById(R.id.managedCellTimeTV);
             runners = itemView.findViewById(R.id.managedCellRunners);
             cancelBtn = itemView.findViewById(R.id.managedCellCancelBtn);
-            editBtn = itemView.findViewById(R.id.managedCellEditBtn);
+
 
             runners.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,16 +111,11 @@ public class ManagedTabAdapter extends RecyclerView.Adapter<ManagedTabAdapter.Ma
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    managedCallback.onCancelButtonClicked(managedEvents.get(getAdapterPosition()));
                 }
             });
 
-            editBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                }
-            });
 
         }
     }

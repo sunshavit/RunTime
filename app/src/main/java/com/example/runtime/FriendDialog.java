@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -67,9 +69,18 @@ public class FriendDialog extends DialogFragment {
         final TextView friendName = view.findViewById(R.id.friendDialogNameTV);
         final TextView friendGender = view.findViewById(R.id.friendDialogGenderTV);
         final TextView friendRunningLevel = view.findViewById(R.id.friendDialogRunningLevel);
+        final ImageView friendRunningLevelImageView = view.findViewById(R.id.friendDialogRunningLevelImageView);
+        final TextView friendLocationTV = view.findViewById(R.id.friendDialogLocationTV);
         final CircleImageView friendImageView = view.findViewById(R.id.friendDialogImageView);
+        ImageView dismissBtn = view.findViewById(R.id.friendDialogDismiss);
+        dismissBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
         RecyclerView friendDialogRecycler = view.findViewById(R.id.friendDialogRecycler);
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(this.getContext());
+        RecyclerView.LayoutManager manager = new GridLayoutManager(this.getContext(), 3);
         friendDialogRecycler.setLayoutManager(manager);
         friendDialogRecycler.setHasFixedSize(true);
         adapter = new FriendDialogAdapter(mutualFriends, this.getContext());
@@ -98,7 +109,28 @@ public class FriendDialog extends DialogFragment {
         viewModel.getRunningLevelLiveData().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                friendRunningLevel.setText(s);
+                switch (s) {
+                    case "easy":
+                        friendRunningLevel.setText(R.string.easy);
+                        friendRunningLevelImageView.setImageResource(R.drawable.easy_orange);
+                        break;
+                    case "medium":
+                        friendRunningLevel.setText(R.string.medium);
+                        friendRunningLevelImageView.setImageResource(R.drawable.medium_orange);
+                        break;
+                    case "expert":
+                        friendRunningLevel.setText(R.string.expert);
+                        friendRunningLevelImageView.setImageResource(R.drawable.hard_orange);
+                        break;
+                }
+
+            }
+        });
+
+        viewModel.getAddressLiveData().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                friendLocationTV.setText(s);
             }
         });
 

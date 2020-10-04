@@ -64,9 +64,12 @@ public class MapFragment extends Fragment {
             throw new ClassCastException("Activity must implement OnCreateEventListener");
         }
 
-//        viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+         viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
         //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
-        viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+
+        //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
+
+
     }
 
     @Nullable

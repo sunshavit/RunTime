@@ -103,6 +103,7 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
             throw new ClassCastException("Activity must implement OnBackFromCreateEventListener");
         }
 
+
         //viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
         //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
         viewModel = new ViewModelProvider(getActivity()).get(CreateEventVM.class);
@@ -112,6 +113,10 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
     public void onResume() {
         super.onResume();
         dateEt.setText(viewModel.getEventDate());
+
+       // viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+        //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
+
     }
 
     @Nullable

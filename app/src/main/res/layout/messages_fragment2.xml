@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -28,42 +29,52 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/titleLinearLayout"
-        android:orientation="vertical">
+        android:layout_below="@+id/titleLinearLayout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/messages"
+            android:layout_above="@+id/layoutEditText"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.90"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.1"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutEditText"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/messageET"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedTextField"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
                 android:layout_weight="0.8"
-                android:autofillHints="Your message"
-                android:hint="@string/insert_text"
-                android:inputType="text"
-                android:padding="10dp"
-                android:textSize="20sp" />
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:layout_height="wrap_content"
+                android:hint="enter text"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <Button
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/messageET"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
                 android:id="@+id/sendBTN"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.2" />
+                android:layout_weight="0.2"
+                android:background="@null"
+                android:src="@drawable/ic_send_black_24dp"
+                />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
