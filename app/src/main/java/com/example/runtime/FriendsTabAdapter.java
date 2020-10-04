@@ -28,7 +28,7 @@ public class FriendsTabAdapter extends RecyclerView.Adapter<FriendsTabAdapter.Fr
     private RegisterClass registerClass = RegisterClass.getInstance();
 
     interface FriendTabListener{
-        void onRemoveBtnClicked(String userId, String friendId);
+        void onRemoveBtnClicked(String userId, String friendId, String friendName);
         void onFriendCellClicked(String friendId);
     }
 
@@ -110,7 +110,7 @@ public class FriendsTabAdapter extends RecyclerView.Adapter<FriendsTabAdapter.Fr
                 @Override
                 public void onClick(View v) {
                     //report
-                    friendTabCallback.onRemoveBtnClicked(registerClass.getUserId(), friends.get(getAdapterPosition()).getUserId());
+                    friendTabCallback.onRemoveBtnClicked(registerClass.getUserId(), friends.get(getAdapterPosition()).getUserId(), friends.get(getAdapterPosition()).getFullName());
                 }
             });
 

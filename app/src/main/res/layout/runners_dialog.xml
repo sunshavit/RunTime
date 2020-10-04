@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:paddingHorizontal="20dp"
-        android:paddingVertical="20dp"
+        android:paddingVertical="15dp"
         android:background="@color/lightBlue"
         android:layout_height="wrap_content">
         <TextView
@@ -20,8 +20,9 @@
             android:id="@+id/runnerDialogTitle"/>
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/runnerDialogDismiss"
             android:src="@drawable/ic_clear_white_24dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
@@ -33,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="30dp"
-        android:paddingVertical="20dp"
+        android:paddingVertical="13dp"
         android:background="@color/orange">
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="40dp"
@@ -53,7 +54,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="17sp"
+            android:textSize="20sp"
             android:text="Tali"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/managerImageView"

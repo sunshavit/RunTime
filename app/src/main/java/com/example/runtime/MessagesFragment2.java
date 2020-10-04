@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+
+
 import android.text.Editable;
 import android.text.TextWatcher;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -165,8 +168,13 @@ public class MessagesFragment2 extends Fragment {
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.d("messageChat", intent.getStringExtra("message") );
                 messagesVM.addToList(intent.getStringExtra("message"));
+
+
+
                 messagesVM.saveIfOpen(false,getArguments().getString("id"));
+
             }
         };
         IntentFilter filter = new IntentFilter("messagesReceiver");

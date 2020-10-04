@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
@@ -19,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
+import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
@@ -26,14 +28,20 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "serviceTag";
     NotificationManager manager;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference reference = storage.getReference();
     DataBaseClass dataBaseClass = DataBaseClass.getInstance();
+    final int NOTIF_ID = 11;
 
     @Override
     public void onCreate() {
@@ -44,6 +52,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // ...
+
 
 
         Log.d(TAG, "From: " + remoteMessage.getFrom());
@@ -70,7 +79,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 intent.putExtra("time",userMessageTime);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                 createNotifMessages(title,body);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
+            } else if(remoteMessage.getData().get("messageType").equals("eventCancel")){
+                String title = remoteMessage.getData().get("title");
+                String body = remoteMessage.getData().get("body");
+                createEventCanceledNotif(title, body);
+
+            } else if (remoteMessage.getData().get("messageType").equals("friendRequest")){
+                String title = remoteMessage.getData().get("title");
+                String body = remoteMessage.getData().get("body");
+                createEventCanceledNotif(title, body);
             }
 
         }
@@ -79,7 +98,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
 
-
+/*
             //NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             Notification.Builder builder = new Notification.Builder(this);
             if (Build.VERSION.SDK_INT >= 26){
@@ -90,7 +109,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
 
             builder.setContentText(remoteMessage.getNotification().getBody()).setContentTitle(remoteMessage.getNotification().getTitle()).setSmallIcon(android.R.drawable.star_on);
-            manager.notify(1, builder.build());
+            manager.notify(1, builder.build());*/
         }
 
 
@@ -99,10 +118,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private void createRequestAcceptedNotif(String title, String body, String userId) {
+    private void createEventCanceledNotif(String title, String body) {
 
-        final int NOTIF_ID = 11;
-        final Notification.Builder builder = new Notification.Builder(this);
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification.Builder builder = new Notification.Builder(this);
         if (Build.VERSION.SDK_INT >= 26){
             String channelId  = "channelId";
             NotificationChannel channel = new NotificationChannel(channelId, "channelName", NotificationManager.IMPORTANCE_HIGH);
@@ -110,28 +130,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             builder.setChannelId( channelId);
         }
         builder.setContentText(body).setContentTitle(title).setSmallIcon(android.R.drawable.star_on);
+        builder.setContentIntent(pendingIntent);
         manager.notify(NOTIF_ID, builder.build());
+    }
 
-        StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(userId);
+    private void createRequestAcceptedNotif(String title, String body, String userId) {
 
-        Glide.with(this)
-                .asBitmap()
-                .load(userImageRef)
-                .into(new CustomTarget<Bitmap>(300, 300) {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        builder.setLargeIcon(resource);
-                        manager.notify(NOTIF_ID, builder.build());
-                    }
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });
-
-
+        final Notification.Builder builder = new Notification.Builder(this);
+        if (Build.VERSION.SDK_INT >= 26){
+            String channelId  = "channelId";
+            NotificationChannel channel = new NotificationChannel(channelId, "channelName", NotificationManager.IMPORTANCE_HIGH);
+            manager.createNotificationChannel(channel);
+            builder.setChannelId( channelId);
+        }
+        builder.setContentText(body).setContentTitle(title);
+        builder.setSmallIcon(android.R.drawable.star_on);
+        builder.setContentIntent(pendingIntent);
+        manager.notify(NOTIF_ID, builder.build());
 }
+
 
     private void createNotifMessages(String title, String body) {
 
@@ -149,9 +169,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         builder.setAutoCancel(true);
         builder.setContentText(body).setContentTitle(title).setSmallIcon(android.R.drawable.star_on);
         manager.notify(NOTIF_ID, builder.build());
-
-
-
 
     }
 

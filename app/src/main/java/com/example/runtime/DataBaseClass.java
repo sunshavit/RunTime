@@ -21,6 +21,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+
 public class DataBaseClass {
     private FirebaseDatabase firebaseDatabase;
     private RegisterClass registerClass;
@@ -440,6 +442,32 @@ public class DataBaseClass {
         DatabaseReference currentEvent = events.child(eventId);
         DatabaseReference eventRunners = currentEvent.child("runners");
         eventRunners.child(userId).setValue(true);
+    }
+
+    public void cancelEvent(String eventId, ArrayList<String> runnersIds, String managerId){
+        //remove event
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference events = databaseReference.child("events");
+        events.child(eventId).removeValue();
+
+        //remove for each runner
+        for (String runnerId : runnersIds){
+            DatabaseReference userLists = databaseReference.child("user_lists");
+            DatabaseReference currentRunner = userLists.child(runnerId);
+            DatabaseReference upcomingEvents = currentRunner.child("myEvents");
+            upcomingEvents.child(eventId).removeValue();
+        }
+
+        //remove for manager
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference manager = userLists.child(managerId);
+        DatabaseReference managedEvents = manager.child("managedEvents");
+        DatabaseReference myEvents = manager.child("myEvents");
+        managedEvents.child(eventId).removeValue();
+        myEvents.child(eventId).removeValue();
+
+        //remove for invited too
+
     }
 
     public void removeEventFromInvitations (String userId, String eventId){
