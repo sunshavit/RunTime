@@ -79,7 +79,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 intent.putExtra("time",userMessageTime);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                 createNotifMessages(title,body);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
 
             } else if(remoteMessage.getData().get("messageType").equals("eventCancel")){
                 String title = remoteMessage.getData().get("title");

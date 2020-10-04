@@ -30,11 +30,11 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
     private TextView title;
     private TextView locationtext;
 
-    findPeopleListener findPeopleCallback;
+    /*findPeopleListener findPeopleCallback;
     CreateNewEventListener createnewEventCallBack;
     findEventsListener findEventsCallback;
-
-    interface CreateNewEventListener{
+*/
+   /* interface CreateNewEventListener{
         void onCreateNewEvent(boolean isNew);
     }
 
@@ -44,27 +44,27 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
 
     interface findEventsListener{
         void onFindEventsClicked();
-    }
+    }*/
 
-    public void setFindPeopleCallback(findPeopleListener findPeopleCallback) {
+    /*public void setFindPeopleCallback(findPeopleListener findPeopleCallback) {
         this.findPeopleCallback = findPeopleCallback;
     }
 
     public void setFindEventsCallback(findEventsListener findEventsCallback) {
         this.findEventsCallback = findEventsCallback;
     }
-
+*/
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel= new ViewModelProvider(getActivity()).get(HomeVM.class);
         viewModel.setContext(getContext());
-        try {
+       /* try {
             createnewEventCallBack = (CreateNewEventListener) context;
         }
         catch (ClassCastException e){
             throw new ClassCastException("Activity must implement CreateNewEventListener");
-        }
+        }*/
     }
 
     @Override
@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
             }
         };
 
-        viewModel.getLocation().observe(this,observerLocation);
+        viewModel.getLocation().observe(getViewLifecycleOwner(),observerLocation);
 
 
         ToggleButton activeBtn = root.findViewById(R.id.active_btn);
@@ -132,7 +132,7 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
             public void onClick(View v) {
                 //createnewEventCallBack.onCreateNewEvent(true);
 
-                Fragment fragment = CreateEventFragment.getInstance(true);
+                Fragment fragment = CreateEventFragment.getCreateEventFragment(true);
                 FragmentManager fragmentManager = getFragmentManager();
                 assert fragmentManager != null;
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

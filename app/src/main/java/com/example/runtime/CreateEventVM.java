@@ -57,12 +57,7 @@ public class CreateEventVM extends AndroidViewModel {
 
     private final String API_TOKEN_KEY = "AAAAfwvvO64:APA91bG6RWYJYEROIIoBMpzKm6kMdCbqDdqpzhynZ4YnFKEiQ0vu5QuLfJdGTtlixdzqBoL2Ul99A5Mf9kspOh8Whz9U-AY1-7rQTBiOUNUeYZM3UHh4A7Tm4Kb-u4Hrv98zApJn76NQ";
 
-    public CreateEventVM(@NonNull Application application) {
-        super(application);
-    }
-
-
-        MutableLiveData<String> streetAddress = new MutableLiveData<>();
+    MutableLiveData<String> streetAddress = new MutableLiveData<>();
 
     public CreateEventVM(@NonNull Application application) {
         super(application);

@@ -36,10 +36,10 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 
-public class MainActivity extends AppCompatActivity implements MessagesFragment.OnClickOnMessages, DataBaseClass.OnChangeUserListener, HomeFragment.CreateNewEventListener, BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
+public class MainActivity extends AppCompatActivity implements MessagesFragment.OnClickOnMessages, DataBaseClass.OnChangeUserListener/*, HomeFragment.CreateNewEventListener*/, BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
         ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
-        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener, HomeFragment.findPeopleListener, CreateEventFragment.OnMapListener,
-        MapFragment.OnCreateEventListener, /*FindPeopleFragment.OnStrangerCellClickListener,*/ HomeFragment.findEventsListener, CreateEventFragment.OnBackFromCreateEventListener{
+        RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener/*, HomeFragment.findPeopleListener*/, CreateEventFragment.OnMapListener,
+        MapFragment.OnCreateEventListener, /*FindPeopleFragment.OnStrangerCellClickListener,*/ /*HomeFragment.findEventsListener,*/ CreateEventFragment.OnBackFromCreateEventListener{
 
     // where to do the user authentication
     // local time and local date require sdk 26
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     final String SIGNUP2TAG="signup2tag";
     final String SIGNUP3TAG="signup3tag";
     private static final String MESSAGES_TAG = "messagestag";
+    private static final String MESSAGES_TAG2 = "messagestag2";
     final String HOME_TAG="homeTag";
     final String CREATEEVENT_TAG="eventtag";
 
@@ -119,8 +120,8 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         dataBaseClass.setCallBackPreferenceCreate(this);
         registerClass.setSignInListener(this);
         dataBaseClass.setCallBackUserLists(this);
-        homeFragment.setFindPeopleCallback(this);
-        homeFragment.setFindEventsCallback(this);
+        /*homeFragment.setFindPeopleCallback(this);
+        homeFragment.setFindEventsCallback(this);*/
         dataBaseClass.setOnChangeUserListener(this);
 
 
@@ -247,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
     }
 
-    @Override
+   /* @Override
     public void onCreateNewEvent(boolean isNew) {
         createEventFragment = null;
         //createEventFragment = CreateEventFragment.getInstance(true);
@@ -260,15 +261,15 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         //to remove toolbar and navigation bar.
 
        // navigationFragment =getSupportFragmentManager().findFragmentByTag(NAV_TAG);
-       /* if(navigationFragment!=null) {
+       *//* if(navigationFragment!=null) {
 
         /*navigationFragment =getSupportFragmentManager().findFragmentByTag(NAV_TAG);
         if(navigationFragment!=null) {
 
             toolbarLayout.setVisibility(View.GONE);
             fragmentManager.beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(NAV_TAG)).commit();
-        }*/
-    }
+        }*//*
+    }*/
 
     @Override
     public void onSignInClick() {
@@ -296,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     @Override
     public void onClickMessages(User user) {
         MessagesFragment2 messagesFragment2 = MessagesFragment2.newInstance(user);
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,messagesFragment2,SIGNUP1TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,messagesFragment2,MESSAGES_TAG2).addToBackStack(null).commit();
     }
 
     @Override
@@ -464,15 +465,15 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     }
 
 
-    @Override
+   /* @Override
     public void onFindPeopleClicked() {
         fragmentManager.beginTransaction().replace(R.id.rootLayout, new FindPeopleFragment(), FIND_PEOPLE).addToBackStack(null).commit();
     }
 
     @Override
     public void onFindEventsClicked() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout, new /**/FindEventsFragment(), FIND_EVENTS).addToBackStack(null).commit();
-    }
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, new *//**//*FindEventsFragment(), FIND_EVENTS).addToBackStack(null).commit();
+    }*/
 
     //when a stranger at findPeopleFragment recycler is clicked
 

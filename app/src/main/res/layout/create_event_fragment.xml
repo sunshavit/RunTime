@@ -98,7 +98,6 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:orientation="vertical"
                         android:gravity="center"
                         android:layout_marginEnd="20dp"
@@ -121,30 +120,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-
-                        android:textSize="15sp"
-                        android:text="@string/expert"
-                        android:id="@+id/medium_tv"
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    >
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/hard_gray"
-                        android:id="@+id/image_hard"
-                        />
-
-                    <TextView
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -163,7 +138,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
-                            android:text="@string/active"
+                            android:text="@string/medium"
                             android:id="@+id/medium_tv"
                             />
 
@@ -187,7 +162,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
-                            android:text="@string/medium"
+                            android:text="@string/expert"
                             android:id="@+id/hard_tv"/>
 
                     </LinearLayout>
