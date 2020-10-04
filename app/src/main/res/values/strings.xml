@@ -70,7 +70,16 @@
     <string name="added_to_friends">was added to your friends list</string>
     <string name="sign_up_with_email">Sign up with email</string>
     <string name="sign_in">Sign in</string>
-
+    <string name="sign_up">Sign up</string>
+    <string name="registration_details">Registration Details</string>
+    <string name="personal_details">Personal Details</string>
+    <string name="preferred_running_partner">Preferred Running Partner</string>
+    <string name="name">Name</string>
+    <string name="next">Next</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="password_confirm">Password confirm</string>
+    <string name="profile_picture">Profile picture:</string>
 
 
 </resources>

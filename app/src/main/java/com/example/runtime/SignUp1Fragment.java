@@ -21,6 +21,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 public class SignUp1Fragment extends Fragment {
 
     /*interface OnNext1Listener{
@@ -28,10 +30,10 @@ public class SignUp1Fragment extends Fragment {
     }*/
     SignUpVM viewModel;
     final int LOCATION_PERMISSION_REQUEST=0;
-    EditText fullNameEt;
-    EditText passwordEt;
-    EditText emailEt;
-    EditText passwordConfirmEt;
+    TextInputEditText fullNameEt;
+    TextInputEditText passwordEt;
+    TextInputEditText emailEt;
+    TextInputEditText passwordConfirmEt;
 
     String fullName;
     String email;

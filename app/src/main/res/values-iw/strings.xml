@@ -69,5 +69,15 @@
     <string name="added_to_friends">נוסף לרשימת החברים שלך</string>
     <string name="sign_up_with_email">הרשמה עם אימייל</string>
     <string name="sign_in">התחברות</string>
+    <string name="sign_up">הרשמה</string>
+    <string name="registration_details">פרטי הרשמה</string>
+    <string name="personal_details">פרטים אישיים</string>
+    <string name="preferred_running_partner">עם מי תרצה לרוץ?</string>
+    <string name="name">שמך</string>
+    <string name="next">המשך</string>
+    <string name="email">אימייל</string>
+    <string name="password">סיסמא</string>
+    <string name="password_confirm">אימות סיסמא</string>
+    <string name="profile_picture">תמונת פרופיל:</string>
 
 </resources>
