@@ -1,6 +1,8 @@
 package com.example.runtime;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
@@ -15,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -71,8 +76,31 @@ public class UpcomingTabFragment extends Fragment implements UpcomingTabAdapter.
     }
 
     @Override
-    public void onUpcomingRemoved(String userId, String eventId) {
-        viewModel.RemoveUpcomingEvent(userId, eventId);
+    public void onUpcomingRemoved(final String userId, final String eventId) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        String cancel = getString(R.string.is_sure_cancel_participants);
+
+
+        AlertDialog friendDeleteDialog = builder.setMessage(cancel)
+                .setPositiveButton(R.string.cancel_participation, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        viewModel.RemoveUpcomingEvent(userId, eventId);
+                        Snackbar.make(swipeRefreshLayout, R.string.participation_removed, Snackbar.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(R.string.do_not_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setCancelable(false).show();
+        friendDeleteDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#f56a45"));
+        friendDeleteDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.parseColor("#4292ac"));
+
     }
 
     @Override

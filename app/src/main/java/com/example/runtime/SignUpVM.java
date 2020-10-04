@@ -69,7 +69,7 @@ public class SignUpVM extends ViewModel  {
         this.gender = gender;
         this.runningLevel = runningLevel;
 
-        final User user = new User("0",registerClass.getUserId(),this.fullName,this.gender,this.year,this.month,this.dayOfMonth,this.runningLevel,false,userInstance.getUser().getLongitude(),userInstance.getUser().getLatitude());
+        final User user = new User("0",registerClass.getUserId(),this.fullName,this.gender,this.year,this.month,this.dayOfMonth,this.runningLevel,userInstance.getUser().getLongitude(),userInstance.getUser().getLatitude());
 
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override

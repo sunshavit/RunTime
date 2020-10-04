@@ -16,56 +16,74 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.runtime.model.Message;
 
+import java.util.ArrayList;
+
 //TODO choose message
 //TODO forward
 //TODO delete message
-public class Messages2Adapter extends ListAdapter<Message, Messages2Adapter.Message2ViewHolder> {
-    public Messages2Adapter() {
-        super(Messages2Adapter.DIFF_CALLBACK);
+public class Messages2Adapter extends RecyclerView.Adapter<Messages2Adapter.Message2ViewHolder> {
+    Context context;
+    ArrayList<Message> list;
+    public Messages2Adapter(Context context,ArrayList<Message> list) {
+        this.context = context;
+        this.list = list;
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
     }
 
     @NonNull
     @Override
     public Message2ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item, parent, false);
-        return new Message2ViewHolder(view);
+        if(viewType==0) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item, parent, false);
+            return new Message2ViewHolder(view);
+        }
+        else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.messages_item_right, parent, false);
+            return new Message2ViewHolder(view);
+        }
     }
 
     @Override
     public void onBindViewHolder(Message2ViewHolder holder, int position) {
-        Message msg = getItem(position);
-        if(msg.getUserIdSent().equals(UserInstance.getInstance().getUser().getUserId())) {
-            holder.message.setBackgroundColor(Color.LTGRAY);
+        Message msg = list.get(position);
 
-        }
-        holder.message.setText(msg.getContent());
-        holder.time.setText(msg.getTime());
+        if(msg.getUserIdSent().equals(UserInstance.getInstance().getUser().getUserId())) {
+
+            holder.myMessage.setText(msg.getContent());
+            holder.myTime.setText(msg.getTime());
+        }else {
+            holder.message.setText(msg.getContent());
+            holder.time.setText(msg.getTime());
+    }
     }
 
     class Message2ViewHolder extends RecyclerView.ViewHolder {
         TextView message;
+        TextView myMessage;
         TextView time;
+        TextView myTime;
 
         Message2ViewHolder(@NonNull View itemView) {
             super(itemView);
+            myMessage = itemView.findViewById(R.id.messageItemTVRight);
+            myTime = itemView.findViewById(R.id.messageTimeTVRight);
             message = itemView.findViewById(R.id.messageItemTV);
             time = itemView.findViewById(R.id.messageTimeTV);
         }
     }
 
-    private static final DiffUtil.ItemCallback<Message> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<Message>() {
-                @Override
-                public boolean areItemsTheSame(
-                        @NonNull Message oldMsg, @NonNull Message newMsg) {
-                    return oldMsg.equals(newMsg);
-                }
+    @Override
+    public int getItemViewType(int position) {
+        if(list.get(position).getUserIdSent().equals(UserInstance.getInstance().getUser().getUserId())){
+            return 1;
+        }else {
+            return 0;
+        }
+    }
 
-                @Override
-                public boolean areContentsTheSame(
-                        @NonNull Message oldMsg, @NonNull Message newMsg) {
-                    return oldMsg.equals(newMsg);
-                }
-            };
 }
 

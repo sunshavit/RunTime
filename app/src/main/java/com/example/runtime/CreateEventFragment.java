@@ -1,44 +1,34 @@
 package com.example.runtime;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class CreateEventFragment extends Fragment {
+public class CreateEventFragment extends Fragment implements InviteFriendsDialog.PassInvitedFriendsIdsToParentListener{
 
     private CreateEventVM viewModel;
     private int eventYear;
@@ -48,12 +38,13 @@ public class CreateEventFragment extends Fragment {
     private int eventMinute;
     private String runningLevel;
     private String eventStatus;
-    private ArrayList<String> runners;
     private TextView locationEt;
     private TextView dateEt;
     private static Bundle bundle;
     private String eventDate;
     private String eventTime;
+
+    private ArrayList<String> invitedFriendsIds;
 
     interface OnMapListener{
         void onMapOkClick();
@@ -68,7 +59,8 @@ public class CreateEventFragment extends Fragment {
 
     private static CreateEventFragment createEventFragment = null;
 
-    public static CreateEventFragment getInstance(boolean isNew){
+
+    public static CreateEventFragment getCreateEventFragment(boolean isNew){
         bundle = new Bundle();
         if(createEventFragment == null || isNew ){
             bundle.putBoolean("isNew", true);
@@ -83,10 +75,9 @@ public class CreateEventFragment extends Fragment {
         return createEventFragment;
     };
 
-    private CreateEventFragment() {
+    public CreateEventFragment() {
 
     }
-
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -105,7 +96,12 @@ public class CreateEventFragment extends Fragment {
             throw new ClassCastException("Activity must implement OnBackFromCreateEventListener");
         }
 
-        viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+        viewModel = new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Nullable
@@ -116,22 +112,20 @@ public class CreateEventFragment extends Fragment {
         dateEt=root.findViewById(R.id.eventDateEt);
         final TextView timeEt=root.findViewById(R.id.eventTimeEt);
         locationEt=root.findViewById(R.id.eventLocationEt);
-        Button InviteFriendsBtn=root.findViewById(R.id.inviteFriendsBtn);
+        Button inviteFriendsBtn=root.findViewById(R.id.inviteFriendsBtn);
         final ImageView easyImageIv = root.findViewById(R.id.image_easy);
         final ImageView mediumImageIv = root.findViewById(R.id.image_medium);
         final ImageView hardImageIv = root.findViewById(R.id.image_hard);
         final TextView easyTv = root.findViewById(R.id.easy_tv);
         final TextView mediumTv = root.findViewById(R.id.medium_tv);
         final TextView hardTv = root.findViewById(R.id.hard_tv);
-       // RadioGroup eventLevelRG=root.findViewById(R.id.eventLevelRG);
         final RadioGroup eventStatusRg = root.findViewById(R.id.event_status);
         RadioButton publicRb = root.findViewById(R.id.public_event);
         RadioButton privateRb = root.findViewById(R.id.private_event);
 
         Button doneBtn=root.findViewById(R.id.doneBtn);
 
-
-   Toast.makeText(getContext(),String.valueOf(getArguments().getBoolean("isNew")),Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(),String.valueOf(getArguments().getBoolean("isNew")),Toast.LENGTH_LONG).show();
         if(getArguments()!=null){
             if(getArguments().getBoolean("isNew")){
                 viewModel.setEventDate("");
@@ -145,9 +139,23 @@ public class CreateEventFragment extends Fragment {
                 viewModel.setHardTextView(Color.parseColor("#808080"));
                 viewModel.setPublicChecked(false);
                 viewModel.setPrivateChecked(false);
+
+                viewModel.setEventStatus(null);
+                viewModel.setRunningLevel(null);
+
                 bundle.putBoolean("isNew", false);
             }
         }
+
+
+        eventYear = viewModel.getEventYear();
+        eventMonth = viewModel.getEventMonth();
+        eventDayOfMonth = viewModel.getEventDayOfMonth();
+        eventHourOfDay = viewModel.getEventHourOfDay();
+        eventMinute = viewModel.getEventMinute();
+        runningLevel = viewModel.getRunningLevel();
+        eventStatus = viewModel.getEventStatus();
+
 
         dateEt.setText(viewModel.getEventDate());
         timeEt.setText(viewModel.getEventTime());
@@ -156,32 +164,23 @@ public class CreateEventFragment extends Fragment {
         hardTv.setTextColor(viewModel.getHardTextView());
         publicRb.setChecked(viewModel.isPublicChecked());
         privateRb.setChecked(viewModel.isPrivateChecked());
-
-        if(viewModel.getIsFirstLaunch()){
-            easyImageIv.setImageResource(R.drawable.easy_gray);
-            mediumImageIv.setImageResource(R.drawable.medium_gray);
-            hardImageIv.setImageResource(R.drawable.hard_gray);
-        }
-        else {
-            easyImageIv.setImageResource(viewModel.getEasyImageView());
-            mediumImageIv.setImageResource(viewModel.getMediumImageView());
-            hardImageIv.setImageResource(viewModel.getHardImageView());
-        }
-
-
+        easyImageIv.setImageResource(viewModel.getEasyImageView());
+        mediumImageIv.setImageResource(viewModel.getMediumImageView());
+        hardImageIv.setImageResource(viewModel.getHardImageView());
 
         dateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar=Calendar.getInstance();
                 int year1=calendar.get(calendar.YEAR);
-                int month1=calendar.get(calendar.MONTH);
+                final int month1=calendar.get(calendar.MONTH);
                 int dayOfMonth1=calendar.get(calendar.DAY_OF_MONTH);
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
 
                         eventYear=year;
                         eventMonth=month+1;
@@ -191,7 +190,7 @@ public class CreateEventFragment extends Fragment {
                         String eventDayOfMonth1;
 
                         if(eventMonth < 10)
-                           eventMonth1 = "0"+eventMonth;
+                            eventMonth1 = "0"+eventMonth;
                         else
                             eventMonth1=eventMonth+"";
 
@@ -203,6 +202,9 @@ public class CreateEventFragment extends Fragment {
                         eventDate=eventDayOfMonth1+"/"+eventMonth1+'/'+eventYear;
                         dateEt.setText(eventDate);
                         viewModel.setEventDate(eventDate);
+                        viewModel.setEventYear(year);
+                        viewModel.setEventMonth(month+1);
+                        viewModel.setEventDayOfMonth(dayOfMonth);
 
                     }
                 },year1,month1,dayOfMonth1);
@@ -244,6 +246,8 @@ public class CreateEventFragment extends Fragment {
                         eventTime = chosenHour+":"+chosenMinute;
                         timeEt.setText(eventTime);
                         viewModel.setEventTime(eventTime);
+                        viewModel.setEventHourOfDay(hourOfDay);
+                        viewModel.setEventMinute(minute);
                     }
                 }, currentHourOfDay,currentMinute,true);
                 timePickerDialog.show();
@@ -276,6 +280,7 @@ public class CreateEventFragment extends Fragment {
                 hardTv.setTextColor(Color.parseColor("#808080"));
                 viewModel.setHardTextView(Color.parseColor("#808080"));
                 runningLevel = "easy";
+                viewModel.setRunningLevel("easy");
 
             }
         });
@@ -297,6 +302,7 @@ public class CreateEventFragment extends Fragment {
                 hardTv.setTextColor(Color.parseColor("#808080"));
                 viewModel.setHardTextView(Color.parseColor("#808080"));
                 runningLevel = "medium";
+                viewModel.setRunningLevel("medium");
 
             }
         });
@@ -318,26 +324,29 @@ public class CreateEventFragment extends Fragment {
                 hardTv.setTextColor(Color.parseColor("#056378"));
                 viewModel.setHardTextView(Color.parseColor("#056378"));
                 runningLevel = "expert";
+                viewModel.setRunningLevel("expert");
             }
         });
 
-     eventStatusRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-         @Override
-         public void onCheckedChanged(RadioGroup group, int checkedId) {
-             switch (checkedId){
-                 case R.id.public_event:{
-                     eventStatus = "publicEvent";
-                     viewModel.setPublicChecked(true);
-                     break;
-                 }
-                 case R.id.private_event:{
-                     eventStatus = "privateEvent";
-                     viewModel.setPrivateChecked(true);
-                     break;
-                 }
-             }
-         }
-     });
+        eventStatusRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.public_event:{
+                        eventStatus = "publicEvent";
+                        viewModel.setPublicChecked(true);
+                        viewModel.setEventStatus("publicEvent");
+                        break;
+                    }
+                    case R.id.private_event:{
+                        eventStatus = "privateEvent";
+                        viewModel.setPrivateChecked(true);
+                        viewModel.setEventStatus("privateEvent");
+                        break;
+                    }
+                }
+            }
+        });
 
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -350,7 +359,8 @@ public class CreateEventFragment extends Fragment {
                 }
                 else{
                     viewModel.setEventData(eventYear,eventMonth,eventDayOfMonth,eventHourOfDay,
-                            eventMinute,runningLevel,eventStatus);
+                            eventMinute,runningLevel,eventStatus,invitedFriendsIds);
+
                     Snackbar.make(getView(),R.string.new_event_snack_bar, Snackbar.LENGTH_LONG).show();
                     backFromCreateEventCallback.toHomeFromCreateEvent();
 
@@ -359,9 +369,7 @@ public class CreateEventFragment extends Fragment {
             }
         });
 
-
-
-        viewModel.getStreetAddress().observe(this, new Observer<String>() {
+        viewModel.getStreetAddress().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 locationEt.setText(s);
@@ -369,8 +377,27 @@ public class CreateEventFragment extends Fragment {
             }
         });
 
+        inviteFriendsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                InviteFriendsDialog dialog = new InviteFriendsDialog();
+                dialog.setCancelable(true);
+                dialog.setTargetFragment(CreateEventFragment.this,300);
+                assert fm != null;
+                dialog.show(fm,"inviteFriendsFragment");
+            }
+        });
+
+
         return root;
-        }
+    }
+
+    @Override
+    public void onFinishEditDialog(ArrayList<String> invitedFriendsIds) {
+        this.invitedFriendsIds = invitedFriendsIds;
+    }
+
 
 
 }

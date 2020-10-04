@@ -6,6 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.runtime.model.LastMessage;
+import com.example.runtime.model.Message;
+import com.example.runtime.model.UserWithLastMessage;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -13,17 +16,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class MessagesVM extends ViewModel {
-    private MutableLiveData<ArrayList<User>> friends = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<UserWithLastMessage>> friends = new MutableLiveData<>();
     private ArrayList<String> usersIdFromDatabase = new ArrayList<>();
-    private ArrayList<User> usersFromDatabase = new ArrayList<>();
+    private ArrayList<UserWithLastMessage> usersFromDatabase = new ArrayList<>();
     private DataBaseClass dataBaseClass;
 
     public MessagesVM() {
         this.dataBaseClass = DataBaseClass.getInstance();
-        getFriendsId();
     }
 
-    private void getFriendsId() {
+    public void getFriendsId() {
         usersIdFromDatabase.clear();
         usersFromDatabase.clear();
         ValueEventListener valueEventListener = new ValueEventListener() {
@@ -54,13 +56,16 @@ public class MessagesVM extends ViewModel {
 
     }
 
-    private void getFriends(String id){
+    public void saveIfOpen(boolean open,String id){
+        dataBaseClass.saveIfOpenTheLastMessage(open,id);
+    }
+
+    private void getFriends(final String id){
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                usersFromDatabase.add(user);
-                friends.setValue(usersFromDatabase);
+                getLastMessage(user,id);
             }
 
             @Override
@@ -71,7 +76,38 @@ public class MessagesVM extends ViewModel {
             dataBaseClass.getUserWithId(valueEventListener,id);
     }
 
-    public MutableLiveData<ArrayList<User>> getFriends() {
+    private void getLastMessage(final User user,String id){
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    if(snapshot.child("content").exists()){
+                    LastMessage message = snapshot.getValue(LastMessage.class);
+                    usersFromDatabase.add(new UserWithLastMessage(user,new Message(message.getContent(),message.getTime(),message.getId(),message.getUserIdSent()),message.isNew()));
+                    friends.setValue(usersFromDatabase);
+                    }
+                    else {                         {
+                            usersFromDatabase.add(new UserWithLastMessage(user,new Message("","",-1,""),false));
+                            friends.setValue(usersFromDatabase);
+                        }
+                    }
+                }
+                else{
+                    usersFromDatabase.add(new UserWithLastMessage(user,new Message("","",-1,""),false));
+                    friends.setValue(usersFromDatabase);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        dataBaseClass.getLastMessage(id,valueEventListener);
+    }
+
+    public MutableLiveData<ArrayList<UserWithLastMessage>> getFriends() {
         return friends;
     }
 }

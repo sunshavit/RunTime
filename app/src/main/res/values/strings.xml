@@ -13,8 +13,8 @@
     <string name="done_btn">Done</string>
     <string name="activity_level">Choose event dificulty</string>
     <string name="easy">Easy</string>
-    <string name="active">Medium</string>
-    <string name="medium">Hard</string>
+    <string name="expert">Expert</string>
+    <string name="medium">Medium</string>
     <string name="event_status">Choose event status</string>
     <string name="public_event">Public event</string>
     <string name="private_event">Private event</string>
@@ -45,6 +45,41 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="insert_text">enter text</string>
+
+    <string name="my_friends">My friends</string>
+    <string name="invite">"Invite "</string>
+    <string name="un_invite">Un invite</string>
+
+    <string name="is_sure_cancel_event">Cancel this event?</string>
+    <string name="cancel_event">Cancel event</string>
+    <string name="do_not_cancel">Don\'t cancel</string>
+    <string name="event_canceled">Event is canceled</string>
+    <string name="the_event">The event</string>
+    <string name="on_date">on</string>
+    <string name="on_time">on</string>
+    <string name="is_canceled">is canceled</string>
+    <string name="is_sure_delete_friend">Remove</string>
+    <string name="from_friend_list">from your friends list?</string>
+    <string name="friend_successfuly_removed">Friend successfuly removed</string>
+    <string name="event_canceled_successfuly">Event Canceled</string>
+    <string name="new_friend_request">New friend request!</string>
+    <string name="do_not_keep_wait">Don\'t keep them waiting</string>
+    <string name="is_sure_cancel_participants">Cancel your participation in this event?</string>
+    <string name="cancel_participation">Cancel participation</string>
+    <string name="participation_removed">Participation removed</string>
+    <string name="added_to_friends">was added to your friends list</string>
+    <string name="sign_up_with_email">Sign up with email</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="registration_details">Registration Details</string>
+    <string name="personal_details">Personal Details</string>
+    <string name="preferred_running_partner">Preferred Running Partner</string>
+    <string name="name">Name</string>
+    <string name="next">Next</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="password_confirm">Password confirm</string>
+    <string name="profile_picture">Profile picture:</string>
 
 
 </resources>

@@ -6,7 +6,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.runtime.model.LastMessage;
 import com.example.runtime.model.Message;
+import com.example.runtime.model.UserWithLastMessage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -18,6 +20,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
 
 public class DataBaseClass {
     private FirebaseDatabase firebaseDatabase;
@@ -97,32 +101,60 @@ public class DataBaseClass {
 
     }
 
-    public void sendMessage(Message model, String activeConversationFriendId) {
+    public void sendMessage(final Message model, final String activeConversationFriendId) {
         databaseReference = firebaseDatabase.getReference();
         DatabaseReference userMsgs = databaseReference.child("user_lists").child(registerClass.getUserId()).child("myMessages").child(activeConversationFriendId).child(model.getId()+"");
         userMsgs.setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
-                    Log.d("sun","sun");
+                if(task.isSuccessful()) {
+                    sendMessageToPartner(model, activeConversationFriendId);
+                    saveLastMessage(activeConversationFriendId,model);
+                }
             }
         });
-        sendMessageToPartner(model,activeConversationFriendId);
     }
 
-    public void sendMessageToPartner(Message model, String activeConversationFriendId){
+    public void sendMessageToPartner(final Message model, final String activeConversationFriendId){
         databaseReference = firebaseDatabase.getReference();
         DatabaseReference userMsgs = databaseReference.child("user_lists").child(activeConversationFriendId).child("myMessages").child(registerClass.getUserId()).child(model.getId()+"");
         userMsgs.setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful())
-                    Log.d("sun","sun");
+                {
+                    saveLastMessage(activeConversationFriendId,model);
+                }
+
             }
         });
     }
 
+    private void saveLastMessage(String partner,Message messageToSend){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference message = databaseReference.child("user_lists").child(registerClass.getUserId()).child("last_message").child(partner);
+        LastMessage lastMessage = new LastMessage(messageToSend.getContent(),messageToSend.getTime(),messageToSend.getId(),messageToSend.getUserIdSent(),false);
+        message.setValue(lastMessage);
+        saveLastMessagePartner(partner,messageToSend);
+    }
 
+    private void saveLastMessagePartner(String partner,Message messageToSend){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference message = databaseReference.child("user_lists").child(partner).child("last_message").child(registerClass.getUserId());
+        LastMessage lastMessage = new LastMessage(messageToSend.getContent(),messageToSend.getTime(),messageToSend.getId(),messageToSend.getUserIdSent(),true);
+        message.setValue(lastMessage);
+    }
+    public void saveIfOpenTheLastMessage(boolean open,String partner){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference message = databaseReference.child("user_lists").child(registerClass.getUserId()).child("last_message").child(partner).child("new");
+        message.setValue(open);
+    }
+
+    public void getLastMessage(String partner,ValueEventListener listener){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference message = databaseReference.child("user_lists").child(registerClass.getUserId()).child("last_message").child(partner);
+        message.addListenerForSingleValueEvent(listener);
+    }
 
     public void retrieveMessages(String partnerId ,ValueEventListener listener ){
         databaseReference = firebaseDatabase.getReference();
@@ -289,6 +321,12 @@ public class DataBaseClass {
     }
 
 
+    public void getImageUserId(String userId, OnSuccessListener listener) {
+        StorageReference reference = storageReference.child("profileImages/" + userId);
+        reference.getDownloadUrl().addOnSuccessListener(listener);}
+
+
+
     public void getUser(ValueEventListener listener) {
         final DatabaseReference users = firebaseDatabase.getReference("user");
         users.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
@@ -413,6 +451,32 @@ public class DataBaseClass {
         eventRunners.child(userId).setValue(true);
     }
 
+    public void cancelEvent(String eventId, ArrayList<String> runnersIds, String managerId){
+        //remove event
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference events = databaseReference.child("events");
+        events.child(eventId).removeValue();
+
+        //remove for each runner
+        for (String runnerId : runnersIds){
+            DatabaseReference userLists = databaseReference.child("user_lists");
+            DatabaseReference currentRunner = userLists.child(runnerId);
+            DatabaseReference upcomingEvents = currentRunner.child("myEvents");
+            upcomingEvents.child(eventId).removeValue();
+        }
+
+        //remove for manager
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference manager = userLists.child(managerId);
+        DatabaseReference managedEvents = manager.child("managedEvents");
+        DatabaseReference myEvents = manager.child("myEvents");
+        managedEvents.child(eventId).removeValue();
+        myEvents.child(eventId).removeValue();
+
+        //remove for invited too
+
+    }
+
     public void removeEventFromInvitations (String userId, String eventId){
         databaseReference = firebaseDatabase.getReference();
         DatabaseReference userLists = databaseReference.child("user_lists");
@@ -496,7 +560,7 @@ public class DataBaseClass {
     }
 
 
-    public void createNewEvent(Event event, String userId) {
+    public void createNewEvent(Event event, String userId, ArrayList<String> invitedFriendsIds) {
         databaseReference = firebaseDatabase.getReference(); //to get root
         DatabaseReference events = databaseReference.child("events");
         DatabaseReference newEvent = events.push();
@@ -510,6 +574,15 @@ public class DataBaseClass {
         DatabaseReference managedEvents = currentUser.child("managedEvents");
         DatabaseReference myEvents = currentUser.child("myEvents");
 
+        if(invitedFriendsIds!=null){
+            for(String runnerInvitedId: invitedFriendsIds){
+                DatabaseReference currentRunnerInvitedId = userLists.child(runnerInvitedId);
+                DatabaseReference eventRequests = currentRunnerInvitedId.child("eventRequests");
+                eventRequests.child(eventKey).setValue(true);
+            }
+
+        }
+
         myEvents.child(eventKey).setValue(true);
         managedEvents.child(eventKey).setValue(true);
 
@@ -522,6 +595,10 @@ public class DataBaseClass {
         DatabaseReference currentUserLists = userLists.child(userId);
         DatabaseReference myEventsList = currentUserLists.child("myEvents");
         myEventsList.child(eventId).setValue(true);
+        DatabaseReference events = databaseReference.child("events");
+        DatabaseReference currentEvent = events.child(eventId);
+        DatabaseReference eventRunners = currentEvent.child("runners");
+        eventRunners.child(userId).setValue(true);
 
     }
 
@@ -532,9 +609,18 @@ public class DataBaseClass {
         DatabaseReference currentUserLists = userLists.child(userId);
         DatabaseReference myEventsList = currentUserLists.child("myEvents");
         myEventsList.child(eventId).removeValue();
-
+        DatabaseReference events = databaseReference.child("events");
+        DatabaseReference currentEvent = events.child(eventId);
+        DatabaseReference eventRunners = currentEvent.child("runners");
+        eventRunners.child(userId).removeValue();
     }
 
+    public void retrieveMyEvents(ValueEventListener listener, String userId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference userLists = databaseReference.child("user_lists");
+        DatabaseReference currentUser = userLists.child(userId);
+        currentUser.child("myEvents").addListenerForSingleValueEvent(listener);
+    }
 
 }
 

@@ -26,6 +26,7 @@ public class FriendsTabVM extends ViewModel {
 
     public FriendsTabVM() {
         getFriendsIds();
+        Log.d("attach","attach2");
     }
 
     public void getFriendsIds (){

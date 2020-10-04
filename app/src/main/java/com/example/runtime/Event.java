@@ -139,4 +139,5 @@ public class Event {
     public void setRunners(HashMap<String, Boolean> runners) {
         this.runners = runners;
     }
+
 }
