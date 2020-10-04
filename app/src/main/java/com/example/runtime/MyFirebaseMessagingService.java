@@ -71,8 +71,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             else if(remoteMessage.getData().get("messageType").equals("message")){
                 String title = remoteMessage.getData().get("title");
                 String body = remoteMessage.getData().get("body");
+                String userId = remoteMessage.getData().get("userId");
+                String userMessageTime = remoteMessage.getData().get("time");
                 Intent intent = new Intent("messagesReceiver");
                 intent.putExtra("message",body);
+                intent.putExtra("userId",userId);
+                intent.putExtra("time",userMessageTime);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                 createNotifMessages(title,body);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
@@ -158,6 +163,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             manager.createNotificationChannel(channel);
             builder.setChannelId( channelId);
         }
+        Intent intent = new Intent(this,MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        builder.setAutoCancel(true);
         builder.setContentText(body).setContentTitle(title).setSmallIcon(android.R.drawable.star_on);
         manager.notify(NOTIF_ID, builder.build());
 

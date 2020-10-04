@@ -12,7 +12,7 @@ public class Message {
 
     }
 
-    public Message(String content, String time, int id,String userIdSent) {
+    public Message(String content, String time, int id, String userIdSent) {
         this.content = content;
         this.time = time;
         this.id = id;
@@ -44,16 +44,24 @@ public class Message {
         this.id = id;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
-        return id == message.id;
+        return Objects.equals(userIdSent, message.userIdSent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(userIdSent);
     }
 }
