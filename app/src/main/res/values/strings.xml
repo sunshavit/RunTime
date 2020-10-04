@@ -45,6 +45,9 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="insert_text">enter text</string>
+    <string name="my_friends">My friends</string>
+    <string name="invite">"Invite "</string>
+    <string name="un_invite">Un invite</string>
 
 
 </resources>

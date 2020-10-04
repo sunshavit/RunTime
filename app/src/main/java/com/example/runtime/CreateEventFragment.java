@@ -5,40 +5,36 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class CreateEventFragment extends Fragment {
+public class CreateEventFragment extends Fragment implements InviteFriendsDialog.PassInvitedFriendsIdsToParentListener{
 
     private CreateEventVM viewModel;
     private int eventYear;
@@ -48,12 +44,14 @@ public class CreateEventFragment extends Fragment {
     private int eventMinute;
     private String runningLevel;
     private String eventStatus;
-    private ArrayList<String> runners;
     private TextView locationEt;
     private TextView dateEt;
     private static Bundle bundle;
     private String eventDate;
     private String eventTime;
+
+    private InviteFriendsDialog inviteFriendsDialog;
+    private ArrayList<String> invitedFriendsIds;
 
     interface OnMapListener{
         void onMapOkClick();
@@ -68,7 +66,8 @@ public class CreateEventFragment extends Fragment {
 
     private static CreateEventFragment createEventFragment = null;
 
-    public static CreateEventFragment getInstance(boolean isNew){
+
+    public static CreateEventFragment getCreateEventFragment(boolean isNew){
         bundle = new Bundle();
         if(createEventFragment == null || isNew ){
             bundle.putBoolean("isNew", true);
@@ -83,10 +82,9 @@ public class CreateEventFragment extends Fragment {
         return createEventFragment;
     };
 
-    private CreateEventFragment() {
+    public CreateEventFragment() {
 
     }
-
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -105,7 +103,15 @@ public class CreateEventFragment extends Fragment {
             throw new ClassCastException("Activity must implement OnBackFromCreateEventListener");
         }
 
-        viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+        //viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+        //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
+        viewModel = new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        dateEt.setText(viewModel.getEventDate());
     }
 
     @Nullable
@@ -116,20 +122,24 @@ public class CreateEventFragment extends Fragment {
         dateEt=root.findViewById(R.id.eventDateEt);
         final TextView timeEt=root.findViewById(R.id.eventTimeEt);
         locationEt=root.findViewById(R.id.eventLocationEt);
-        Button InviteFriendsBtn=root.findViewById(R.id.inviteFriendsBtn);
+        Button inviteFriendsBtn=root.findViewById(R.id.inviteFriendsBtn);
         final ImageView easyImageIv = root.findViewById(R.id.image_easy);
         final ImageView mediumImageIv = root.findViewById(R.id.image_medium);
         final ImageView hardImageIv = root.findViewById(R.id.image_hard);
         final TextView easyTv = root.findViewById(R.id.easy_tv);
         final TextView mediumTv = root.findViewById(R.id.medium_tv);
         final TextView hardTv = root.findViewById(R.id.hard_tv);
-       // RadioGroup eventLevelRG=root.findViewById(R.id.eventLevelRG);
         final RadioGroup eventStatusRg = root.findViewById(R.id.event_status);
         RadioButton publicRb = root.findViewById(R.id.public_event);
         RadioButton privateRb = root.findViewById(R.id.private_event);
 
         Button doneBtn=root.findViewById(R.id.doneBtn);
-
+/*
+        Bundle bundle = this.getArguments();
+        String streetAddress = bundle.getString("streetAddress");
+        final double longitude = bundle.getDouble("longitude");
+        final double latitude = bundle.getDouble("latitude");
+        locationEt.setText(streetAddress);*/
 
    Toast.makeText(getContext(),String.valueOf(getArguments().getBoolean("isNew")),Toast.LENGTH_LONG).show();
         if(getArguments()!=null){
@@ -168,8 +178,6 @@ public class CreateEventFragment extends Fragment {
             hardImageIv.setImageResource(viewModel.getHardImageView());
         }
 
-
-
         dateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,6 +190,7 @@ public class CreateEventFragment extends Fragment {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
 
                         eventYear=year;
                         eventMonth=month+1;
@@ -343,6 +352,8 @@ public class CreateEventFragment extends Fragment {
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+     /*           Log.d("details",dateEt.getText().toString()+""+ timeEt.getText().toString()+""+
+                        locationEt.getText()+""+runningLevel+""+eventStatus);*/
                 if(dateEt.getText().equals("") || timeEt.getText().equals("") ||
                        locationEt.getText().equals("")|| runningLevel==null || eventStatus==null ){
                     Snackbar.make(getView(),R.string.all_fields, Snackbar.LENGTH_LONG).show();
@@ -350,7 +361,8 @@ public class CreateEventFragment extends Fragment {
                 }
                 else{
                     viewModel.setEventData(eventYear,eventMonth,eventDayOfMonth,eventHourOfDay,
-                            eventMinute,runningLevel,eventStatus);
+                            eventMinute,runningLevel,eventStatus,invitedFriendsIds);
+
                     Snackbar.make(getView(),R.string.new_event_snack_bar, Snackbar.LENGTH_LONG).show();
                     backFromCreateEventCallback.toHomeFromCreateEvent();
 
@@ -359,9 +371,7 @@ public class CreateEventFragment extends Fragment {
             }
         });
 
-
-
-        viewModel.getStreetAddress().observe(this, new Observer<String>() {
+        viewModel.getStreetAddress().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 locationEt.setText(s);
@@ -369,8 +379,27 @@ public class CreateEventFragment extends Fragment {
             }
         });
 
+        inviteFriendsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                InviteFriendsDialog dialog = new InviteFriendsDialog();
+                dialog.setCancelable(true);
+                dialog.setTargetFragment(CreateEventFragment.this,300);
+                assert fm != null;
+                dialog.show(fm,"inviteFriendsFragment");
+            }
+        });
+
+
         return root;
         }
+
+    @Override
+    public void onFinishEditDialog(ArrayList<String> invitedFriendsIds) {
+        this.invitedFriendsIds = invitedFriendsIds;
+    }
+
 
 
 }

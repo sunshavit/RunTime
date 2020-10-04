@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,7 +25,8 @@ import java.util.List;
 public class FindEventsFragment extends Fragment implements FindEventsAdapter.OnJoinEventListener {
 
     private FindEventsAdapter adapter;
-    private ArrayList<Event> relevantEvents= new ArrayList<>();
+    private ArrayList<Event> relevantEvents = new ArrayList<>();
+    private ArrayList<String> myEvents = new ArrayList<>();
     private FindEventsVM viewModel;
 
     @Override
@@ -39,7 +41,7 @@ public class FindEventsFragment extends Fragment implements FindEventsAdapter.On
         View root = inflater.inflate(R.layout.find_events_fragment,container,false);
 
         RecyclerView recyclerView = root.findViewById(R.id.findEventsRecycler);
-        adapter = new FindEventsAdapter(relevantEvents,getContext());
+        adapter = new FindEventsAdapter(relevantEvents,getContext(),myEvents);
         recyclerView.setAdapter(adapter);
         adapter.setJoinEventCallback(this);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
@@ -50,6 +52,15 @@ public class FindEventsFragment extends Fragment implements FindEventsAdapter.On
             public void onChanged(ArrayList<Event> events) {
                 relevantEvents.clear();
                 relevantEvents.addAll(events);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        viewModel.getMyEvents().observe(this, new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(ArrayList<String> usersEventsIds) {
+                myEvents.clear();
+                myEvents.addAll(usersEventsIds);
                 adapter.notifyDataSetChanged();
             }
         });

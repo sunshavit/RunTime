@@ -3,6 +3,7 @@ package com.example.runtime;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -25,17 +27,19 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ev
 
     private ArrayList<Event> events;
     private Context context;
+    private ArrayList<String> myEvents;
 
     interface OnJoinEventListener{
         void onJoinEvent(String eventId,String userId);
         void onCancelJoinEvent(String eventId,String userId);
     }
 
-    OnJoinEventListener joinEventCallback;
+    private OnJoinEventListener joinEventCallback;
 
-    public FindEventsAdapter(ArrayList<Event> events, Context context) {
+    public FindEventsAdapter(ArrayList<Event> events, Context context, ArrayList<String> myEvents)  {
         this.events = events;
         this.context = context;
+        this.myEvents = myEvents;
     }
 
     public class EventsViewHolder extends RecyclerView.ViewHolder {
@@ -142,6 +146,10 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ev
 
         }
 
+
+        if(myEvents.contains(event.getEventId())){
+            holder.joinBtn.setChecked(true);
+        }
 
 
        // add amount of runners.
