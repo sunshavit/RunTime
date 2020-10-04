@@ -1,14 +1,17 @@
 package com.example.runtime;
 
+import android.app.Application;
 import android.net.sip.SipSession;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 
-public class CreateEventVM extends ViewModel {
+public class CreateEventVM extends AndroidViewModel {
 
     private int eventYear;
     private int eventMonth;
@@ -36,6 +39,10 @@ public class CreateEventVM extends ViewModel {
     private boolean isPrivateChecked;
 
     MutableLiveData<String> streetAddress = new MutableLiveData<>();
+
+    public CreateEventVM(@NonNull Application application) {
+        super(application);
+    }
 
     public MutableLiveData<String> getStreetAddress(){
         return streetAddress;

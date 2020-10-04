@@ -63,6 +63,7 @@ public class MapFragment extends Fragment {
         }
 
         viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+        //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
 
 
     }

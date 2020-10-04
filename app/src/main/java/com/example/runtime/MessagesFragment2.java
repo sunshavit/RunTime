@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,7 +107,9 @@ public class MessagesFragment2 extends Fragment {
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.d("messageChat", intent.getStringExtra("message") );
                 messagesVM.addToList(intent.getStringExtra("message"));
+
             }
         };
         IntentFilter filter = new IntentFilter("messagesReceiver");

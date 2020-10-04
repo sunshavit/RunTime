@@ -1,5 +1,7 @@
 package com.example.runtime;
 
+import android.location.Geocoder;
+
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.solver.widgets.Snapshot;
 import androidx.lifecycle.MutableLiveData;
@@ -10,8 +12,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 
 public class FriendDialogVM extends ViewModel {
@@ -23,10 +27,12 @@ public class FriendDialogVM extends ViewModel {
     MutableLiveData<StorageReference> imageRefLiveData = new MutableLiveData<>();
     private ArrayList<User> mutualFriends = new ArrayList<>();
     MutableLiveData<ArrayList<User>> mutualFriendsLiveData = new MutableLiveData<>();
+    MutableLiveData<String> addressLiveData = new MutableLiveData<>();
     private ArrayList<String> friendFriendsIds = new ArrayList<>();
     private ArrayList<String> userFriendsIds = new ArrayList<>();
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
     private RegisterClass registerClass = RegisterClass.getInstance();
+    private UserInstance userInstance = UserInstance.getInstance();
 
     public FriendDialogVM(String friendId) {
        this.friendId = friendId;
@@ -118,6 +124,12 @@ public class FriendDialogVM extends ViewModel {
                     User friendUser = snapshot.getValue(User.class);
                     int age = getAge(friendUser.getYear(), friendUser.getMonth(), friendUser.getDayOfMonth());
                     String name = friendUser.getFullName();
+
+                    double longitude = friendUser.getLongitude();
+                    double latitude = friendUser.getLatitude();
+                    double distance = haversine(latitude, longitude, userInstance.getUser().getLatitude(), userInstance.getUser().getLongitude());
+                    int meters = (int)(distance * 1000);
+                    addressLiveData.setValue(meters + "");
                     nameLiveData.setValue(name + ", " + age);
                     genderLiveData.setValue(friendUser.getGender());
                     runningLevelLiveData.setValue(friendUser.getRunningLevel());
@@ -154,6 +166,10 @@ public class FriendDialogVM extends ViewModel {
         return mutualFriendsLiveData;
     }
 
+    public MutableLiveData<String> getAddressLiveData(){
+        return addressLiveData;
+    }
+
     private int getAge(int year, int month, int day){
         Calendar dob = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
@@ -171,4 +187,26 @@ public class FriendDialogVM extends ViewModel {
 
         return ageInt;
     }
+
+    private double haversine(double lat1, double lon1,
+                             double lat2, double lon2)
+    {
+        // distance between latitudes and longitudes
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+
+        // convert to radians
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+
+        // apply formulae
+        double a = Math.pow(Math.sin(dLat / 2), 2) +
+                Math.pow(Math.sin(dLon / 2), 2) *
+                        Math.cos(lat1) *
+                        Math.cos(lat2);
+        double rad = 6371;
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return rad * c; //distance in km
+    }
+
 }

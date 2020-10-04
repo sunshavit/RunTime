@@ -132,7 +132,7 @@ public class Messages2VM extends AndroidViewModel {
         data.put("messageType","message");
         //JSONObject notificationObject = new JSONObject();
         data.put("title", "New message from "+ name);
-        data.put("body","from "+message);
+        data.put("body",message.getContent());
         rootObject.put("data", data);
 
         String url = "https://fcm.googleapis.com/fcm/send";

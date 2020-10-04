@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -30,11 +31,11 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
 
 
 
-    interface OnStrangerCellClickListener{
-       void onStrangerCellClicked(String strangerId, boolean isRequested);
-    }
+    /*interface OnStrangerCellClickListener{
+       //void onStrangerCellClicked(String strangerId, boolean isRequested);
+    }*/
 
-    OnStrangerCellClickListener strangerCellCallback;
+   // OnStrangerCellClickListener strangerCellCallback;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -42,11 +43,11 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
         //viewModel= new ViewModelProvider(getActivity()).get(FindPeopleVM.class);
         viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(FindPeopleVM.class);
 
-        try {
+       /* try {
             strangerCellCallback = (OnStrangerCellClickListener) context;
         } catch (ClassCastException e){
             throw new ClassCastException("Activity must implement OnStrangerCellClickedListener");
-        }
+        }*/
     }
 
     @Nullable
@@ -55,7 +56,7 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
 
         View root = inflater.inflate(R.layout.find_people_fragment, container, false);
         RecyclerView recyclerView = root.findViewById(R.id.findPeopleRecycler);
-        TextView locationTV = root.findViewById(R.id.findPeopleLocationTV);//geocode address
+        final TextView locationTV = root.findViewById(R.id.findPeopleLocationTV);//geocode address
 
 
         Log.d("tag2", relevantUsers.size()+"");
@@ -70,6 +71,13 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
 
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshFindPeople);
         swipeRefreshLayout.setOnRefreshListener(this);
+
+        viewModel.getAddressLiveData().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                locationTV.setText(s);
+            }
+        });
 
 
         viewModel.getSwipeLayoutBool().observe(this, new Observer<Boolean>() {
@@ -128,7 +136,11 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
 
     @Override
     public void onStrangerClicked(String strangerId, boolean isRequested) {
-        strangerCellCallback.onStrangerCellClicked(strangerId, isRequested);
+       // strangerCellCallback.onStrangerCellClicked(strangerId, isRequested);
+        FragmentManager fm = getFragmentManager();
+        FriendDialog dialog = FriendDialog.newInstance(strangerId);
+        assert fm != null;
+        dialog.show(fm, "friendDialog");
     }
 
     @Override

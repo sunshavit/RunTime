@@ -83,7 +83,7 @@ public class CreateEventFragment extends Fragment {
         return createEventFragment;
     };
 
-    private CreateEventFragment() {
+    public CreateEventFragment() {
 
     }
 
@@ -106,6 +106,7 @@ public class CreateEventFragment extends Fragment {
         }
 
         viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
+        //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
     }
 
     @Nullable
@@ -132,7 +133,7 @@ public class CreateEventFragment extends Fragment {
 
 
    Toast.makeText(getContext(),String.valueOf(getArguments().getBoolean("isNew")),Toast.LENGTH_LONG).show();
-        if(getArguments()!=null){
+        /*if(getArguments()!=null){
             if(getArguments().getBoolean("isNew")){
                 viewModel.setEventDate("");
                 viewModel.setEventTime("");
@@ -147,7 +148,7 @@ public class CreateEventFragment extends Fragment {
                 viewModel.setPrivateChecked(false);
                 bundle.putBoolean("isNew", false);
             }
-        }
+        }*/
 
         dateEt.setText(viewModel.getEventDate());
         timeEt.setText(viewModel.getEventTime());

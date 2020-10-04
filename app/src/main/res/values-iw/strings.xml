@@ -14,8 +14,8 @@
     <string name="done_btn">סיום</string>
     <string name="activity_level">בחר רמת קושי</string>
     <string name="easy">קל</string>
-    <string name="active">בינוני</string>
-    <string name="medium">קשה</string>
+    <string name="expert">מקצועי</string>
+    <string name="medium">בינוני</string>
     <string name="event_status">בחר את סטטוס האירוע</string>
     <string name="public_event">אירוע ציבורי</string>
     <string name="private_event">אירוע פרטי</string>
@@ -25,7 +25,7 @@
     <string name="cancel_join_btn">ביטול</string>
     <string name="events_recycler_title">אירועים בקרבת מקום</string>
     <string name="accept">אשר</string>
-    <string name="remove">מחק</string>
+    <string name="remove">הסר</string>
     <string name="join">הצטרף</string>
     <string name="add">הוסף</string>
     <string name="cancel">בטל</string>
@@ -45,4 +45,25 @@
     <string name="mutual">חברים משותפים</string>
     <string name="male">גבר</string>
     <string name="female">אישה</string>
+    <string name="insert_text">הוסף טקסט</string>
+    <string name="is_sure_cancel_event">האם לבטל את האירוע הזה?</string>
+    <string name="cancel_event">בטל אירוע</string>
+    <string name="do_not_cancel">לא לבטל</string>
+    <string name="event_canceled">אירוע בוטל</string>
+    <string name="the_event">האירוע</string>
+    <string name="on_date">בתאריך</string>
+    <string name="on_time">בשעה</string>
+    <string name="is_canceled">מבוטל</string>
+    <string name="is_sure_delete_friend">להסיר את</string>
+    <string name="from_friend_list">מרשימת החברים שלך?</string>
+    <string name="friend_successfuly_removed">חבר הוסר בהצלחה</string>
+    <string name="event_canceled_successfuly">האירוע בוטל</string>
+    <string name="new_friend_request">בקשת חברות חדשה!</string>
+    <string name="do_not_keep_wait">אל תשאיר אותם לבד</string>
+    <string name="is_sure_cancel_participants">לבטל את השתתפותך באירוע?</string>
+    <string name="cancel_participation">בטל השתתפות</string>
+    <string name="participation_removed">ההשתתפות הוסרה</string>
+    <string name="added_to_friends">נוסף לרשימת החברים שלך</string>
+    <string name="sign_up_with_email">הרשמה עם אימייל</string>
+    <string name="sign_in">התחברות</string>
 </resources>
