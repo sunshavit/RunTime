@@ -80,6 +80,25 @@
     <string name="password">Password</string>
     <string name="password_confirm">Password confirm</string>
     <string name="profile_picture">Profile picture:</string>
+    <string name="gender">Gender:</string>
+    <string name="birthdate">Birthdate:</string>
+    <string name="running_level">Running level:</string>
+    <string name="both">Both</string>
+    <string name="age">Age:</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="required_field">Required field</string>
+    <string name="email_badly_formatted">Email badly formatted</string>
+    <string name="no_such_user">No user with this address</string>
+    <string name="wrong_password">Wrong Password</string>
+    <string name="failed_sign_in">Failed to sign in</string>
+    <string name="passwords_not_identical">Passwords not identical</string>
+    <string name="password_must_be_8_letters">Password must be at least 8 letters</string>
+    <string name="invalid_credentials">Invalid credentials</string>
+    <string name="user_already_exists">User already exists</string>
+    <string name="failed_to_sign_up">Failed to sign up</string>
+    <string name="fill_all_details">Please fill all details</string>
 
 
 </resources>

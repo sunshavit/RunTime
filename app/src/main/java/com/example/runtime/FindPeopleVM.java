@@ -264,37 +264,42 @@ public class FindPeopleVM extends AndroidViewModel {
         double longitude = currentUser.getLongitude();
         double latitude = currentUser.getLatitude();
         //user preferences
-        String preferredGender = userPreferences.getGender();
 
+        String preferredGender = userPreferences.getGender();
         Log.d("gender", preferredGender);
         String preferredLevel = userPreferences.getRuningLevel();
         int preferredFromAge = userPreferences.getFromAge();
         int preferredToAge = userPreferences.getToAge();
 
-        //choosing only relevant users from the list
-       // ArrayList<User> relevant = new ArrayList<>();
+        if (preferredGender != null && preferredLevel != null && preferredFromAge != 0 && preferredToAge != 0){
 
-        for (User user : usersFromDatabase){
+            //choosing only relevant users from the list
 
-            int age = getAge(user.getYear(), user.getMonth(), user.getDayOfMonth());
-            double distance = haversine(user.getLatitude(), user.getLongitude(), latitude, longitude);
-            Log.d("distance", distance+"");
+            for (User user : usersFromDatabase){
 
-            //also check if user not on friends list already!
-            if (!userFriendsIds.contains(user.getUserId()) && !userFriendRequestsIds.contains(user.getUserId())){
-                Log.d("user", user.getGender());
-                if(user.getGender().equals(preferredGender)
-                        && user.getRunningLevel().equals(preferredLevel)
-                        && age >= preferredFromAge && age <= preferredToAge
-                        && distance < 20
-                        && !(user.getUserId().equals(currentUser.getUserId()))
-                ) {
-                    relevant.add(user);
-                    Log.d("distance", "relevant user distance " +distance+"");
-                    Log.d("tag2", "inside findRelevant users "+relevant.size()+"");
+                if (user.getGender() != null && user.getRunningLevel() != null && user.getUserId() != null){
+                    int age = getAge(user.getYear(), user.getMonth(), user.getDayOfMonth());
+                    double distance = haversine(user.getLatitude(), user.getLongitude(), latitude, longitude);
+                    Log.d("distance", distance+"");
+
+                    //also check if user not on friends list already!
+                    if (!userFriendsIds.contains(user.getUserId()) && !userFriendRequestsIds.contains(user.getUserId())){
+                        Log.d("user", user.getGender());
+                        if((user.getGender().equals(preferredGender) || preferredGender.equals("both"))
+                                && user.getRunningLevel().equals(preferredLevel)
+                                && age >= preferredFromAge && age <= preferredToAge
+                                && distance < 20
+                                && !(user.getUserId().equals(currentUser.getUserId()))
+                        ) {
+                            relevant.add(user);
+                            Log.d("distance", "relevant user distance " +distance+"");
+                            Log.d("tag2", "inside findRelevant users "+relevant.size()+"");
+                        }
+                    }
                 }
-            }
 
+
+            }
         }
 
      //   Log.d("tag", "relevant" + relevant.get(0).getFullName());

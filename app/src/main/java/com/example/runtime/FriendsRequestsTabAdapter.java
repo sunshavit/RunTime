@@ -1,6 +1,7 @@
 package com.example.runtime;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
@@ -51,10 +53,18 @@ public class FriendsRequestsTabAdapter extends RecyclerView.Adapter<FriendsReque
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FriendRequestViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final FriendRequestViewHolder holder, int position) {
         holder.friendRequestTextView.setText(friendsRequests.get(position).getFullName());
-        StorageReference requestImageRef = dataBaseClass.retrieveImageStorageReference(friendsRequests.get(position).getUserId());
-        Glide.with(context).load(requestImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.friendRequestImageView);
+        /*StorageReference requestImageRef = dataBaseClass.retrieveImageStorageReference(friendsRequests.get(position).getUserId());
+        Glide.with(context).load(requestImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.friendRequestImageView);*/
+        OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(context).load(uri).placeholder(R.drawable.placeholder_small).into(holder.friendRequestImageView);
+            }
+        };
+
+        dataBaseClass.getImageUserId(friendsRequests.get(position).getUserId(), listener);
     }
 
     @Override

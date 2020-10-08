@@ -1,6 +1,7 @@
 package com.example.runtime;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -52,10 +54,18 @@ public class FriendsTabAdapter extends RecyclerView.Adapter<FriendsTabAdapter.Fr
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FriendViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final FriendViewHolder holder, int position) {
         holder.friendTextView.setText(friends.get(position).getFullName());
-        StorageReference friendImageRef = dataBaseClass.retrieveImageStorageReference(friends.get(position).getUserId());
-        Glide.with(context).load(friendImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.friendImageView);
+        /*StorageReference friendImageRef = dataBaseClass.retrieveImageStorageReference(friends.get(position).getUserId());
+        Glide.with(context).load(friendImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.friendImageView);*/
+        OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(context).load(uri).placeholder(R.drawable.placeholder_small).into(holder.friendImageView);
+            }
+        };
+
+        dataBaseClass.getImageUserId(friends.get(position).getUserId(), listener);
         double longitude = friends.get(position).getLongitude();
         double latitude = friends.get(position).getLatitude();
         double distance = haversine(latitude, longitude, userInstance.getUser().getLatitude(), userInstance.getUser().getLongitude());

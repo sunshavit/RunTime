@@ -60,24 +60,16 @@ public class ManagedTabFragment extends Fragment implements SwipeRefreshLayout.O
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshManagedTab);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-       /* swipeRefreshLayout.post(new Runnable() {
+       viewModel.getManagedEventsIds();
 
-            @Override
-            public void run() {
-
-                swipeRefreshLayout.setRefreshing(true);
-
-            }
-        });*/
-
-        viewModel.getSwipeLayoutBool().observe(this, new Observer<Boolean>() {
+        viewModel.getSwipeLayoutBool().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
 
-        viewModel.getManagedEventsLiveData().observe(this, new Observer<ArrayList<Event>>() {
+        viewModel.getManagedEventsLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Event>>() {
             @Override
             public void onChanged(ArrayList<Event> events) {
                 managed.clear();

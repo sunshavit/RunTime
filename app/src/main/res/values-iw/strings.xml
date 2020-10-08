@@ -79,5 +79,24 @@
     <string name="password">סיסמא</string>
     <string name="password_confirm">אימות סיסמא</string>
     <string name="profile_picture">תמונת פרופיל:</string>
+    <string name="gender">מגדר:</string>
+    <string name="birthdate">תאריך לידה:</string>
+    <string name="running_level">רמת ריצה:</string>
+    <string name="both">לא משנה</string>
+    <string name="age">גיל:</string>
+    <string name="from">מ</string>
+    <string name="to">עד</string>
+    <string name="welcome_back">ברוכים השבים!</string>
+    <string name="required_field">שדה חובה</string>
+    <string name="email_badly_formatted">אימייל לא תקין</string>
+    <string name="no_such_user">לא נמצא משתמש עם האימייל הזה</string>
+    <string name="wrong_password">סיסמא לא נכונה</string>
+    <string name="failed_sign_in">התחברות נכשלה</string>
+    <string name="passwords_not_identical">סיסמאות לא תואמות</string>
+    <string name="password_must_be_8_letters">סיסמא בת 8 תווים לפחות</string>
+    <string name="invalid_credentials">אשרות לא חוקיות</string>
+    <string name="user_already_exists">משתמש כבר קיים</string>
+    <string name="failed_to_sign_up">הרשמה נכשלה</string>
+    <string name="fill_all_details">השלם את כל הפרטים</string>
 
 </resources>

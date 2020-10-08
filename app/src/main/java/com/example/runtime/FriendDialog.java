@@ -1,6 +1,7 @@
 package com.example.runtime;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,14 +88,14 @@ public class FriendDialog extends DialogFragment {
         friendDialogRecycler.setAdapter(adapter);
 
 
-        viewModel.getNameLiveData().observe(this, new Observer<String>() {
+        viewModel.getNameLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 friendName.setText(s);
             }
         });
 
-        viewModel.getGenderLiveData().observe(this, new Observer<String>() {
+        viewModel.getGenderLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if(s.equals("female")){
@@ -106,7 +107,7 @@ public class FriendDialog extends DialogFragment {
             }
         });
 
-        viewModel.getRunningLevelLiveData().observe(this, new Observer<String>() {
+        viewModel.getRunningLevelLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 switch (s) {
@@ -127,21 +128,28 @@ public class FriendDialog extends DialogFragment {
             }
         });
 
-        viewModel.getAddressLiveData().observe(this, new Observer<String>() {
+        viewModel.getAddressLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 friendLocationTV.setText(s);
             }
         });
 
-        viewModel.getImageRefLiveData().observe(this, new Observer<StorageReference>() {
+        /*viewModel.getImageRefLiveData().observe(getViewLifecycleOwner(), new Observer<StorageReference>() {
             @Override
             public void onChanged(StorageReference storageReference) {
                 Glide.with(Objects.requireNonNull(getContext())).load(storageReference).into(friendImageView);
             }
+        });*/
+
+        viewModel.getImageUriLiveData().observe(getViewLifecycleOwner(), new Observer<Uri>() {
+            @Override
+            public void onChanged(Uri uri) {
+                Glide.with(Objects.requireNonNull(getContext())).load(uri).placeholder(R.drawable.placeholder_small).into(friendImageView);
+            }
         });
 
-        viewModel.getMutualFriendsLiveData().observe(this, new Observer<ArrayList<User>>() {
+        viewModel.getMutualFriendsLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
                 mutualFriends.clear();
