@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 
@@ -23,9 +25,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,9 +45,9 @@ public class MapFragment extends Fragment {
     private LatLng latLng;
 
     private String streetAddress;
-    TextView searchResult;
+    private TextView searchResult;
 
-    CreateEventVM viewModel;
+    private CreateEventVM viewModel;
 
 
 
@@ -72,6 +76,7 @@ public class MapFragment extends Fragment {
 
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -81,6 +86,7 @@ public class MapFragment extends Fragment {
         geocoder=new Geocoder(getContext());
         searchResult = root.findViewById(R.id.search_result);
         Button vBtn = root.findViewById(R.id.vBtn);
+        Button focusBtn = root.findViewById(R.id.focus_btn);
 
 
         //location set by text
@@ -109,12 +115,11 @@ public class MapFragment extends Fragment {
                         searchResult.setText(streetAddress);
                     }
                     else
-                        Toast.makeText(getContext(),"Invalid address",Toast.LENGTH_LONG).show();
-
+                        Snackbar.make(getView(),R.string.type, Snackbar.LENGTH_LONG).show();
                 }
 
                 else
-                    Toast.makeText(getContext(),"Invalid address",Toast.LENGTH_LONG).show();
+                    Snackbar.make(getView(),R.string.type, Snackbar.LENGTH_LONG).show();
 
                 return false;
             }
@@ -135,22 +140,22 @@ public class MapFragment extends Fragment {
                 longitude=userInstance.getUser().getLongitude();
                 latitude=userInstance.getUser().getLatitude();
 
-                //current location of user
-                float zoomLevel = 16.0f;
-                latLng = new LatLng(latitude, longitude);
-                try {
-                    List<Address>addresses = geocoder.getFromLocation(latLng.latitude,latLng.longitude,1);
-                    if(addresses.size()>0){
-                        Address address=addresses.get(0);
-                        streetAddress=address.getAddressLine(0);
-                        map.clear();
-                        map.addMarker(new MarkerOptions().position(latLng).title(streetAddress).draggable(true));
-                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoomLevel));
-                        searchResult.setText(streetAddress);
+                    //current location of user
+                    float zoomLevel = 16.0f;
+                    latLng = new LatLng(latitude, longitude);
+                    try {
+                        List<Address>addresses = geocoder.getFromLocation(latLng.latitude,latLng.longitude,1);
+                        if(addresses.size()>0){
+                            Address address=addresses.get(0);
+                            streetAddress=address.getAddressLine(0);
+                            map.clear();
+                            map.addMarker(new MarkerOptions().position(latLng).title(streetAddress).draggable(true));
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoomLevel));
+                            searchResult.setText(streetAddress);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
                 //location drag by marker
                 map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
@@ -210,6 +215,13 @@ public class MapFragment extends Fragment {
 
 
 
+            }
+        });
+
+        focusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
             }
         });
 

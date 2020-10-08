@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -83,11 +84,17 @@ public class InviteFriendsDialogAdapter extends RecyclerView.Adapter<InviteFrien
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyFriendsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyFriendsViewHolder holder, int position) {
         User user = myFriends.get(position);
 
-        StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(user.getUserId());
-        Glide.with(context).load(userImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.myFriendIv);
+        OnSuccessListener listener = new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                String image = o.toString();
+                Glide.with(context).load(image).placeholder(R.drawable.ic_launcher_background).into(holder.myFriendIv);
+            }
+        };
+        dataBaseClass.getImageUserId(user.getUserId(),listener);
 
         holder.friendName.setText(user.getFullName());
 

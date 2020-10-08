@@ -22,6 +22,8 @@ public class FindEventsVM extends AndroidViewModel {
     private MutableLiveData<ArrayList<String>> myEvents = new MutableLiveData<>();
     private ArrayList<String> myEventsTemp = new ArrayList<>();
 
+    private MutableLiveData<Boolean> swipeLayoutEventBool = new MutableLiveData<>();
+
     public FindEventsVM(@NonNull Application application) {
         super(application);
         retrieveEventsList();
@@ -59,6 +61,7 @@ public class FindEventsVM extends AndroidViewModel {
 
     public void retrieveEventsList(){
         getAllEventsList();
+        swipeLayoutEventBool.setValue(true);
     }
 
     private void getAllEventsList(){
@@ -147,5 +150,8 @@ public class FindEventsVM extends AndroidViewModel {
 
     }
 
+    public MutableLiveData<Boolean> getSwipeLayoutEventBool() {
+        return swipeLayoutEventBool;
+    }
 }
 

@@ -41,23 +41,13 @@ public class CreateEventVM extends AndroidViewModel {
     private String eventStatus;
     private UserInstance userInstance = UserInstance.getInstance();
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
-
     private String eventDate;
     private String eventTime;
-    private int easyImageView;
-    private int mediumImageView;
-    private int hardImageView;
-    private boolean isFirstLaunch=true;
-    private int easyTextView;
-    private int mediumTextView;
-    private int hardTextView;
-    private boolean isPublicChecked;
-    private boolean isPrivateChecked;
-
+    private ArrayList<String> invitedUsersIds;
 
     private final String API_TOKEN_KEY = "AAAAfwvvO64:APA91bG6RWYJYEROIIoBMpzKm6kMdCbqDdqpzhynZ4YnFKEiQ0vu5QuLfJdGTtlixdzqBoL2Ul99A5Mf9kspOh8Whz9U-AY1-7rQTBiOUNUeYZM3UHh4A7Tm4Kb-u4Hrv98zApJn76NQ";
 
-    MutableLiveData<String> streetAddress = new MutableLiveData<>();
+    private MutableLiveData<String> streetAddress = new MutableLiveData<>();
 
     public CreateEventVM(@NonNull Application application) {
         super(application);
@@ -75,8 +65,7 @@ public class CreateEventVM extends AndroidViewModel {
         this.latitude = latitude;
     }
 
-
-    public void setEventData ( int eventYear, int eventMonth, int eventDayOfMonth, int eventHourOfDay, int eventMinute, String runningLevel, String eventStatus, ArrayList<String> invitedFriendsIds) {
+    public void setEventData (int eventYear, int eventMonth, int eventDayOfMonth, int eventHourOfDay, int eventMinute, String runningLevel, String eventStatus, ArrayList<String> invitedFriendsIds) {
         this.eventYear = eventYear;
         this.eventMonth = eventMonth;
         this.eventDayOfMonth = eventDayOfMonth;
@@ -90,16 +79,10 @@ public class CreateEventVM extends AndroidViewModel {
         dataBaseClass.createNewEvent(event,userId,invitedFriendsIds);
 
         if(invitedFriendsIds!=null){
-            userTokenFromDatabase(invitedFriendsIds);
+           // userTokenFromDatabase(invitedFriendsIds);
         }
 
     }
-
-    Event getEventData(){
-        Event event = new Event(eventYear,eventMonth,eventDayOfMonth,eventHourOfDay,eventMinute,longitude,latitude,runningLevel,eventStatus);
-        return event;
-    }
-
 
     public void setEventDate(String eventDate){
         this.eventDate = eventDate;
@@ -115,78 +98,6 @@ public class CreateEventVM extends AndroidViewModel {
 
     public String getEventTime(){
         return  eventTime;
-    }
-
-    public void setEasyImageView(int easyImageView){
-        this.easyImageView = easyImageView;
-    }
-
-    public int getEasyImageView(){
-        return easyImageView;
-    }
-
-    public void setMediumImageView(int mediumImageView){
-        this.mediumImageView = mediumImageView;
-    }
-
-    public int getMediumImageView(){
-        return mediumImageView;
-    }
-
-    public void setHardImageView(int hardImageView){
-        this.hardImageView = hardImageView;
-    }
-
-    public int getHardImageView(){
-        return hardImageView;
-    }
-
-    public void setIsFirstLaunch(boolean isFirstLaunch){
-        this.isFirstLaunch = isFirstLaunch;
-    }
-
-    public boolean getIsFirstLaunch(){
-        return isFirstLaunch;
-    }
-
-    public int getEasyTextView() {
-        return easyTextView;
-    }
-
-    public void setEasyTextView(int easyTextView) {
-        this.easyTextView = easyTextView;
-    }
-
-    public int getMediumTextView() {
-        return mediumTextView;
-    }
-
-    public void setMediumTextView(int mediumTextView) {
-        this.mediumTextView = mediumTextView;
-    }
-
-    public int getHardTextView() {
-        return hardTextView;
-    }
-
-    public void setHardTextView(int hardTextView) {
-        this.hardTextView = hardTextView;
-    }
-
-    public boolean isPublicChecked() {
-        return isPublicChecked;
-    }
-
-    public void setPublicChecked(boolean publicChecked) {
-        isPublicChecked = publicChecked;
-    }
-
-    public boolean isPrivateChecked() {
-        return isPrivateChecked;
-    }
-
-    public void setPrivateChecked(boolean privateChecked) {
-        isPrivateChecked = privateChecked;
     }
 
     public void userTokenFromDatabase(final ArrayList<String> invitedFriendsIds){
@@ -258,59 +169,45 @@ public class CreateEventVM extends AndroidViewModel {
 
     }
 
-    public int getEventYear() {
-        return eventYear;
+    public Event getEventData(){
+        Event event = new Event(eventYear,eventMonth,eventDayOfMonth,eventHourOfDay,eventMinute,longitude,latitude,runningLevel,eventStatus);
+        return event;
     }
 
     public void setEventYear(int eventYear) {
         this.eventYear = eventYear;
     }
 
-    public int getEventMonth() {
-        return eventMonth;
-    }
-
     public void setEventMonth(int eventMonth) {
         this.eventMonth = eventMonth;
-    }
-
-    public int getEventDayOfMonth() {
-        return eventDayOfMonth;
     }
 
     public void setEventDayOfMonth(int eventDayOfMonth) {
         this.eventDayOfMonth = eventDayOfMonth;
     }
 
-    public int getEventHourOfDay() {
-        return eventHourOfDay;
-    }
-
     public void setEventHourOfDay(int eventHourOfDay) {
         this.eventHourOfDay = eventHourOfDay;
-    }
-
-    public int getEventMinute() {
-        return eventMinute;
     }
 
     public void setEventMinute(int eventMinute) {
         this.eventMinute = eventMinute;
     }
 
-    public String getRunningLevel() {
-        return runningLevel;
-    }
-
     public void setRunningLevel(String runningLevel) {
         this.runningLevel = runningLevel;
-    }
-
-    public String getEventStatus() {
-        return eventStatus;
     }
 
     public void setEventStatus(String eventStatus) {
         this.eventStatus = eventStatus;
     }
+
+    public ArrayList<String> getInvitedUsersIds() {
+        return invitedUsersIds;
+    }
+
+    public void setInvitedUsersIds(ArrayList<String> invitedUsersIds) {
+        this.invitedUsersIds = invitedUsersIds;
+    }
+
 }

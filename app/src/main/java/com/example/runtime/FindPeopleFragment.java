@@ -109,7 +109,7 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
     public void onResume() {
         super.onResume();
         viewModel.getSentRequests();
-        viewModel.getRecentSentRequests().observe(this, new Observer<ArrayList<String>>() {
+        viewModel.getRecentSentRequests().observe(getViewLifecycleOwner(), new Observer<ArrayList<String>>() {
             @Override
             public void onChanged(ArrayList<String> strings) {
 
