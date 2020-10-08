@@ -62,6 +62,8 @@ public class EditPreferencesFragment extends Fragment {
         final RadioButton radioButtonExpert = root.findViewById(R.id.expertRBPartnerEditP);
         final RadioButton radioButtonBoth = root.findViewById(R.id.bothRBPartnerEditP);
 
+        editPreferencesVM.getUserPreferences();
+
         editPreferencesVM.getFromAge().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
@@ -74,7 +76,7 @@ public class EditPreferencesFragment extends Fragment {
             @Override
             public void onChanged(Integer integer) {
                 to = integer;
-                spinnerAgeTo.setSelection(integer);
+                spinnerAgeTo.setSelection(integer-from);
             }
         });
 
@@ -114,6 +116,10 @@ public class EditPreferencesFragment extends Fragment {
         spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("spinner1", "position" +position +"");
+                Log.d("spinner1", " to " +to +"");
+                Log.d("spinner1",  "from" +from +"");
+                Log.d("spinner1", " size" + toAgesArray.size() +"");
                 if ((int)parent.getItemAtPosition(position) == 0){
 
                 }else{
@@ -140,6 +146,10 @@ public class EditPreferencesFragment extends Fragment {
         spinnerAgeTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("spinner", "position" +position +"");
+                Log.d("spinner", " to " +to +"");
+                Log.d("spinner",  "from" +from +"");
+                Log.d("spinner", " size" + toAgesArray.size() +"");
                 if((int)parent.getItemAtPosition(position) == 0){
 
                 }else{

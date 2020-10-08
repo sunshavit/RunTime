@@ -61,9 +61,10 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:layout_alignParentEnd="true"
+
             android:layout_margin="5dp"
             android:layout_below="@+id/cardLastMessageTime"
-            android:src="@drawable/newmessage"/>
+            android:src="@drawable/ic_new_message"/>
 
     </RelativeLayout>
 

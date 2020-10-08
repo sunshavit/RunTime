@@ -12,24 +12,33 @@ public class EditProfileVM extends ViewModel implements DataBaseClass.OnGetUserI
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
     private UserInstance userInstance = UserInstance.getInstance();
     private MutableLiveData<String> liveDataImage = new MutableLiveData<>();
-    private MutableLiveData<String> liveDataDate = new MutableLiveData<>();
-    private MutableLiveData<String > liveDataName = new MutableLiveData<>();
+    //private MutableLiveData<String> liveDataDate = new MutableLiveData<>();
+    //private MutableLiveData<String > liveDataName = new MutableLiveData<>();
+    private MutableLiveData<User> userLiveData = new MutableLiveData<>();
 
 
     public EditProfileVM() {
         dataBaseClass.setCallBackGetImage(this);
         dataBaseClass.setCallBackImage(this);
-        liveDataName.setValue(UserInstance.getInstance().getUser().getFullName());
-        liveDataDate.setValue(userInstance.getUser().getDayOfMonth()+"."+userInstance.getUser().getMonth()+"."+userInstance.getUser().getYear());
+       // liveDataName.setValue(UserInstance.getInstance().getUser().getFullName());
+      //  liveDataDate.setValue(userInstance.getUser().getDayOfMonth()+"."+userInstance.getUser().getMonth()+"."+userInstance.getUser().getYear());
     }
 
-    public void setDate(String date){
+    public MutableLiveData<User> getUserLiveData(){
+        return userLiveData;
+    }
+
+    public void setUserLiveData(User user){
+        userLiveData.setValue(user);
+    }
+
+    /*public void setDate(String date){
         liveDataDate.setValue(date);
-    }
+    }*/
 
-    public LiveData<String> getLiveDataDate() {
+    /*public LiveData<String> getLiveDataDate() {
         return liveDataDate;
-    }
+    }*/
 
     public void getImageFromData(){
         dataBaseClass.getImage();
@@ -45,6 +54,7 @@ public class EditProfileVM extends ViewModel implements DataBaseClass.OnGetUserI
     }
 
     public void saveUserEdit(){
+
         dataBaseClass.changeUser(userInstance.getUser());
     }
 
@@ -68,11 +78,11 @@ public class EditProfileVM extends ViewModel implements DataBaseClass.OnGetUserI
 
     }
 
-    public void setName(String name){
+    /*public void setName(String name){
         liveDataName.setValue(name);
-    }
+    }*/
 
-    public MutableLiveData<String> getLiveDataName() {
+    /*public MutableLiveData<String> getLiveDataName() {
         return liveDataName;
-    }
+    }*/
 }

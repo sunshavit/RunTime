@@ -146,6 +146,9 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                 final FirebaseUser user=firebaseAuth.getCurrentUser();
                 if(user!=null) { //sign up or sign in
 
+                    RelativeLayout layout = findViewById(R.id.toolbarLayout);
+                    layout.setVisibility(View.VISIBLE);
+
                         ValueEventListener listener = new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -220,9 +223,12 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                         fragmentManager.beginTransaction().replace(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG).commit();
                         toolBarFragment =getSupportFragmentManager().findFragmentByTag(TOOLBAR_TAG);
                         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                        RelativeLayout layout = findViewById(R.id.toolbarLayout);
+                        layout.setVisibility(View.GONE);
                         if(toolBarFragment!=null) {
                             fragmentManager.beginTransaction().remove(toolBarFragment).commit();
                             fragmentManager.beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(NAV_TAG)).commit();
+
                         }
                     }
 
@@ -294,11 +300,13 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
     @Override
     public void onSignInClick() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignInFragment(),SIGN_IN).commit();
+
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignInFragment(),SIGN_IN).addToBackStack(null).commit();
     }
 
     @Override
     public void onSignUpClick() {
+
         fragmentManager.beginTransaction().replace(R.id.rootLayout,new SignUp1Fragment(),SIGNUP1TAG).addToBackStack(null).commit();
     }
 
@@ -541,7 +549,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
     @Override
     public void onSuccessUpdatePreferences() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(), CREATEEVENT_TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(), CREATEEVENT_TAG).addToBackStack(null).commit();
     }
 
     @Override
@@ -551,7 +559,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         fragmentManager.beginTransaction().replace(R.id.rootLayout, new HomeFragment(), HOME_TAG).commit();}
 
     public void onChangeUserSuccess() {
-        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).addToBackStack(null).commit();
     }
 
     @Override

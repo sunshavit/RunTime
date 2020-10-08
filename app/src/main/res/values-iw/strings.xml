@@ -106,7 +106,7 @@
     <string name="profile_picture">תמונת פרופיל:</string>
     <string name="gender">מגדר:</string>
     <string name="birthdate">תאריך לידה:</string>
-    <string name="running_level">רמת ריצה:</string>
+
     <string name="both">לא משנה</string>
     <string name="age">גיל:</string>
     <string name="from">מ</string>
@@ -124,22 +124,31 @@
     <string name="failed_to_sign_up">הרשמה נכשלה</string>
     <string name="fill_all_details">השלם את כל הפרטים</string>
     <string name="are_you_coming_for_a_run">אתה מוכן לריצה?</string>
-    <string name="find_runners_around_you">למצוא רצים סביבך</string>
-    <string name="find_event_around_you">למצוא אירועים סביבך</string>
-    <string name="create_new_event">ליצור אירוע חדש</string>
+    <string name="find_runners_around_you">מצא רצים בסביבה</string>
+    <string name="find_event_around_you">מצא אירועים בסביבה</string>
+
     <string name="my_profile">הפרופיל שלי</string>
-    <string name="gender">מין:</string>
-    <string name="both">שניהם</string>
-    <string name="age">גיל:</string>
-    <string name="from">מגיל</string>
-    <string name="to">לגיל</string>
-    <string name="running_level">רמת ריצה:</string>
+
+
+
+
+
+
     <string name="save">שמירה</string>
     <string name="edit_profile">עריכת פרופיל</string>
     <string name="full_name">שם מלא:</string>
-    <string name="birthdate">תאריך לידה:</string>
-    <string name="enter_full_name">הכנס שם מלא</string>
 
+    <string name="enter_full_name">הכנס שם מלא</string>
+    <string name="edit_preferences">עריכת העדפות</string>
+    <string name="sign_out">התנתקות</string>
+    <string name="menu">תפריט</string>
+    <string name="hello">שלום</string>
+    <string name="home">בית</string>
+    <string name="events">אירועים</string>
+    <string name="profile">פרופיל</string>
+    <string name="chat">צ\'אט</string>
+    <string name="edit_name">ערוך שם</string>
+    <string name="enter_your_message">הקלד הודעה</string>
 
 
 </resources>

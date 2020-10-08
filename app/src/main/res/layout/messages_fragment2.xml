@@ -56,9 +56,10 @@
                 android:layout_weight="0.8"
                 android:layout_margin="5dp"
                 android:padding="5dp"
-                app:boxStrokeColor="@color/orange"
+                app:boxStrokeColor="@color/lightBlue2"
                 android:layout_height="wrap_content"
-                android:hint="enter text"
+                app:hintTextColor="@color/lightBlue2"
+                android:hint="@string/enter_your_message"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -75,7 +76,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.2"
                 android:background="@null"
-                android:src="@drawable/ic_send_black_24dp"
+                android:scaleType="centerCrop"
+                android:padding="20dp"
+                android:src="@drawable/ic_send_orange_24dp"
                 />
         </LinearLayout>
     </RelativeLayout>

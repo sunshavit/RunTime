@@ -17,7 +17,7 @@ public class EditPreferencesVM extends ViewModel{
     MutableLiveData <Integer> fromAge = new MutableLiveData<>();
 
     public EditPreferencesVM() {
-        getUserPreferences();
+        //getUserPreferences();
     }
 
     public void getUserPreferences(){
@@ -29,6 +29,7 @@ public class EditPreferencesVM extends ViewModel{
                     preferencesMutableLiveData.setValue(userPreferences);
                     fromAge.setValue(userPreferences.getFromAge());
                     toAge.setValue(userPreferences.getToAge());
+
                 }
             }
 

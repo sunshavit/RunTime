@@ -25,6 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class InviteFriendsDialogAdapter extends RecyclerView.Adapter<InviteFriendsDialogAdapter.MyFriendsViewHolder>{
 
     private ArrayList<User> myFriends;
+    private ArrayList<String> invitedFriendsIds = new ArrayList<>();
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
     private Context context;
     private UserInstance userInstance = UserInstance.getInstance();
@@ -41,9 +42,10 @@ public class InviteFriendsDialogAdapter extends RecyclerView.Adapter<InviteFrien
         this.inviteFriendToEventCallback = inviteFriendToEventCallback;
     }
 
-    public InviteFriendsDialogAdapter(ArrayList<User> myFriends, Context context) {
+    public InviteFriendsDialogAdapter(ArrayList<User> myFriends, Context context, ArrayList<String> invitedFriendsIds) {
         this.myFriends = myFriends;
         this.context = context;
+        this.invitedFriendsIds = invitedFriendsIds;
     }
 
     public class MyFriendsViewHolder extends RecyclerView.ViewHolder{
@@ -86,6 +88,10 @@ public class InviteFriendsDialogAdapter extends RecyclerView.Adapter<InviteFrien
     @Override
     public void onBindViewHolder(@NonNull final MyFriendsViewHolder holder, int position) {
         User user = myFriends.get(position);
+
+        if (invitedFriendsIds.contains(user.getUserId())){
+            holder.inviteFriendBtn.setChecked(true);
+        }
 
         OnSuccessListener listener = new OnSuccessListener() {
             @Override

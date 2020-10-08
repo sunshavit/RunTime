@@ -79,7 +79,7 @@ public class CreateEventVM extends AndroidViewModel {
         dataBaseClass.createNewEvent(event,userId,invitedFriendsIds);
 
         if(invitedFriendsIds!=null){
-           // userTokenFromDatabase(invitedFriendsIds);
+            userTokenFromDatabase(invitedFriendsIds);
         }
 
     }

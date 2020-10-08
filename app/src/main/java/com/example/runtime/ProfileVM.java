@@ -2,25 +2,32 @@ package com.example.runtime;
 
 import android.content.Context;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class ProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage {
+public class ProfileVM extends ViewModel /*implements DataBaseClass.OnGetUserImage*/ {
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
-    private MutableLiveData<String> liveDataImage = new MutableLiveData<>();
+    private MutableLiveData<Uri> liveDataImage = new MutableLiveData<>();
     private MutableLiveData<User> liveDataUser = new MutableLiveData<>();
     private UserInstance userInstance;
 
     public ProfileVM() {
-        dataBaseClass.setCallBackGetImage(this);
+        //dataBaseClass.setCallBackGetImage(this);
         this.userInstance = UserInstance.getInstance();
+        liveDataUser.setValue(userInstance.getUser());
+    }
+
+    public void setNewUser(){
         liveDataUser.setValue(userInstance.getUser());
     }
 
@@ -64,19 +71,25 @@ public class ProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage
     }
 
     public void getImageFromData(){
-        dataBaseClass.getImage();
+        OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                liveDataImage.setValue(uri);
+            }
+        };
+        dataBaseClass.getImageUserId(userInstance.getUser().getUserId(), listener);
     }
 
-    public MutableLiveData<String> getImageLivedata() {
+    public MutableLiveData<Uri> getImageLivedata() {
         return liveDataImage;
     }
 
-    @Override
+   /* @Override
     public void onSuccessGetImage(String uri) {
         liveDataImage.setValue(uri);
-    }
-
+    }*/
+/*
     @Override
     public void onFailedGetImage() {
-    }
+    }*/
 }

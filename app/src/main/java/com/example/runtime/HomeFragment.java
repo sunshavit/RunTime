@@ -75,7 +75,8 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
 
     @Override
     public void onGetUser() {
-        title.setText("hello"+ " " +user.getUser().getFullName()+"!");
+        String hello = getString(R.string.hello);
+        title.setText(hello + " " +user.getUser().getFullName()+"!");
         Log.d("sun",user.getUser().getLatitude()+"");
 
        // String city = viewModel.getAddress(getContext(),user.getUser().getLatitude(),user.getUser().getLongitude());

@@ -39,7 +39,7 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
     private TextView dateEt;
     private String eventDate;
     private String eventTime;
-    private ArrayList<String> invitedFriendsIds;
+    private ArrayList<String> invitedFriendsIds = new ArrayList<>();
     private UserInstance userInstance = UserInstance.getInstance();
 
 
@@ -299,7 +299,7 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
-                InviteFriendsDialog dialog = new InviteFriendsDialog();
+                InviteFriendsDialog dialog = InviteFriendsDialog.getInstance(invitedFriendsIds);
                 dialog.setCancelable(true);
                 dialog.setTargetFragment(CreateEventFragment.this,300);
                 assert fm != null;
