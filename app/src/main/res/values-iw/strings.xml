@@ -16,10 +16,10 @@
     <string name="easy">קל</string>
     <string name="expert">מקצועי</string>
     <string name="medium">בינוני</string>
-    <string name="event_status">בחר את סטטוס האירוע</string>
-    <string name="public_event">אירוע ציבורי</string>
-    <string name="private_event">אירוע פרטי</string>
-    <string name="all_fields">בבקשה מלא את כל השדות</string>
+    <string name="event_status">סטטוס אירוע:</string>
+    <string name="public_event">ציבורי</string>
+    <string name="private_event">פרטי</string>
+    <string name="all_fields">יש למלא את כל השדות</string>
     <string name="new_event_snack_bar">אירוע חדש נוצר בהצלחה!</string>
     <string name="join_btn">הצטרף!</string>
     <string name="cancel_join_btn">ביטול</string>
@@ -69,5 +69,30 @@
     <string name="added_to_friends">נוסף לרשימת החברים שלך</string>
     <string name="sign_up_with_email">הרשמה עם אימייל</string>
     <string name="sign_in">התחברות</string>
+    <string name="see_members">ראה משתתפים</string>
+    <string name="welcome">ברוכים הבאים ל Run time!</string>
+    <string name="find_someone">מצא מישהו</string>
+    <string name="to_run_with">לרוץ איתו</string>
+    <string name="create_profile">צור פרופיל אישי</string>
+    <string name="create1">"צור פרופיל אישי "</string>
+    <string name="create2">ובחר את העדפותיך</string>
+    <string name="create3">לשותפיך לריצה</string>
+    <string name="friends1">מצא חברים חדשים</string>
+    <string name="friend2">מצא שותפים חדשים לריצה</string>
+    <string name="friend3">בסביבתך</string>
+    <string name="event1">הצטרף לאירועי ריצה</string>
+    <string name="event2">הצטרף לאירועים הקרבים בסביבתך</string>
+    <string name="event3">או צור אירועים משלך!</string>
+    <string name="get_started">התחל!</string>
+    <string name="create_new_event">צור אירוע חדש</string>
+    <string name="date">תאריך</string>
+    <string name="time">זמן</string>
+    <string name="location">מיקום</string>
+    <string name="running_level">רמת ריצה:</string>
+    <string name="done">סיום</string>
+    <string name="enter_address">הזן כתובת</string>
+    <string name="confirm_location">בחר מיקום</string>
+    <string name="type">בבקשה הקלד כתובת תקינה</string>
+    <string name="no_friends">אין חברים להציג</string>
 
 </resources>

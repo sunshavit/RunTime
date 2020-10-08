@@ -2,10 +2,13 @@ package com.example.runtime;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.OnBackPressedDispatcherOwner;
 import androidx.annotation.NonNull;
@@ -45,6 +48,7 @@ public class InviteFriendsDialog extends DialogFragment implements InviteFriends
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel.setMyFriendsIds();
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.Theme_AppCompat_Dialog_MinWidth);
     }
 
@@ -53,7 +57,7 @@ public class InviteFriendsDialog extends DialogFragment implements InviteFriends
         super.onViewCreated(view, savedInstanceState);
 
         Button doneBtn = view.findViewById(R.id.doneBtnFriendDialog);
-        Button cancelBtn = view.findViewById(R.id.cancelBtnFriendDialog);
+        ImageView cancelBtn = view.findViewById(R.id.cancelBtnFriendDialog);
         RecyclerView inviteFriendsRecycler = view.findViewById(R.id.myFriendsRecycler);
         adapter = new InviteFriendsDialogAdapter(myFriends,getContext());
         inviteFriendsRecycler.setAdapter(adapter);
@@ -65,8 +69,7 @@ public class InviteFriendsDialog extends DialogFragment implements InviteFriends
                 ((LinearLayoutManager) manager).getOrientation());
         inviteFriendsRecycler.addItemDecoration(dividerItemDecoration);
 
-
-        viewModel.getMyFriends().observe(this, new Observer<ArrayList<User>>() {
+        viewModel.getMyFriends().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
                 myFriends.clear();
@@ -90,6 +93,7 @@ public class InviteFriendsDialog extends DialogFragment implements InviteFriends
                 dismiss();
             }
         });
+
 
     }
 

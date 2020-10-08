@@ -520,7 +520,6 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
     @Override
     public void onMapOkClick() {
-        getSupportFragmentManager().popBackStack();
         fragmentManager.beginTransaction().replace(R.id.rootLayout, new MapFragment(), MAP_TAG).addToBackStack(null).commit();
     }
 
@@ -528,6 +527,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     public void onCreateEventFromMap(boolean isNew) {
         getSupportFragmentManager().popBackStack();
         fragmentManager.beginTransaction().replace(R.id.rootLayout, CreateEventFragment.getCreateEventFragment(false), CREATEEVENT_TAG).addToBackStack(null).commit();
+        getSupportFragmentManager().popBackStack();
     }
 
     @Override

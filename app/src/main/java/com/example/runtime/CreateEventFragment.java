@@ -2,7 +2,6 @@ package com.example.runtime;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,12 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
-import android.widget.RadioButton;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -24,13 +21,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CreateEventFragment extends Fragment implements InviteFriendsDialog.PassInvitedFriendsIdsToParentListener{
 
     private CreateEventVM viewModel;
+    private static Bundle bundle;
     private int eventYear;
     private int eventMonth;
     private int eventDayOfMonth;
@@ -40,11 +37,11 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
     private String eventStatus;
     private TextView locationEt;
     private TextView dateEt;
-    private static Bundle bundle;
     private String eventDate;
     private String eventTime;
-
     private ArrayList<String> invitedFriendsIds;
+    private UserInstance userInstance = UserInstance.getInstance();
+
 
     interface OnMapListener{
         void onMapOkClick();
@@ -99,6 +96,7 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
         viewModel = new ViewModelProvider(getActivity()).get(CreateEventVM.class);
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -112,61 +110,23 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
         dateEt=root.findViewById(R.id.eventDateEt);
         final TextView timeEt=root.findViewById(R.id.eventTimeEt);
         locationEt=root.findViewById(R.id.eventLocationEt);
-        Button inviteFriendsBtn=root.findViewById(R.id.inviteFriendsBtn);
-        final ImageView easyImageIv = root.findViewById(R.id.image_easy);
-        final ImageView mediumImageIv = root.findViewById(R.id.image_medium);
-        final ImageView hardImageIv = root.findViewById(R.id.image_hard);
-        final TextView easyTv = root.findViewById(R.id.easy_tv);
-        final TextView mediumTv = root.findViewById(R.id.medium_tv);
-        final TextView hardTv = root.findViewById(R.id.hard_tv);
+        LinearLayout inviteFriendsBtn=root.findViewById(R.id.invite_friend_layout);
         final RadioGroup eventStatusRg = root.findViewById(R.id.event_status);
-        RadioButton publicRb = root.findViewById(R.id.public_event);
-        RadioButton privateRb = root.findViewById(R.id.private_event);
+        RadioGroup eventRunningLevelRg = root.findViewById(R.id.levelGroupCreateEvent);
+
 
         Button doneBtn=root.findViewById(R.id.doneBtn);
 
-        Toast.makeText(getContext(),String.valueOf(getArguments().getBoolean("isNew")),Toast.LENGTH_LONG).show();
         if(getArguments()!=null){
             if(getArguments().getBoolean("isNew")){
-                viewModel.setEventDate("");
-                viewModel.setEventTime("");
-                viewModel.setStreetAddress("");
-                viewModel.setEasyImageView(R.drawable.easy_gray);
-                viewModel.setMediumImageView(R.drawable.medium_gray);
-                viewModel.setHardImageView(R.drawable.hard_gray);
-                viewModel.setEasyTextView(Color.parseColor("#808080"));
-                viewModel.setMediumTextView(Color.parseColor("#808080"));
-                viewModel.setHardTextView(Color.parseColor("#808080"));
-                viewModel.setPublicChecked(false);
-                viewModel.setPrivateChecked(false);
-
-                viewModel.setEventStatus(null);
-                viewModel.setRunningLevel(null);
-
-                bundle.putBoolean("isNew", false);
+               clearPage();
             }
         }
 
 
-        eventYear = viewModel.getEventYear();
-        eventMonth = viewModel.getEventMonth();
-        eventDayOfMonth = viewModel.getEventDayOfMonth();
-        eventHourOfDay = viewModel.getEventHourOfDay();
-        eventMinute = viewModel.getEventMinute();
-        runningLevel = viewModel.getRunningLevel();
-        eventStatus = viewModel.getEventStatus();
-
-
         dateEt.setText(viewModel.getEventDate());
         timeEt.setText(viewModel.getEventTime());
-        easyTv.setTextColor(viewModel.getEasyTextView());
-        mediumTv.setTextColor(viewModel.getMediumTextView());
-        hardTv.setTextColor(viewModel.getHardTextView());
-        publicRb.setChecked(viewModel.isPublicChecked());
-        privateRb.setChecked(viewModel.isPrivateChecked());
-        easyImageIv.setImageResource(viewModel.getEasyImageView());
-        mediumImageIv.setImageResource(viewModel.getMediumImageView());
-        hardImageIv.setImageResource(viewModel.getHardImageView());
+
 
         dateEt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,6 +165,7 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
                         viewModel.setEventYear(year);
                         viewModel.setEventMonth(month+1);
                         viewModel.setEventDayOfMonth(dayOfMonth);
+
 
                     }
                 },year1,month1,dayOfMonth1);
@@ -263,70 +224,28 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
             }
         });
 
-        easyImageIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.setIsFirstLaunch(false);
-                easyImageIv.setImageResource(R.drawable.easy);
-                viewModel.setEasyImageView(R.drawable.easy);
-                easyTv.setTextColor(Color.parseColor("#056378"));
-                viewModel.setEasyTextView(Color.parseColor("#056378"));
-                mediumImageIv.setImageResource(R.drawable.medium_gray);
-                viewModel.setMediumImageView(R.drawable.medium_gray);
-                mediumTv.setTextColor(Color.parseColor("#808080"));
-                viewModel.setMediumTextView(Color.parseColor("#808080"));
-                hardImageIv.setImageResource(R.drawable.hard_gray);
-                viewModel.setHardImageView(R.drawable.hard_gray);
-                hardTv.setTextColor(Color.parseColor("#808080"));
-                viewModel.setHardTextView(Color.parseColor("#808080"));
-                runningLevel = "easy";
-                viewModel.setRunningLevel("easy");
-
-            }
-        });
-
-        mediumImageIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.setIsFirstLaunch(false);
-                easyImageIv.setImageResource(R.drawable.easy_gray);
-                viewModel.setEasyImageView(R.drawable.easy_gray);
-                easyTv.setTextColor(Color.parseColor("#808080"));
-                viewModel.setEasyTextView(Color.parseColor("#808080"));
-                mediumImageIv.setImageResource(R.drawable.medium);
-                viewModel.setMediumImageView(R.drawable.medium);
-                mediumTv.setTextColor(Color.parseColor("#056378"));
-                viewModel.setMediumTextView(Color.parseColor("#056378"));
-                hardImageIv.setImageResource(R.drawable.hard_gray);
-                viewModel.setHardImageView(R.drawable.hard_gray);
-                hardTv.setTextColor(Color.parseColor("#808080"));
-                viewModel.setHardTextView(Color.parseColor("#808080"));
-                runningLevel = "medium";
-                viewModel.setRunningLevel("medium");
-
-            }
-        });
-
-        hardImageIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.setIsFirstLaunch(false);
-                easyImageIv.setImageResource(R.drawable.easy_gray);
-                viewModel.setEasyImageView(R.drawable.easy_gray);
-                easyTv.setTextColor(Color.parseColor("#808080"));
-                viewModel.setEasyTextView(Color.parseColor("#808080"));
-                mediumImageIv.setImageResource(R.drawable.medium_gray);
-                viewModel.setMediumImageView(R.drawable.medium_gray);
-                mediumTv.setTextColor(Color.parseColor("#808080"));
-                viewModel.setMediumTextView(Color.parseColor("#808080"));
-                hardImageIv.setImageResource(R.drawable.hard);
-                viewModel.setHardImageView(R.drawable.hard);
-                hardTv.setTextColor(Color.parseColor("#056378"));
-                viewModel.setHardTextView(Color.parseColor("#056378"));
-                runningLevel = "expert";
-                viewModel.setRunningLevel("expert");
-            }
-        });
+       eventRunningLevelRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+           @Override
+           public void onCheckedChanged(RadioGroup group, int checkedId) {
+               switch (checkedId){
+                   case R.id.easyRBCreateEvent:{
+                       runningLevel = "easy";
+                       viewModel.setRunningLevel("easy");
+                       break;
+                   }
+                   case R.id.mediumRBCreateEvent:{
+                       runningLevel = "medium";
+                       viewModel.setRunningLevel("medium");
+                       break;
+                   }
+                   case R.id.expertRBCreateEvent:{
+                       runningLevel = "expert";
+                       viewModel.setRunningLevel("expert");
+                       break;
+                   }
+               }
+           }
+       });
 
         eventStatusRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -334,13 +253,11 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
                 switch (checkedId){
                     case R.id.public_event:{
                         eventStatus = "publicEvent";
-                        viewModel.setPublicChecked(true);
                         viewModel.setEventStatus("publicEvent");
                         break;
                     }
                     case R.id.private_event:{
                         eventStatus = "privateEvent";
-                        viewModel.setPrivateChecked(true);
                         viewModel.setEventStatus("privateEvent");
                         break;
                     }
@@ -352,6 +269,7 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updateEventData();
                 if(dateEt.getText().equals("") || timeEt.getText().equals("") ||
                        locationEt.getText().equals("")|| runningLevel==null || eventStatus==null ){
                     Snackbar.make(getView(),R.string.all_fields, Snackbar.LENGTH_LONG).show();
@@ -386,9 +304,9 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
                 dialog.setTargetFragment(CreateEventFragment.this,300);
                 assert fm != null;
                 dialog.show(fm,"inviteFriendsFragment");
+
             }
         });
-
 
         return root;
     }
@@ -396,6 +314,28 @@ public class CreateEventFragment extends Fragment implements InviteFriendsDialog
     @Override
     public void onFinishEditDialog(ArrayList<String> invitedFriendsIds) {
         this.invitedFriendsIds = invitedFriendsIds;
+        viewModel.setInvitedUsersIds(invitedFriendsIds);
+    }
+
+    public void clearPage(){
+        viewModel.setEventDate("");
+        viewModel.setEventTime("");
+        viewModel.setStreetAddress("");
+        viewModel.setEventStatus(null);
+        viewModel.setRunningLevel(null);
+        viewModel.setInvitedUsersIds(null);
+        bundle.putBoolean("isNew", false);
+    }
+
+    public void updateEventData(){
+        eventYear = viewModel.getEventData().getYear();
+        eventMonth = viewModel.getEventData().getMonth();
+        eventDayOfMonth = viewModel.getEventData().getDayOfMonth();
+        eventHourOfDay = viewModel.getEventData().getHourOfDay();
+        eventMinute = viewModel.getEventData().getMinute();
+        runningLevel = viewModel.getEventData().getRunningLevel();
+        eventStatus = viewModel.getEventData().getEventStatus();
+        invitedFriendsIds = viewModel.getInvitedUsersIds();
     }
 
 

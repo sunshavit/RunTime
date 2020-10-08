@@ -3,15 +3,13 @@ package com.example.runtime;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -21,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.EventsViewHolder> {
@@ -29,12 +28,13 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ev
     private Context context;
     private ArrayList<String> myEvents;
 
-    interface OnJoinEventListener{
+    interface OnUpcomingEventListener {
         void onJoinEvent(String eventId,String userId);
         void onCancelJoinEvent(String eventId,String userId);
+        void onSeeMembersClick(String eventId);
     }
 
-    private OnJoinEventListener joinEventCallback;
+    private OnUpcomingEventListener upcomingEventCallback;
 
     public FindEventsAdapter(ArrayList<Event> events, Context context, ArrayList<String> myEvents)  {
         this.events = events;
@@ -51,6 +51,7 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ev
         TextView runnersAmountTv;
         ImageView runningLevelIm;
         ToggleButton joinBtn;
+        LinearLayout seeMembers;
 
         public EventsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,6 +63,7 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ev
             runnersAmountTv = itemView.findViewById(R.id.runnersAmountTVRecyclerCell);
             runningLevelIm = itemView.findViewById(R.id.runningLevelIm);
             joinBtn = itemView.findViewById(R.id.joinEventBtn);
+            seeMembers = itemView.findViewById(R.id.seeMembersTv);
 
             joinBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -69,12 +71,23 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ev
                     String eventId = events.get(getAdapterPosition()).getEventId();
                     String userId = UserInstance.getInstance().getUser().getUserId();
                     if(isChecked){
-                        joinEventCallback.onJoinEvent(eventId,userId);
+                        upcomingEventCallback.onJoinEvent(eventId,userId);
                     }
                     else
-                        joinEventCallback.onCancelJoinEvent(eventId,userId);
+                        upcomingEventCallback.onCancelJoinEvent(eventId,userId);
                 }
             });
+
+            seeMembers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String eventId = events.get(getAdapterPosition()).getEventId();
+                    upcomingEventCallback.onSeeMembersClick(eventId);
+                }
+            });
+
+
+
         }
     }
 
@@ -130,7 +143,6 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ev
 
         String runningLevel = event.getRunningLevel();
 
-
         holder.runningLevelTv.setText(runningLevel);
 
         switch (runningLevel){
@@ -146,13 +158,14 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ev
 
         }
 
-
         if(myEvents.contains(event.getEventId())){
             holder.joinBtn.setChecked(true);
         }
 
+        holder.runnersAmountTv.setText(String.valueOf(amountOfRunners(event)));
 
-       // add amount of runners.
+
+
     }
 
     @Override
@@ -160,7 +173,15 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ev
         return events.size();
     }
 
-    public void setJoinEventCallback(OnJoinEventListener joinEventCallback) {
-        this.joinEventCallback = joinEventCallback;
+    public void setUpcomingEventCallback(OnUpcomingEventListener upcomingEventCallback) {
+        this.upcomingEventCallback = upcomingEventCallback;
     }
+
+    public int amountOfRunners(Event event){
+        HashMap<String,Boolean> runners = event.getRunners();
+        int amount = runners.size();
+        return amount;
+    }
+
+
 }
