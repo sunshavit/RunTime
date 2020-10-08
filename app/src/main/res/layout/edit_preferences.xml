@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:textSize="15sp"
+                android:text="@string/gender"
+                android:textColor="@color/lightBlue2"/>
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:id="@+id/genderGroupPartnerEditP">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/male"
+                android:id="@+id/maleRBPartnerEditP"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female"
+                android:id="@+id/femaleRBPartnerEditP"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/both"
+                android:id="@+id/bothRBPartnerEditP"/>
+        </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/age"
+                android:textSize="15sp"
+                android:textColor="@color/lightBlue2"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:text="@string/from"/>
+        <Spinner
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/spinner_style_blue"
+            android:id="@+id/fromAgeEditP"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="105dp"
+            android:layout_gravity="center_vertical"
+            android:textSize="15sp"
+            android:text="@string/to"/>
+
+        <Spinner
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/spinner_style_blue"
+            android:id="@+id/toAgeEditP"/>
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/running_level"
+                android:textColor="@color/lightBlue2"
+                android:textSize="15dp"/>
+        <RadioGroup
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="45dp"
+            android:layout_toEndOf="@+id/runningLevel_text"
+            android:id="@+id/levelGroupPartnerEditP">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/easy"
+                android:drawableTop="@drawable/easy_option_blue"
+                android:textAlignment="center"
+                android:textColor="@drawable/option_text_blue"
+                android:button="@null"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/easyRBPartnerEditP"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/medium_option_blue"
+                android:textAlignment="center"
+                android:text="@string/medium"
+                android:button="@null"
+                android:layout_marginEnd="10dp"
+                android:textColor="@drawable/option_text_blue"
+                android:id="@+id/mediumRBPartnerEditP"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/expert_option_blue"
+                android:textAlignment="center"
+                android:text="@string/expert"
+                android:button="@null"
+                android:textColor="@drawable/option_text_blue"
+                android:id="@+id/expertRBPartnerEditP"/>
+        </RadioGroup>
+
+        </LinearLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/orang_btn"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/signUpDoneEditP"
+            android:textColor="#ffff"
+            android:text="@string/save"/>
+
+
+    </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -98,5 +98,22 @@
     <string name="user_already_exists">משתמש כבר קיים</string>
     <string name="failed_to_sign_up">הרשמה נכשלה</string>
     <string name="fill_all_details">השלם את כל הפרטים</string>
+    <string name="are_you_coming_for_a_run">אתה מוכן לריצה?</string>
+    <string name="find_runners_around_you">למצוא רצים סביבך</string>
+    <string name="find_event_around_you">למצוא אירועים סביבך</string>
+    <string name="create_new_event">ליצור אירוע חדש</string>
+    <string name="my_profile">הפרופיל שלי</string>
+    <string name="gender">מין:</string>
+    <string name="both">שניהם</string>
+    <string name="age">גיל:</string>
+    <string name="from">מגיל</string>
+    <string name="to">לגיל</string>
+    <string name="running_level">רמת ריצה:</string>
+    <string name="save">שמירה</string>
+    <string name="edit_profile">עריכת פרופיל</string>
+    <string name="full_name">שם מלא:</string>
+    <string name="birthdate">תאריך לידה:</string>
+    <string name="enter_full_name">הכנס שם מלא</string>
+
 
 </resources>

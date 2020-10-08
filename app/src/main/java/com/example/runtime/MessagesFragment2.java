@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 
 
@@ -87,9 +88,9 @@ public class MessagesFragment2 extends Fragment {
             }
         });
 
-        messagesVM.getLiveDataImage().observe(getViewLifecycleOwner(), new Observer<StorageReference>() {
+        messagesVM.getLiveDataImage().observe(getViewLifecycleOwner(), new Observer<Uri>() {
             @Override
-            public void onChanged(StorageReference storageReference) {
+            public void onChanged(Uri storageReference) {
                 Glide.with(requireContext()).load(storageReference).into(circleImageView);
             }
         });
