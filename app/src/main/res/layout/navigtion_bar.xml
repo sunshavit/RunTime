@@ -16,7 +16,8 @@
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:itemIconTint="@drawable/bottom_nav_color"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorAccent"
+        android:background="#ffff"
         app:menu="@menu/navigtion_bar"/>
 </RelativeLayout>

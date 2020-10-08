@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 
 import androidx.annotation.NonNull;
@@ -56,12 +57,13 @@ public class MessagesFragment extends Fragment {
         View root = inflater.inflate(R.layout.messages_fragment,container,false);
         messagesVM.getFriendsId();
         RecyclerView recyclerView = root.findViewById(R.id.recycleMessages);
+        //ProgressBar progressBar = root.findViewById(R.id.progressBarMessage);
         adapter = new MessagesAdepter(friends,getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        messagesVM.getFriends().observe(this, new Observer<ArrayList<UserWithLastMessage>>() {
+        messagesVM.getFriends().observe(getViewLifecycleOwner(), new Observer<ArrayList<UserWithLastMessage>>() {
             @Override
             public void onChanged(ArrayList<UserWithLastMessage> users) {
                 friends.clear();

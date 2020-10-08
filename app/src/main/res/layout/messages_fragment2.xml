@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -9,21 +10,22 @@
         android:id="@+id/titleLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/messagesImage"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp" />
+            android:layout_marginStart="10dp"/>
 
         <TextView
             android:id="@+id/messagesTVName"
             android:layout_width="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/DarkBlue"
+            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
             android:textSize="20sp" />
 
 
@@ -54,6 +56,7 @@
                 android:layout_weight="0.8"
                 android:layout_margin="5dp"
                 android:padding="5dp"
+                app:boxStrokeColor="@color/orange"
                 android:layout_height="wrap_content"
                 android:hint="enter text"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">

@@ -9,4 +9,6 @@
         android:id="@+id/recycleMessages">
     </androidx.recyclerview.widget.RecyclerView>
 
+
+
 </RelativeLayout>

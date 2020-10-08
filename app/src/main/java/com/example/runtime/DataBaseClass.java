@@ -75,6 +75,9 @@ public class DataBaseClass {
         void onFailedUserLists();
     }
 
+    interface OnUpdateUserPreferences {
+        void onSuccessUpdatePreferences();
+    }
 
     private OnUserCreateListener callBackCreate;
     private OnUserPreferenceCreateListener callBackPreferenceCreate;
@@ -83,6 +86,7 @@ public class DataBaseClass {
     private OnGetUserImage callBackGetImage;
     private OnLocationUpdateListener updateListener;
     private OnChangeUserListener onChangeUserListener;
+    private OnUpdateUserPreferences onUpdateUserPreferences;
 
     private DataBaseClass() {
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -335,6 +339,9 @@ public class DataBaseClass {
     public void onCancelled(@NonNull DatabaseError error) {
     }
 
+    public void setOnUpdateUserPreferences(OnUpdateUserPreferences onUpdateUserPreferences) {
+        this.onUpdateUserPreferences = onUpdateUserPreferences;
+    }
 
     public void setOnChangeUserListener(OnChangeUserListener onChangeUserListener) {
         this.onChangeUserListener = onChangeUserListener;
@@ -389,6 +396,18 @@ public class DataBaseClass {
         DatabaseReference userPreferenceTable = databaseReference.child("user_preferences");
         userPreferenceTable.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);
     }
+
+    public void updateUserPreferences(UserPreferences preferences){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference databaseReference1 = databaseReference.child("user_preferences");
+        databaseReference1.child(registerClass.getUserId()).setValue(preferences).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                    onUpdateUserPreferences.onSuccessUpdatePreferences();
+            }
+        });
+    }
+
 
     public StorageReference retrieveImageStorageReference(String UserId) {
         StorageReference storageReference1 = FirebaseStorage.getInstance().getReference().child("profileImages/" + UserId);
