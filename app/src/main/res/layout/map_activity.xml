@@ -3,8 +3,8 @@
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mapLayout"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mapLayout">
 
     <fragment
         xmlns:tools="http://schemas.android.com/tools"
@@ -16,7 +16,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -25,24 +25,34 @@
         <SearchView
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:queryHint="Enter address"
+            android:queryHint="@string/enter_address"
             android:id="@+id/search_view"
             android:iconifiedByDefault="false"
-            android:elevation="5dp"
             android:padding="2dp"
+            android:queryBackground="@drawable/search_background"
             android:background="@drawable/search_background"/>
+
+
+        <Button
+            android:layout_margin="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_below="@+id/search_view"
+            android:id="@+id/focus_btn"
+            android:background="@drawable/focus"
+            />
 
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="5dp"
+        android:layout_height="130dp"
         android:layout_alignParentBottom="true"
-        android:elevation="5dp"
         android:padding="10dp"
-        android:background="@drawable/search_result_background"
+        android:background="#ffffff"
+        android:id="@+id/lay1"
         >
 
         <ImageView
@@ -66,23 +76,39 @@
             android:layout_marginTop="7dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/locationIm"
             android:layout_below="@+id/locationIm"
             android:id="@+id/search_result"
             />
 
-        <Button
-            android:layout_margin="5dp"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/ic_check_black_24dp"
-            android:id="@+id/vBtn"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            app:cardCornerRadius="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:layout_below="@+id/search_result"
+                android:layout_width="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:layout_height="40dp"
+                android:textSize="18sp"
+                android:textColor="@color/darkGray"
+                android:text="@string/done"
+                android:id="@+id/vBtn"
+                android:textAllCaps="false"
+                android:background="#ffffff"/>
+
+        </androidx.cardview.widget.CardView>
+
 
     </RelativeLayout>
+
 
 
 </RelativeLayout>

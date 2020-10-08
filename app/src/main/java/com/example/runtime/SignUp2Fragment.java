@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
@@ -33,6 +35,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveImageListener{
 
     private SignUpVM viewModel;
@@ -43,10 +47,8 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
     private int dayOfMonthOfBirth;
     private final int PICK_IMAGE_REQUEST=1;
     private Uri filePath;
-    private ImageView imageViewProfile;
+    private CircleImageView imageViewProfile;
     private DataBaseClass dataBaseClass;
-
-
 
 
     @Override
@@ -67,6 +69,7 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
                 && data.getData() != null) {
             filePath = data.getData();
             viewModel.saveProfileImage(filePath);
+            viewModel.setUserImageLiveData(filePath);
         }
        }
 
@@ -84,9 +87,11 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.sign_up2,container,false);
+        viewModel.setProgressBar1LiveData(false);
 
         imageViewProfile = root.findViewById(R.id.profileImageIV);
-        final EditText editTextDate = root.findViewById(R.id.dateET);
+        final TextView textViewDate = root.findViewById(R.id.dateET);
+        ImageView calendarIcon = root.findViewById(R.id.signUp2CalendarIcon);
         final RadioGroup radioGroupGender = root.findViewById(R.id.genderGroup);
         RadioGroup radioGroupLevel = root.findViewById(R.id.levelGroup);
         Button buttonNext = root.findViewById(R.id.nextButton);
@@ -94,6 +99,32 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
         final TextView ageView=root.findViewById(R.id.age);
 
        // final Calendar calendar = Calendar.getInstance();
+
+        final ProgressBar progressBar = root.findViewById(R.id.signUp2_progressBar);
+        viewModel.getProgressBar2LiveData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean){
+                    progressBar.setVisibility(View.VISIBLE);
+                } else{
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        viewModel.getDateStringLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                textViewDate.setText(s);
+            }
+        });
+
+        viewModel.getUserImageLiveData().observe(getViewLifecycleOwner(), new Observer<Uri>() {
+            @Override
+            public void onChanged(Uri uri) {
+                Glide.with(getActivity()).load(uri).into(imageViewProfile);
+            }
+        });
 
 
         imageViewProfile.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +144,7 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
 
 
 
-        editTextDate.setOnClickListener(new View.OnClickListener() {
+        textViewDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar=Calendar.getInstance();
@@ -129,10 +160,15 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
                         yearOfBirth=year;
                         monthOfBirth=month+1;
                         dayOfMonthOfBirth=dayOfMonth;
-                        editTextDate.setText(dayOfMonthOfBirth+"/"+monthOfBirth+'/'+yearOfBirth);
+                        //textViewDate.setText(dayOfMonthOfBirth+"/"+monthOfBirth+'/'+yearOfBirth);
+                        viewModel.setYear(year);
+                        viewModel.setMonth(month +1);
+                        viewModel.setDayOfMonth(dayOfMonth);
+                        viewModel.setDateStringLiveData(dayOfMonthOfBirth+"/"+monthOfBirth+'/'+yearOfBirth);
 
                     }
                 },year1,month1,dayOfMonth1);
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis()-1000);
                 datePickerDialog.show();
 
 
@@ -150,6 +186,35 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
             }
         });
 
+        calendarIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar=Calendar.getInstance();
+                int year1=calendar.get(calendar.YEAR);
+                int month1=calendar.get(calendar.MONTH);
+                int dayOfMonth1=calendar.get(calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                        yearOfBirth=year;
+                        monthOfBirth=month+1;
+                        dayOfMonthOfBirth=dayOfMonth;
+                       // textViewDate.setText(dayOfMonthOfBirth+"/"+monthOfBirth+'/'+yearOfBirth);
+                        viewModel.setYear(year);
+                        viewModel.setMonth(month+1);
+                        viewModel.setDayOfMonth(dayOfMonth);
+                        viewModel.setDateStringLiveData(dayOfMonthOfBirth+"/"+monthOfBirth+'/'+yearOfBirth);
+
+                    }
+                },year1,month1,dayOfMonth1);
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis()-1000);
+                datePickerDialog.show();
+            }
+        });
+
         radioGroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -157,10 +222,12 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
                 {
                     case R.id.maleRB: {
                       gender="male" ;
+                      viewModel.setGender(gender);
                       break;
                     }
                     case R.id.femaleRB: {
                         gender="female" ;
+                        viewModel.setGender(gender);
                         break;
                     }
                 }
@@ -173,14 +240,17 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
                 switch (checkedId){
                     case R.id.easyRB:{
                         level = "easy";
+                        viewModel.setRunningLevel(level);
                         break;
                     }
                     case R.id.mediumRB:{
                         level = "medium";
+                        viewModel.setRunningLevel(level);
                         break;
                     }
                     case R.id.expertRB:{
                         level = "expert";
+                        viewModel.setRunningLevel(level);
                         break;
                     }
                 }
@@ -191,7 +261,15 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
 
             @Override
             public void onClick(View v) {
-                viewModel.setDataNext2(filePath,yearOfBirth,monthOfBirth,dayOfMonthOfBirth,gender,level);
+
+                if (viewModel.getGender() == null ||
+                viewModel.getYear() == 0 || viewModel.getMonth() == 0 || viewModel.getDayOfMonth() == 0
+                || viewModel.getRunningLevel() == null){
+                    Toast.makeText(getActivity(),R.string.fill_all_details,Toast.LENGTH_LONG).show();
+                } else {
+                    viewModel.setDataNext2(filePath,yearOfBirth,monthOfBirth,dayOfMonthOfBirth,gender,level);
+                }
+
             }
         });
 

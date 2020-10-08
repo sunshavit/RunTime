@@ -37,7 +37,7 @@ import com.google.firebase.iid.InstanceIdResult;
 
 
 public class MainActivity extends AppCompatActivity implements MessagesFragment.OnClickOnMessages, DataBaseClass.OnChangeUserListener/*, HomeFragment.CreateNewEventListener*/, BottomNavBarFragment.OnNavigationListener, WelcomeFragment.OnRegisterClick, DataBaseClass.OnUserCreateListener
-        ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,
+        ,SignUp3Fragment.OnSignUpLastListener, RegisterClass.SignUpStatusListener, DataBaseClass.OnUserPreferenceCreateListener,DataBaseClass.OnUpdateUserPreferences,
         RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener/*, HomeFragment.findPeopleListener*/, CreateEventFragment.OnMapListener,
         MapFragment.OnCreateEventListener, /*FindPeopleFragment.OnStrangerCellClickListener,*/ /*HomeFragment.findEventsListener,*/ CreateEventFragment.OnBackFromCreateEventListener{
 
@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         /*homeFragment.setFindPeopleCallback(this);
         homeFragment.setFindEventsCallback(this);*/
         dataBaseClass.setOnChangeUserListener(this);
+        dataBaseClass.setOnUpdateUserPreferences(this);
 
 
         Log.d("bug", "onCreate");
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                                if (!sp.getBoolean("isChangingConfigurations", false)){
                                  Log.d("home", "snapshot");
                                     fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
+                                   drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                                     //fragmentTransaction.commit();
 
                   //  Log.d("bug", "first condition");
@@ -217,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                     if (!sp.getBoolean("isChangingConfigurations", false)){
                         fragmentManager.beginTransaction().replace(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG).commit();
                         toolBarFragment =getSupportFragmentManager().findFragmentByTag(TOOLBAR_TAG);
+                        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                         if(toolBarFragment!=null) {
                             fragmentManager.beginTransaction().remove(toolBarFragment).commit();
                             fragmentManager.beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(NAV_TAG)).commit();
@@ -245,12 +248,18 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                         if(fragment!=null){
                             fragmentManager.beginTransaction().remove(fragment);
                         }
+                        drawerLayout.closeDrawers();
 
 
                         registerClass.signOut();
                         break;
                     case R.id.editProfileSidebar:
+                        drawerLayout.closeDrawers();
                         fragmentManager.beginTransaction().replace(R.id.rootLayout, new EditProfileFragment(), "editProfile").addToBackStack(null).commit();
+                        break;
+                    case R.id.EditPreferencesSidebar :
+                        drawerLayout.closeDrawers();
+                        fragmentManager.beginTransaction().replace(R.id.rootLayout , new EditPreferencesFragment(), HOME_TAG).addToBackStack(null).commit();
                         break;
                 }
                 return false;
@@ -520,7 +529,6 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
 
     @Override
     public void onMapOkClick() {
-        getSupportFragmentManager().popBackStack();
         fragmentManager.beginTransaction().replace(R.id.rootLayout, new MapFragment(), MAP_TAG).addToBackStack(null).commit();
     }
 
@@ -528,6 +536,12 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
     public void onCreateEventFromMap(boolean isNew) {
         getSupportFragmentManager().popBackStack();
         fragmentManager.beginTransaction().replace(R.id.rootLayout, CreateEventFragment.getCreateEventFragment(false), CREATEEVENT_TAG).addToBackStack(null).commit();
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onSuccessUpdatePreferences() {
+        fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(), CREATEEVENT_TAG).commit();
     }
 
     @Override

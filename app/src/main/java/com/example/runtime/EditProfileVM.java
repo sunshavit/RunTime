@@ -3,6 +3,7 @@ package com.example.runtime;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -11,11 +12,23 @@ public class EditProfileVM extends ViewModel implements DataBaseClass.OnGetUserI
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
     private UserInstance userInstance = UserInstance.getInstance();
     private MutableLiveData<String> liveDataImage = new MutableLiveData<>();
+    private MutableLiveData<String> liveDataDate = new MutableLiveData<>();
+    private MutableLiveData<String > liveDataName = new MutableLiveData<>();
 
 
     public EditProfileVM() {
         dataBaseClass.setCallBackGetImage(this);
         dataBaseClass.setCallBackImage(this);
+        liveDataName.setValue(UserInstance.getInstance().getUser().getFullName());
+        liveDataDate.setValue(userInstance.getUser().getDayOfMonth()+"."+userInstance.getUser().getMonth()+"."+userInstance.getUser().getYear());
+    }
+
+    public void setDate(String date){
+        liveDataDate.setValue(date);
+    }
+
+    public LiveData<String> getLiveDataDate() {
+        return liveDataDate;
     }
 
     public void getImageFromData(){
@@ -53,5 +66,13 @@ public class EditProfileVM extends ViewModel implements DataBaseClass.OnGetUserI
     @Override
     public void onFailedImage() {
 
+    }
+
+    public void setName(String name){
+        liveDataName.setValue(name);
+    }
+
+    public MutableLiveData<String> getLiveDataName() {
+        return liveDataName;
     }
 }

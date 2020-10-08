@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,21 +17,31 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindEventsFragment extends Fragment implements FindEventsAdapter.OnJoinEventListener {
+public class FindEventsFragment extends Fragment implements FindEventsAdapter.OnUpcomingEventListener,SwipeRefreshLayout.OnRefreshListener {
 
     private FindEventsAdapter adapter;
     private ArrayList<Event> relevantEvents = new ArrayList<>();
     private ArrayList<String> myEvents = new ArrayList<>();
     private FindEventsVM viewModel;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(FindEventsVM.class);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel.retrieveEventsList();
+        viewModel.setMyEvents();
     }
 
     @Nullable
@@ -43,20 +52,31 @@ public class FindEventsFragment extends Fragment implements FindEventsAdapter.On
         RecyclerView recyclerView = root.findViewById(R.id.findEventsRecycler);
         adapter = new FindEventsAdapter(relevantEvents,getContext(),myEvents);
         recyclerView.setAdapter(adapter);
-        adapter.setJoinEventCallback(this);
+        adapter.setUpcomingEventCallback(this);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
 
-        viewModel.getRelevantEvents().observe(this, new Observer<ArrayList<Event>>() {
+        swipeRefreshLayout = root.findViewById(R.id.swipeRefreshFindEvents);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        viewModel.getSwipeLayoutEventBool().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+
+        viewModel.getRelevantEvents().observe(getViewLifecycleOwner(), new Observer<ArrayList<Event>>() {
             @Override
             public void onChanged(ArrayList<Event> events) {
                 relevantEvents.clear();
                 relevantEvents.addAll(events);
                 adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        viewModel.getMyEvents().observe(this, new Observer<ArrayList<String>>() {
+        viewModel.getMyEvents().observe(getViewLifecycleOwner(), new Observer<ArrayList<String>>() {
             @Override
             public void onChanged(ArrayList<String> usersEventsIds) {
                 myEvents.clear();
@@ -102,5 +122,20 @@ public class FindEventsFragment extends Fragment implements FindEventsAdapter.On
     @Override
     public void onCancelJoinEvent(String eventId, String userId) {
         viewModel.onCancelJoinEvent(eventId,userId);
+    }
+
+    @Override
+    public void onSeeMembersClick(String eventId) {
+        FragmentManager fm = getFragmentManager();
+        RunnersDialog editNameDialogFragment = RunnersDialog.newInstance(eventId);
+        // SETS the target fragment for use later when sending results
+        //editNameDialogFragment.setTargetFragment(MyParentFragment.this, 300);
+        assert fm != null;
+        editNameDialogFragment.show(fm, "fragment_runners");
+    }
+
+    @Override
+    public void onRefresh() {
+        viewModel.retrieveEventsList();
     }
 }

@@ -1,16 +1,18 @@
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_margin="20dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <TextView
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/event_title"
+        android:text="@string/create_new_event"
         android:textSize="25sp"
         android:layout_marginBottom="25dp"
-        android:textStyle="bold"
         android:textColor="@color/DarkBlue"
         android:gravity="center"/>
 
@@ -20,195 +22,257 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:gravity="center_vertical"
-                android:hint="@string/set_date"
-                android:padding="10dp"
-                android:textSize="17sp"
-                android:textColor="@color/lightBlue2"
-                android:background="@drawable/edit_text_background"
-                android:drawablePadding="15dp"
-                android:drawableStart="@drawable/calender_icon"
-                android:layout_marginBottom="15dp"
-                android:id="@+id/eventDateEt"
-                />
+                android:orientation="horizontal"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
 
-            <TextView
+                <ImageView
+                    android:layout_marginTop="7dp"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:src="@drawable/ic_date_range_black_24dp"
+                    android:layout_marginEnd="9dp" />
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:hint="@string/date"
+                    android:padding="10dp"
+                    android:textSize="18sp"
+                    android:textColor="@color/lightBlue2"
+                    android:background="@drawable/edit_text_background"
+                    android:drawablePadding="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/eventDateEt"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:gravity="center_vertical"
-                android:hint="@string/set_time"
-                android:textSize="17sp"
-                android:textColor="@color/lightBlue2"
-                android:background="@drawable/edit_text_background"
-                android:drawablePadding="15dp"
-                android:drawableStart="@drawable/clock_icon"
-                android:layout_marginBottom="15dp"
-                android:id="@+id/eventTimeEt"/>
+                android:orientation="horizontal"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
 
-            <TextView
+                <ImageView
+                    android:layout_marginTop="7dp"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:src="@drawable/ic_query_builder_black_24dp"
+                    android:layout_marginEnd="9dp" />
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:hint="@string/time"
+                    android:padding="10dp"
+                    android:textSize="18sp"
+                    android:textColor="@color/lightBlue2"
+                    android:background="@drawable/edit_text_background"
+                    android:drawablePadding="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/eventTimeEt"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:gravity="center_vertical"
-                android:hint="@string/set_location"
-                android:textSize="17sp"
-                android:textColor="@color/lightBlue2"
-                android:background="@drawable/edit_text_background"
-                android:drawablePadding="15dp"
-                android:drawableStart="@drawable/location_icon"
-                android:id="@+id/eventLocationEt"
-                android:layout_marginBottom="15dp"/>
+                android:orientation="horizontal"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
 
+                <ImageView
+                    android:layout_marginTop="7dp"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:src="@drawable/ic_location_on_black_24dp"
+                    android:layout_marginEnd="9dp" />
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:text="@string/activity_level"
-                android:textColor="@color/DarkBlue"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="10dp"
-                android:id="@+id/activity_level_tv"/>
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:hint="@string/location"
+                    android:padding="10dp"
+                    android:textSize="18sp"
+                    android:textColor="@color/lightBlue2"
+                    android:background="@drawable/edit_text_background"
+                    android:drawablePadding="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/eventLocationEt"
+                    />
+            </LinearLayout>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                android:layout_marginEnd="7dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:layout_gravity="center_horizontal">
 
-
-
-                    <LinearLayout
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:layout_marginEnd="20dp"
-                        >
+                        android:text="@string/running_level"
+                        android:layout_marginEnd="15dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/lightBlue2" />
 
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/easy_gray"
-                            android:id="@+id/image_easy"
-                            />
+                 <RadioGroup
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:id="@+id/levelGroupCreateEvent"
+                     android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:text="@string/easy"
-                            android:id="@+id/easy_tv"/>
+                     <RadioButton
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="@string/easy"
+                         android:drawableTop="@drawable/easy_option"
+                         android:button="@null"
+                         android:textAlignment="center"
+                         android:textColor="@drawable/option_text"
+                         android:id="@+id/easyRBCreateEvent"
+                         android:layout_marginEnd="10dp"/>
 
-                    </LinearLayout>
+                     <RadioButton
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="@string/medium"
+                         android:drawableTop="@drawable/medium_option"
+                         android:button="@null"
+                         android:textAlignment="center"
+                         android:textColor="@drawable/option_text"
+                         android:id="@+id/mediumRBCreateEvent"
+                         android:layout_marginEnd="10dp"/>
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:layout_marginEnd="20dp"
-                        >
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/medium_gray"
-                            android:id="@+id/image_medium"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:text="@string/medium"
-                            android:id="@+id/medium_tv"
-                            />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        >
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/hard_gray"
-                            android:id="@+id/image_hard"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:text="@string/expert"
-                            android:id="@+id/hard_tv"/>
-
-                    </LinearLayout>
+                     <RadioButton
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="@string/expert"
+                         android:drawableTop="@drawable/expert_option"
+                         android:button="@null"
+                         android:textAlignment="center"
+                         android:textColor="@drawable/option_text"
+                         android:id="@+id/expertRBCreateEvent"/>
+                 </RadioGroup>
 
                 </LinearLayout>
 
 
             </androidx.cardview.widget.CardView>
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginEnd="7dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="center_horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
+                    android:layout_marginEnd="15dp"
                     android:text="@string/event_status"
-                    android:textColor="@color/DarkBlue"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="15dp" />
+                    android:textColor="@color/lightBlue2"
+                     />
 
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/event_status">
+                    android:id="@+id/event_status"
+                    android:orientation="horizontal"
+                    >
 
                     <RadioButton
+                        android:drawableStart="@drawable/radio_btn_orange"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
                         android:textSize="15sp"
+                        android:button="@null"
                         android:text="@string/public_event"
                         android:id="@+id/public_event"
-                        android:textColor="@color/darkGray"/>
+                        android:textColor="@color/darkGray"
+                        android:layout_marginEnd="10dp"/>
 
                     <RadioButton
+                        android:drawableStart="@drawable/radio_btn_orange"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
                         android:textSize="15sp"
+                        android:button="@null"
                         android:textColor="@color/darkGray"
                         android:text="@string/private_event"
                         android:id="@+id/private_event"/>
                 </RadioGroup>
+            </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:id="@+id/invite_friend_layout">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_add_light_blue_24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/invite_friends_btn"
+                    android:textSize="20sp"
+                    android:textColor="@color/lightBlue2"
+                    android:layout_gravity="center_vertical"/>
+
+            </LinearLayout>
+
 
                 <Button
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:textSize="17sp"
@@ -220,7 +284,7 @@
                     android:background="@drawable/blue_btn"
                     android:layout_marginTop="17dp"
                     android:id="@+id/inviteFriendsBtn"/>
-            </LinearLayout>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"

@@ -21,8 +21,16 @@ public class RegisterClass {
         void onFailedSignUp(String problem);
     }
 
+    interface SignUpFailListener {
+        void onFailedSignUp(String problem);
+    }
+
     interface SignInStatusListener{
         void onSuccessSignIn(String userId);
+        void onFailedSignIn(String problem);
+    }
+
+    interface SignInFailListener{
         void onFailedSignIn(String problem);
     }
 
@@ -38,7 +46,16 @@ public class RegisterClass {
     private SignUpStatusListener signUpCallback;
     private SignInStatusListener signInCallback;
     private SignOutListener signOutCallback;
+    private SignUpFailListener failListener;
+    private SignInFailListener signInFailListener;
 
+    public void setSignInFailListener(SignInFailListener signInFailListener) {
+        this.signInFailListener = signInFailListener;
+    }
+
+    public void setFailListener(SignUpFailListener failListener) {
+        this.failListener = failListener;
+    }
 
     public void setSignUpListener (SignUpStatusListener callback){
         signUpCallback = callback;
@@ -91,6 +108,7 @@ public class RegisterClass {
                     signInCallback.onSuccessSignIn(user.getUid());
                 }else{
                     signInCallback.onFailedSignIn(task.getException().getMessage());
+                    signInFailListener.onFailedSignIn(task.getException().getMessage());
                 }
             }
         });
@@ -129,13 +147,13 @@ public class RegisterClass {
         try {
             throw task.getException();
         } catch(FirebaseAuthWeakPasswordException e) {
-            signUpCallback.onFailedSignUp("Password must be at least 8 letters");
+            failListener.onFailedSignUp("Password must be at least 8 letters");
         } catch(FirebaseAuthInvalidCredentialsException e) {
-            signUpCallback.onFailedSignUp("Invalid Credentials");
+            failListener.onFailedSignUp("Invalid Credentials");
         } catch(FirebaseAuthUserCollisionException e) {
-            signUpCallback.onFailedSignUp("User already exists");
+            failListener.onFailedSignUp("User already exists");
         } catch(Exception e) {
-            signUpCallback.onFailedSignUp("Error");
+            failListener.onFailedSignUp("Error");
         }
 
     }

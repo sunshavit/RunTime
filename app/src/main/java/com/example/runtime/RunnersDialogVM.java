@@ -1,11 +1,13 @@
 package com.example.runtime;
 
+import android.net.Uri;
 import android.provider.ContactsContract;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -18,7 +20,8 @@ public class RunnersDialogVM extends ViewModel {
 
     private String eventId;
 
-    MutableLiveData<StorageReference> managerImageRef = new MutableLiveData<>();
+    //MutableLiveData<StorageReference> managerImageRef = new MutableLiveData<>();
+    MutableLiveData<Uri> managerImageUriLiveData = new MutableLiveData<>();
     MutableLiveData<User> manager = new MutableLiveData<>();
     MutableLiveData<ArrayList<User>> runnersLiveData = new MutableLiveData<>();
     private ArrayList<String> runnersIds = new ArrayList<>();
@@ -86,7 +89,8 @@ public class RunnersDialogVM extends ViewModel {
                 if (snapshot.exists()){
                     String managerId = snapshot.getValue(String.class);
                     getManagerName(managerId);
-                    getManagerImageRef(managerId);
+                    //getManagerImageRef(managerId);
+                    getManagerImageUri(managerId);
                 }
             }
 
@@ -98,11 +102,22 @@ public class RunnersDialogVM extends ViewModel {
         dataBaseClass.retrieveEventManagerId(eventId, listener);
     }
 
-    private void getManagerImageRef(String managerId) {
+    /*private void getManagerImageRef(String managerId) {
 
        StorageReference managerImageReference = dataBaseClass.retrieveImageStorageReference(managerId);
        managerImageRef.setValue(managerImageReference);
 
+    }*/
+
+    private void getManagerImageUri (String managerId){
+        OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                managerImageUriLiveData.setValue(uri);
+            }
+        };
+
+        dataBaseClass.getImageUserId(managerId, listener);
     }
 
     private void getManagerName(String managerId) {
@@ -129,8 +144,12 @@ public class RunnersDialogVM extends ViewModel {
         return manager;
     }
 
-    public MutableLiveData<StorageReference> getManagerImageRef(){
+    /*public MutableLiveData<StorageReference> getManagerImageRef(){
         return managerImageRef;
+    }*/
+
+    public MutableLiveData<Uri> getManagerImageUriLiveData(){
+        return managerImageUriLiveData;
     }
 
     public  MutableLiveData<ArrayList<User>> getRunnersLiveData(){

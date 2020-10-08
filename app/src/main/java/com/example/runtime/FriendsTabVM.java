@@ -25,8 +25,8 @@ public class FriendsTabVM extends ViewModel {
     private MutableLiveData<Boolean> swipeLayoutBool = new MutableLiveData<>();
 
     public FriendsTabVM() {
-        getFriendsIds();
-        Log.d("attach","attach2");
+       // getFriendsIds();
+        //Log.d("attach","attach2");
     }
 
     public void getFriendsIds (){

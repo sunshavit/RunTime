@@ -56,14 +56,17 @@ public class UpcomingTabFragment extends Fragment implements UpcomingTabAdapter.
         swipeRefreshLayout.setOnRefreshListener(this);
 
 
-        viewModel.getSwipeLayoutBool().observe(this, new Observer<Boolean>() {
+        viewModel.getUpcomingEventsIds();
+
+
+        viewModel.getSwipeLayoutBool().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
 
-        viewModel.getUpcomingEventsLiveData().observe(this, new Observer<ArrayList<Event>>() {
+        viewModel.getUpcomingEventsLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Event>>() {
             @Override
             public void onChanged(ArrayList<Event> events) {
                 upcomingEvents.clear();

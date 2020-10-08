@@ -21,7 +21,7 @@ public class UpcomingTabVM extends ViewModel {
 
     public UpcomingTabVM() {
 
-        getUpcomingEventsIds();
+        //getUpcomingEventsIds();
     }
 
     public void getUpcomingEventsIds(){

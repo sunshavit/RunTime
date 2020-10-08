@@ -1,6 +1,7 @@
 package com.example.runtime;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -35,9 +37,18 @@ public class RunnersDialogAdapter extends RecyclerView.Adapter<RunnersDialogAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RunnersViewHolder holder, int position) {
-        StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(runners.get(position).getUserId());
-        Glide.with(context).load(userImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.runnerImageView);
+    public void onBindViewHolder(@NonNull final RunnersViewHolder holder, int position) {
+        /*StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(runners.get(position).getUserId());
+        Glide.with(context).load(userImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.runnerImageView);*/
+
+        OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(context).load(uri).placeholder(R.drawable.placeholder_small).into(holder.runnerImageView);
+            }
+        };
+
+        dataBaseClass.getImageUserId(runners.get(position).getUserId(), listener);
         holder.runnerName.setText(runners.get(position).getFullName());
     }
 

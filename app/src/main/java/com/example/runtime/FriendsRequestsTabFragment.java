@@ -54,17 +54,11 @@ public class FriendsRequestsTabFragment extends Fragment implements FriendsReque
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshFriendsRequestsTab);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        /*swipeRefreshLayout.post(new Runnable() {
 
-            @Override
-            public void run() {
 
-                swipeRefreshLayout.setRefreshing(true);
+        viewModel.getFriendsRequestsIds();
 
-            }
-        });*/
-
-        viewModel.getSwipeLayoutBool().observe(this, new Observer<Boolean>() {
+        viewModel.getSwipeLayoutBool().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 swipeRefreshLayout.setRefreshing(true);
@@ -72,7 +66,7 @@ public class FriendsRequestsTabFragment extends Fragment implements FriendsReque
         });
 
 
-        viewModel.getFriendsRequestsLiveData().observe(this, new Observer<ArrayList<User>>() {
+        viewModel.getFriendsRequestsLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
                 friendRequests.clear();

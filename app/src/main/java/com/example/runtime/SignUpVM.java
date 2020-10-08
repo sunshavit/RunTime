@@ -7,6 +7,7 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,11 +31,11 @@ public class SignUpVM extends ViewModel  {
     private String passwordConfirm;
     private String gender;
     private String runningLevel;
-    private int startAge;
-    private int endAge;
-    private int year;
-    private int month;
-    private int dayOfMonth;
+    private int startAge =0 ;
+    private int endAge = 0;
+    private int year = 0;
+    private int month = 0;
+    private int dayOfMonth = 0;
     private String partnerLevel;
     private String partnerGender;
     private Uri userImage;
@@ -42,16 +43,150 @@ public class SignUpVM extends ViewModel  {
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
     private UserInstance userInstance = UserInstance.getInstance();
 
+    private MutableLiveData<String> dateStringLiveData = new MutableLiveData<>();
+    private MutableLiveData<Uri> userImageLiveData = new MutableLiveData<>();
 
+    private MutableLiveData<Boolean> progressBar1LiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> progressBar2LiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> progressBar3LiveData = new MutableLiveData<>();
 
-    public boolean setDataNext1(String fullName , String password ,String passwordConfirm , String email) {
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+
+    public int getStartAge() {
+        return startAge;
+    }
+
+    public void setStartAge(int startAge) {
+        this.startAge = startAge;
+    }
+
+    public int getEndAge() {
+        return endAge;
+    }
+
+    public void setEndAge(int endAge) {
+        this.endAge = endAge;
+    }
+
+    public String getPartnerLevel() {
+        return partnerLevel;
+    }
+
+    public void setPartnerLevel(String partnerLevel) {
+        this.partnerLevel = partnerLevel;
+    }
+
+    public String getPartnerGender() {
+        return partnerGender;
+    }
+
+    public void setPartnerGender(String partnerGender) {
+        this.partnerGender = partnerGender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setRunningLevel(String runningLevel) {
+        this.runningLevel = runningLevel;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public void setDayOfMonth(int dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public void setDateStringLiveData(String date) {
+        dateStringLiveData.setValue(date);
+    }
+
+    public void setUserImageLiveData(Uri uri) {
+        userImageLiveData.setValue(uri);
+    }
+
+    public MutableLiveData<Uri> getUserImageLiveData(){
+       return userImageLiveData;
+    }
+
+    public MutableLiveData<String> getDateStringLiveData(){
+        return dateStringLiveData;
+    }
+
+    public MutableLiveData<Boolean> getProgressBar1LiveData(){
+        return progressBar1LiveData;
+    }
+    public MutableLiveData<Boolean> getProgressBar2LiveData(){
+        return progressBar2LiveData;
+    }
+
+    public MutableLiveData<Boolean> getProgressBar3LiveData(){
+        return progressBar3LiveData;
+    }
+
+    public void setProgressBar1LiveData(Boolean bool){
+        progressBar1LiveData.setValue(bool);
+    }
+
+    public void setProgressBar2LiveData(Boolean bool){
+        progressBar2LiveData.setValue(bool);
+    }
+
+    public void setProgressBar3LiveData(Boolean bool){
+        progressBar3LiveData.setValue(bool);
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getRunningLevel() {
+        return runningLevel;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public boolean setDataNext1(String fullName , String password , String passwordConfirm , String email) {
+
+        /*this.email = email;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
-        this.fullName = fullName;
-        if (password.equals(passwordConfirm)) {
+        this.fullName = fullName;*/
+        if (this.password.equals(this.passwordConfirm)) {
+            setProgressBar1LiveData(true);
 
-            registerClass.signUpUser(email, password);
+            registerClass.signUpUser(this.email, this.password);
             return true;
         }
         return false;
@@ -62,12 +197,13 @@ public class SignUpVM extends ViewModel  {
 
 
     public void setDataNext2(Uri userImage ,int year,int month,int dayOfMonth, String gender , String runningLevel){
-        this.userImage = userImage;
+        /*this.userImage = userImage;
         this.year=year;
         this.month=month;
         this.dayOfMonth=dayOfMonth;
         this.gender = gender;
-        this.runningLevel = runningLevel;
+        this.runningLevel = runningLevel;*/
+        setProgressBar2LiveData(true);
 
         final User user = new User("0",registerClass.getUserId(),this.fullName,this.gender,this.year,this.month,this.dayOfMonth,this.runningLevel,userInstance.getUser().getLongitude(),userInstance.getUser().getLatitude());
 
@@ -84,15 +220,34 @@ public class SignUpVM extends ViewModel  {
     }
 
     public void setDataNext3(int startAge , int endAge , String partnerGender , String partnerLevel){
-        this.startAge = startAge;
+        /*this.startAge = startAge;
         this.endAge = endAge;
         this.partnerGender = partnerGender;
-        this.partnerLevel = partnerLevel;
+        this.partnerLevel = partnerLevel;*/
+        setProgressBar3LiveData(true);
 
-        UserPreferences userPreferences=new UserPreferences(startAge,endAge,partnerGender,partnerLevel);
+        UserPreferences userPreferences=new UserPreferences(this.startAge, this.endAge,this.partnerGender,this.partnerLevel);
         UserLists userLists=new UserLists();
         dataBaseClass.createPreferences(userPreferences);
         dataBaseClass.createUserLists(userLists);
+
+        clearAll();
+
+    }
+
+    private void clearAll() {
+
+        gender = null;
+        runningLevel = null;
+        startAge = 0;
+        endAge = 0;
+        year =0;
+        month = 0;
+        dayOfMonth = 0;
+        partnerGender = null;
+        partnerLevel = null;
+        dateStringLiveData = new MutableLiveData<>();
+        userImageLiveData = new MutableLiveData<>();
 
     }
 

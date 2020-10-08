@@ -6,19 +6,26 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="20dp"
         android:background="@color/lightBlue"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="60dp"
         android:id="@+id/myFriendsDialogTitle">
         <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:text="@string/my_friends"
             android:textStyle="bold"
             android:textColor="@color/white" />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_clear_white_24dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:id="@+id/cancelBtnFriendDialog"/>
 
 
     </RelativeLayout>
@@ -26,33 +33,33 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7"
+        android:layout_height="300dp"
         android:id="@+id/myFriendsRecycler"
-        android:layout_below="@+id/myFriendsDialogTitle"/>
+        />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:background="#ffffff"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:layout_marginEnd="20dp">
+
 
         <Button
+            android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="done"
-            android:id="@+id/doneBtnFriendDialog"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="cancel"
-            android:id="@+id/cancelBtnFriendDialog"/>
+            android:layout_height="40dp"
+            android:text="@string/done"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:background="@drawable/blue_btn"
+            android:id="@+id/doneBtnFriendDialog" />
 
 
+    </RelativeLayout>
 
 
-    </LinearLayout>
 
 
 

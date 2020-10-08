@@ -50,15 +50,7 @@ public class InvitationsTabFragment extends Fragment implements InvitationsTabAd
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshInvitationsTab);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        /*swipeRefreshLayout.post(new Runnable() {
-
-            @Override
-            public void run() {
-
-                swipeRefreshLayout.setRefreshing(true);
-
-            }
-        });*/
+        viewModel.getInvitationsIds();
 
         viewModel.getSwipeLayoutBool().observe(this, new Observer<Boolean>() {
             @Override
