@@ -5,4 +5,7 @@
     android:paddingHorizontal="20dp"
     android:textColor="@color/DarkBlue"
     android:textSize="16sp"
+
+   
     xmlns:android="http://schemas.android.com/apk/res/android" />
+

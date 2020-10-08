@@ -1,6 +1,7 @@
 package com.example.runtime;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,21 +90,26 @@ public class RunnersDialog extends DialogFragment {
                 ((LinearLayoutManager) manager).getOrientation());
         runnersRecycler.addItemDecoration(dividerItemDecoration);
 
-        viewModel.getManager().observe(this, new Observer<User>() {
+        viewModel.getManager().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 managerNameTV.setText(user.getFullName());
             }
         });
 
-        viewModel.getManagerImageRef().observe(this, new Observer<StorageReference>() {
+        viewModel.getManagerImageUriLiveData().observe(getViewLifecycleOwner(), new Observer<Uri>() {
             @Override
-            public void onChanged(StorageReference storageReference) {
-                Glide.with(Objects.requireNonNull(getContext())).load(storageReference).into(managerImageView);
+            public void onChanged(Uri uri) {
+                Glide.with(Objects.requireNonNull(getContext())).load(uri).placeholder(R.drawable.placeholder_small).into(managerImageView);
             }
+
+
+           /* public void onChanged(StorageReference storageReference) {
+               // Glide.with(Objects.requireNonNull(getContext())).load(storageReference).into(managerImageView);
+            }*/
         });
 
-        viewModel.getRunnersLiveData().observe(this, new Observer<ArrayList<User>>() {
+        viewModel.getRunnersLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
                 runners.clear();

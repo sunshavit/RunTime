@@ -9,7 +9,7 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.4"/>
+        android:layout_weight="0.7"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,15 +29,20 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.4"/>
+        android:layout_weight="1"/>
 
 
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="10">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
+        android:layout_height="wrap_content"
+
         android:gravity="center_horizontal">
         <Space
             android:layout_width="0dp"
@@ -56,7 +61,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="53dp"
+            android:layout_height="wrap_content"
             app:boxStrokeColor="@color/lightBlue2"
             app:boxStrokeWidth="1.2dp"
             app:hintTextColor="@color/lightBlue2"
@@ -66,6 +71,7 @@
             app:boxCornerRadiusBottomEnd="22dp"
             android:layout_marginBottom="10dp"
             android:paddingHorizontal="5dp"
+            android:id="@+id/signUp1_name_inputLayout"
             app:boxStrokeWidthFocused="1.9dp"
             android:hint="@string/name"
 
@@ -85,7 +91,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="53dp"
+            android:layout_height="wrap_content"
             app:boxStrokeColor="@color/lightBlue2"
             app:boxStrokeWidth="1.2dp"
             app:hintTextColor="@color/lightBlue2"
@@ -96,6 +102,7 @@
             android:layout_marginBottom="10dp"
             android:paddingHorizontal="5dp"
             app:boxStrokeWidthFocused="1.9dp"
+            android:id="@+id/signUp1_email_inputLayout"
             android:hint="@string/email"
             app:boxStrokeErrorColor="@color/orange"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -108,7 +115,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="53dp"
+            android:layout_height="wrap_content"
             app:boxStrokeColor="@color/lightBlue2"
             app:boxStrokeWidth="1.2dp"
             app:hintTextColor="@color/lightBlue2"
@@ -119,6 +126,7 @@
             android:layout_marginBottom="10dp"
             android:paddingHorizontal="5dp"
             app:boxStrokeWidthFocused="1.9dp"
+            android:id="@+id/signUp1_password_inputLayout"
             android:hint="@string/password"
             app:boxStrokeErrorColor="@color/orange"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -131,7 +139,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="53dp"
+            android:layout_height="wrap_content"
             app:boxStrokeColor="@color/lightBlue2"
             app:boxStrokeWidth="1.2dp"
             app:hintTextColor="@color/lightBlue2"
@@ -142,6 +150,7 @@
             android:layout_marginBottom="10dp"
             android:paddingHorizontal="5dp"
             app:boxStrokeWidthFocused="1.9dp"
+            android:id="@+id/signUp1_passwordConfirm_inputLayout"
             android:hint="@string/password_confirm"
             app:boxStrokeErrorColor="@color/orange"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -152,8 +161,36 @@
                 android:id="@+id/passwordConfirmEt"/>
 
         </com.google.android.material.textfield.TextInputLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            />
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="invisible"
+            android:indeterminateDrawable="@drawable/progress_bar_sign_up"
+            android:id="@+id/signUp1_progressBar"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/next"
+            android:paddingHorizontal="30dp"
+            android:textSize="18sp"
+            android:background="@drawable/orange_btn"
+            android:textColor="#FFF"
+            android:textAllCaps="false"
+            android:id="@+id/next1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
 
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:src="@drawable/circles_1"
+            android:layout_marginBottom="40dp"/>
 
 
 
@@ -166,23 +203,9 @@
 
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="@string/next"
-        android:paddingHorizontal="30dp"
-        android:textSize="18sp"
-        android:background="@drawable/orange_btn"
-        android:textColor="#FFF"
-        android:textAllCaps="false"
-        android:id="@+id/next1"
-        android:layout_marginBottom="10dp"/>
+</ScrollView>
 
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="30dp"
-        android:src="@drawable/circles_1"
-        android:layout_marginBottom="40dp"/>
+
 
 
 

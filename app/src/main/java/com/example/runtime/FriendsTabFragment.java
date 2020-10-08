@@ -63,15 +63,7 @@ public class FriendsTabFragment extends Fragment implements FriendsTabAdapter.Fr
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshFriendsTab);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        /*swipeRefreshLayout.post(new Runnable() {
-
-            @Override
-            public void run() {
-
-                swipeRefreshLayout.setRefreshing(true);
-
-            }
-        });*/
+        viewModel.getFriendsIds();
 
         viewModel.getSwipeLayoutBool().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override

@@ -1,6 +1,7 @@
 package com.example.runtime;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -61,14 +63,23 @@ public class FindPeopleAdapter extends RecyclerView.Adapter<FindPeopleAdapter.Us
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final UserViewHolder holder, int position) {
         User user = users.get(position);
         Log.d("tag", "inside adapter" + user.getFullName());
         int userAge = getAge(user.getYear(), user.getMonth(), user.getDayOfMonth());
         holder.userNameTV.setText(user.getFullName() + ", " + userAge);
         //glide and get from storage
-        StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(user.getUserId());
-        Glide.with(context).load(userImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.userImageView);
+        /*StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(user.getUserId());
+        Glide.with(context).load(userImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.userImageView);*/
+
+        OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(context).load(uri).placeholder(R.drawable.placeholder_small).into(holder.userImageView);
+            }
+        };
+
+        dataBaseClass.getImageUserId(user.getUserId(), listener);
 
         //check which button should be displayed cancel / add and set checked accordingly
         if (recentSentRequests.contains(user.getUserId())){

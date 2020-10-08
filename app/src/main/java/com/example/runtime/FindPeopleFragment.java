@@ -72,7 +72,7 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshFindPeople);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        viewModel.getAddressLiveData().observe(this, new Observer<String>() {
+        viewModel.getAddressLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 locationTV.setText(s);
@@ -80,7 +80,7 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
         });
 
 
-        viewModel.getSwipeLayoutBool().observe(this, new Observer<Boolean>() {
+        viewModel.getSwipeLayoutBool().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 swipeRefreshLayout.setRefreshing(true);
@@ -88,7 +88,7 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
         });
 
 
-        viewModel.getRelevantUsers().observe(this, new Observer<ArrayList<User>>() {
+        viewModel.getRelevantUsers().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
 

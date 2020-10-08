@@ -1,6 +1,7 @@
 package com.example.runtime;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -35,9 +37,17 @@ public class FriendDialogAdapter extends RecyclerView.Adapter<FriendDialogAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MutualFriendsViewHolder holder, int position) {
-        StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(mutualFriends.get(position).getUserId());
-        Glide.with(context).load(userImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.mutualFriendImageView);
+    public void onBindViewHolder(@NonNull final MutualFriendsViewHolder holder, int position) {
+        /*StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(mutualFriends.get(position).getUserId());
+        Glide.with(context).load(userImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.mutualFriendImageView);*/
+        OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(context).load(uri).placeholder(R.drawable.placeholder_small).into(holder.mutualFriendImageView);
+            }
+        };
+
+        dataBaseClass.getImageUserId(mutualFriends.get(position).getUserId(), listener);
         holder.mutualFriendName.setText(mutualFriends.get(position).getFullName());
     }
 

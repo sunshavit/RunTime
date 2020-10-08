@@ -31,17 +31,17 @@ import java.util.Map;
 
 public class FriendsRequestsTabVM extends AndroidViewModel {
 
-    ArrayList<User> friendsRequests = new ArrayList<>();
-    ArrayList<String> friendsRequestsIds = new ArrayList<>();
+    private ArrayList<User> friendsRequests = new ArrayList<>();
+    private ArrayList<String> friendsRequestsIds = new ArrayList<>();
     MutableLiveData<ArrayList<User>> friendsRequestsLiveData = new MutableLiveData<>();
-    DataBaseClass dataBaseClass = DataBaseClass.getInstance();
-    RegisterClass registerClass = RegisterClass.getInstance();
+    private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
+    private RegisterClass registerClass = RegisterClass.getInstance();
     private final String API_TOKEN_KEY = "AAAAfwvvO64:APA91bG6RWYJYEROIIoBMpzKm6kMdCbqDdqpzhynZ4YnFKEiQ0vu5QuLfJdGTtlixdzqBoL2Ul99A5Mf9kspOh8Whz9U-AY1-7rQTBiOUNUeYZM3UHh4A7Tm4Kb-u4Hrv98zApJn76NQ";
     private MutableLiveData<Boolean> swipeLayoutBool = new MutableLiveData<>();
 
     public FriendsRequestsTabVM(@NonNull Application application) {
         super(application);
-        getFriendsRequestsIds();
+        //getFriendsRequestsIds();
     }
 
 
