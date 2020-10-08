@@ -4,31 +4,31 @@
 
     <item
         android:id="@+id/nevHome"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/home_dark_blue"
         android:title="Home"
         />
 
     <item
         android:id="@+id/nevGroup"
-        android:icon="@drawable/ic_group_black_24dp"
+        android:icon="@drawable/friends_dark_blue"
         android:title="Group"
         />
 
     <item
         android:id="@+id/nevLocation"
-        android:icon="@drawable/ic_location_on_black_24dp"
+        android:icon="@drawable/events_dark_blue"
         android:title="Location"
         />
 
     <item
         android:id="@+id/nevProfile"
-        android:icon="@drawable/ic_person_black_24dp"
+        android:icon="@drawable/profile_dark_blue"
         android:title="Profile"
         />
 
     <item
         android:id="@+id/nevMessage"
-        android:icon="@drawable/ic_email_black_24dp"
+        android:icon="@drawable/messanger_dark_blue"
         android:title="Message"
         />
 

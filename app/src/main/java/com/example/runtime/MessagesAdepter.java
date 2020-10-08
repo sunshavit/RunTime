@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.runtime.model.UserWithLastMessage;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class MessagesAdepter extends RecyclerView.Adapter<MessagesAdepter.Messag
     public MessagesAdepter(ArrayList<UserWithLastMessage> friend, Context context) {
         this.friend = friend;
         this.context = context;
+
     }
 
     public void setMessagesLitener(MessagesLitener messagesLitener) {
@@ -44,7 +47,9 @@ public class MessagesAdepter extends RecyclerView.Adapter<MessagesAdepter.Messag
     private TextView textViewLastMessage;
     private TextView textViewLastMessageTime;
 
-    public MessagesViewHolder(@NonNull final View itemView) {
+
+
+        public MessagesViewHolder(@NonNull final View itemView) {
         super(itemView);
         this.image =itemView.findViewById(R.id.cardImage);
         this.textViewName = itemView.findViewById(R.id.cardName);
@@ -78,11 +83,16 @@ public class MessagesAdepter extends RecyclerView.Adapter<MessagesAdepter.Messag
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessagesViewHolder holder, int position) {
-        float density = context.getResources().getDisplayMetrics().density;
+    public void onBindViewHolder(@NonNull final MessagesViewHolder holder, final int position) {
+        final float density = context.getResources().getDisplayMetrics().density;
         User user=friend.get(position).getUser();
-        StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(user.getUserId());
-        Glide.with(this.context).load(userImageRef).override((int)(120*density),(int)(120*density)).into(holder.image);
+        OnSuccessListener onSuccessListener = new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                Glide.with(context).load(o).override((int)(120*density),(int)(120*density)).into(holder.image);
+            }
+        };
+        dataBaseClass.getImageUserId(user.getUserId(),onSuccessListener);
         holder.textViewName.setText(user.getFullName());
         holder.textViewLastMessage.setText(friend.get(position).getMessage().getContent());
         holder.textViewLastMessageTime.setText(friend.get(position).getMessage().getTime());
