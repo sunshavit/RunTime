@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,24 +49,37 @@ public class ProfileFragment extends Fragment {
         };
 
 
-        profileVM.getImageLivedata().observe(this , resultObserverImage);
+        profileVM.getImageLivedata().observe(getViewLifecycleOwner() , resultObserverImage);
 
         final TextView textViewLocation = root.findViewById(R.id.locationProfileTV);
         final TextView textViewAge = root.findViewById(R.id.ageProfileTV);
-        final TextView textViewEmail = root.findViewById(R.id.emailProfileTV);
         final TextView textViewName = root.findViewById(R.id.fullNameProfileTV);
         final TextView textViewLevel = root.findViewById(R.id.levelProfileTV);
+        final TextView textViewGender = root.findViewById(R.id.genderProfile);
+        final ImageView imageViewLevel = root.findViewById(R.id.imageProfileLevel);
         Observer<User> observerUser = new Observer<User>() {
             @Override
             public void onChanged(User user) {
+                switch (user.getRunningLevel()){
+                    case "easy" :
+                        imageViewLevel.setImageResource(R.drawable.easy_orange);
+                        break;
+                    case "medium" :
+                        imageViewLevel.setImageResource(R.drawable.medium_orange);
+                        break;
+                    case "expert" :
+                        //imageViewLevel.setImageResource(R.drawable.);
+                        break;
+                }
                 textViewAge.setText(profileVM.getAge(user.getYear(),user.getMonth(),user.getDayOfMonth())+"");
                 textViewLevel.setText(user.getRunningLevel());
                 textViewLocation.setText(profileVM.getAddress(context,user.getLatitude(),user.getLongitude()));
-                textViewName.setText(user.getFullName());
+                textViewName.setText(user.getFullName()+",");
+                textViewGender.setText(user.getGender());
             }
         };
 
-        profileVM.getLiveDataUser().observe(this,observerUser);
+        profileVM.getLiveDataUser().observe(getViewLifecycleOwner(),observerUser);
 
 
 

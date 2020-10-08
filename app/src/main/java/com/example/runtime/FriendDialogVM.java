@@ -1,12 +1,15 @@
 package com.example.runtime;
 
 import android.location.Geocoder;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.solver.widgets.Snapshot;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -24,7 +27,8 @@ public class FriendDialogVM extends ViewModel {
     MutableLiveData<String> runningLevelLiveData = new MutableLiveData<>();
     MutableLiveData<String> nameLiveData = new MutableLiveData<>();
     MutableLiveData<String> genderLiveData = new MutableLiveData<>();
-    MutableLiveData<StorageReference> imageRefLiveData = new MutableLiveData<>();
+    //MutableLiveData<StorageReference> imageRefLiveData = new MutableLiveData<>();
+    MutableLiveData<Uri> imageUriLiveData = new MutableLiveData<>();
     private ArrayList<User> mutualFriends = new ArrayList<>();
     MutableLiveData<ArrayList<User>> mutualFriendsLiveData = new MutableLiveData<>();
     MutableLiveData<String> addressLiveData = new MutableLiveData<>();
@@ -37,7 +41,8 @@ public class FriendDialogVM extends ViewModel {
     public FriendDialogVM(String friendId) {
        this.friendId = friendId;
        getFriendUser();
-       getFriendImageRef();
+       //getFriendImageRef();
+        getFriendImageUri();
        getFriendFriendsIdsList();
     }
 
@@ -111,9 +116,20 @@ public class FriendDialogVM extends ViewModel {
         dataBaseClass.retrieveAllUsersList(listener);
     }
 
-    private void getFriendImageRef() {
+    /*private void getFriendImageRef() {
         StorageReference imageRef = dataBaseClass.retrieveImageStorageReference(friendId);
         imageRefLiveData.setValue(imageRef);
+    }*/
+
+    private void getFriendImageUri(){
+        OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+               imageUriLiveData.setValue(uri);
+            }
+        };
+
+        dataBaseClass.getImageUserId(friendId, listener);
     }
 
     private void getFriendUser() {
@@ -158,8 +174,12 @@ public class FriendDialogVM extends ViewModel {
         return genderLiveData;
     }
 
-    public MutableLiveData<StorageReference> getImageRefLiveData(){
+    /*public MutableLiveData<StorageReference> getImageRefLiveData(){
         return imageRefLiveData;
+    }*/
+
+    public MutableLiveData<Uri> getImageUriLiveData (){
+      return imageUriLiveData;
     }
 
     public MutableLiveData<ArrayList<User>> getMutualFriendsLiveData(){

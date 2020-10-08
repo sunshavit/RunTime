@@ -1,6 +1,7 @@
 package com.example.runtime;
 
 import android.app.Application;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.runtime.model.Message;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -35,7 +37,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class Messages2VM extends AndroidViewModel {
-    private MutableLiveData<StorageReference> liveDataImage = new MutableLiveData<>();
+    private MutableLiveData<Uri> liveDataImage = new MutableLiveData<>();
     private MutableLiveData<String> liveDataFullName = new MutableLiveData<>();
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
     private MutableLiveData<List<Message>> messageListLiveData;
@@ -59,8 +61,14 @@ public class Messages2VM extends AndroidViewModel {
     }
 
     public void setImage(String id) {
-        StorageReference storageReference = dataBaseClass.retrieveImageStorageReference(id);
-        liveDataImage.setValue(storageReference);
+        OnSuccessListener onSuccessListener = new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                liveDataImage.setValue((Uri)o);
+            }
+        };
+        dataBaseClass.getImageUserId(id,onSuccessListener);
+
     }
 
     //TODO check why we should return LiveData instead of MutableLiveData
@@ -68,7 +76,7 @@ public class Messages2VM extends AndroidViewModel {
         return liveDataFullName;
     }
 
-    public LiveData<StorageReference> getLiveDataImage() {
+    public LiveData<Uri> getLiveDataImage() {
         return liveDataImage;
     }
 

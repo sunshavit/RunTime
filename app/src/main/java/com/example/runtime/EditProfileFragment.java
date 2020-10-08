@@ -1,5 +1,6 @@
 package com.example.runtime;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -66,7 +70,10 @@ public class EditProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.edit_profile_fragment,container,false);
+        ImageButton imageButton = root.findViewById(R.id.dateEditImageButton);
+        final TextView textViewDate = root.findViewById(R.id.dateEditProfileET);
 
+        Button buttonDone= root.findViewById(R.id.saveEditProfileButton);
         final Context context=getContext();
         imageViewProfile = root.findViewById(R.id.imageEditProfile);
         editProfileVM.getImageFromData();
@@ -80,16 +87,23 @@ public class EditProfileFragment extends Fragment {
         };
 
 
-        editProfileVM.getImageLivedata().observe(this , resultObserverImage);
+        editProfileVM.getImageLivedata().observe(getViewLifecycleOwner() , resultObserverImage);
 
-        final EditText editTextFullName = root.findViewById(R.id.fullNameEditProfileEt);
+        final TextView textViewFullName = root.findViewById(R.id.fullNameEditProfileEt);
+
+        editProfileVM.getLiveDataName().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                textViewFullName.setText(s);
+            }
+        });
 
         gender = userInstance.getUser().getGender();
         dayOfMonthOfBirth = userInstance.getUser().getDayOfMonth();
         monthOfBirth = userInstance.getUser().getMonth();
         yearOfBirth = userInstance.getUser().getYear();
         level = userInstance.getUser().getRunningLevel();
-        editTextFullName.setText(userInstance.getUser().getFullName());
+        textViewFullName.setText(userInstance.getUser().getFullName());
 
 
         imageViewProfile.setOnClickListener(new View.OnClickListener() {
@@ -146,10 +160,65 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
+        RadioButton radioButtonMale = root.findViewById(R.id.maleEditProfileRB);
+        RadioButton radioButtonFemale = root.findViewById(R.id.femaleEditProfileRB);
+        if(userInstance.getUser().getGender().equals("male")){
+            radioButtonMale.setChecked(true);
+        }
+        else {
+            radioButtonFemale.setChecked(true);
+        }
 
-        final EditText editTextDate = root.findViewById(R.id.dateEditProfileET);
+        RadioButton radioButtonEasy = root.findViewById(R.id.easyEditProfileRB);
+        RadioButton radioButtonMedium = root.findViewById(R.id.mediumEditProfileRB);
+        RadioButton radioButtonExpert = root.findViewById(R.id.expertEditProfileRB);
 
-        editTextDate.setOnClickListener(new View.OnClickListener() {
+        switch (userInstance.getUser().getRunningLevel()){
+            case "easy" :
+                radioButtonEasy.setChecked(true);
+                break;
+            case "medium" :
+                radioButtonMedium.setChecked(true);
+                break;
+            case "expert" :
+                radioButtonExpert.setChecked(true);
+                break;
+        }
+
+        editProfileVM.getLiveDataDate().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                textViewDate.setText(s);
+            }
+        });
+
+        CircleImageView imageButtonEditText = root.findViewById(R.id.changeFullNameImage);
+        imageButtonEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+// ...Irrelevant code for customizing the buttons and title
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog_name, null);
+                dialogBuilder.setView(dialogView);
+
+                final EditText editText = (EditText) dialogView.findViewById(R.id.editTextDialog);
+                dialogBuilder.setTitle("change name");
+                final AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog.show();
+
+                Button buttonNameDialog = dialogView.findViewById(R.id.buttonDialog);
+                buttonNameDialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editProfileVM.setName(editText.getText().toString());
+                        alertDialog.dismiss();
+                    }
+                });
+        }});
+
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar=Calendar.getInstance();
@@ -165,7 +234,7 @@ public class EditProfileFragment extends Fragment {
                         yearOfBirth=year;
                         monthOfBirth=month+1;
                         dayOfMonthOfBirth=dayOfMonth;
-                        editTextDate.setText(dayOfMonthOfBirth+"/"+monthOfBirth+'/'+yearOfBirth);
+                        editProfileVM.setDate(dayOfMonthOfBirth+"."+monthOfBirth+'.'+yearOfBirth);
 
                     }
                 },year1,month1,dayOfMonth1);
@@ -175,11 +244,11 @@ public class EditProfileFragment extends Fragment {
 
 
 
-        Button buttonDone= root.findViewById(R.id.saveEditProfileButton);
+
         buttonDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fullName = editTextFullName.getText().toString();
+                fullName = textViewFullName.getText().toString();
                 userInstance.getUser().setFullName(fullName);
                 userInstance.getUser().setGender(gender);
                 userInstance.getUser().setRunningLevel(level);
@@ -195,3 +264,5 @@ public class EditProfileFragment extends Fragment {
         return root;
     }
 }
+
+

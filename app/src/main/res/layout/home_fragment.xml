@@ -5,6 +5,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+ <ScrollView
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
 
 
 
@@ -22,36 +25,81 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:gravity="center"
-       android:textSize="30sp"
+       android:textColor="@color/DarkBlue"
+       android:layout_marginTop="50dp"
+       android:textSize="25sp"
        android:id="@+id/helloLabelMain"/>
 
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center"
+       android:textColor="@color/DarkBlue"
+       android:visibility="gone"
+       android:layout_marginTop="5dp"
+       android:id="@+id/areYouComingTV"
+       android:text="@string/are_you_coming_for_a_run"
+       android:textSize="25sp" />
+
       <TextView
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:gravity="center"
-          android:textSize="20sp"
+          android:layout_gravity="center"
+          android:drawableStart="@drawable/ic_location_on_grey_24dp"
+          android:layout_marginTop="40dp"
+          android:visibility="gone"
+          android:layout_marginBottom="40dp"
+          android:textSize="15sp"
           android:id="@+id/locationText"/>
 
    <Button
-       android:layout_width="match_parent"
+       android:layout_width="270dp"
        android:layout_height="wrap_content"
        android:layout_marginTop="10dp"
+       android:textColor="#ffff"
+       android:background="@drawable/orang_btn"
+       android:layout_gravity="center"
+       android:textSize="20sp"
+       android:visibility="gone"
+       android:padding="10dp"
        android:id="@+id/findPeopleBtn"
-    android:text="@string/find_new_runners"/>
+       android:textAllCaps="false"
+    android:text="@string/find_runners_around_you"/>
 
    <Button
-       android:layout_width="match_parent"
+       android:layout_width="270dp"
        android:layout_height="wrap_content"
-       android:layout_marginTop="10dp"
+       android:layout_marginTop="20dp"
        android:id="@+id/findUpcomingEventsBT"
-       android:text="Find Upcoming Events"/>
+       android:layout_gravity="center"
+       android:visibility="gone"
+       android:textSize="20sp"
+       android:padding="10dp"
+       android:background="@drawable/orang_btn"
+       android:textColor="#ffff"
+       android:textAllCaps="false"
+       android:text="@string/find_event_around_you"/>
 
    <Button
-       android:layout_width="match_parent"
+       android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_marginTop="10dp"
+       android:layout_marginTop="40dp"
+       android:layout_gravity="center"
        android:id="@+id/createNewEventBT"
-       android:text="create New Event"/>
+       android:textColor="@color/DarkBlue"
+       android:drawableStart="@drawable/ic_add_blue_dark_24dp"
+       android:visibility="gone"
+       android:textAllCaps="false"
+       android:background="@null"
+       android:text="@string/create_new_event"/>
+
+   <ProgressBar
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="20dp"
+       android:id="@+id/homeFragmentProgressBar"/>
 
 
 
@@ -59,6 +107,7 @@
 
  </RelativeLayout>
 
+ </ScrollView>
 
 
 </RelativeLayout>

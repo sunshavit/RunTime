@@ -94,5 +94,52 @@
     <string name="confirm_location">בחר מיקום</string>
     <string name="type">בבקשה הקלד כתובת תקינה</string>
     <string name="no_friends">אין חברים להציג</string>
+    <string name="sign_up">הרשמה</string>
+    <string name="registration_details">פרטי הרשמה</string>
+    <string name="personal_details">פרטים אישיים</string>
+    <string name="preferred_running_partner">עם מי תרצה לרוץ?</string>
+    <string name="name">שמך</string>
+    <string name="next">המשך</string>
+    <string name="email">אימייל</string>
+    <string name="password">סיסמא</string>
+    <string name="password_confirm">אימות סיסמא</string>
+    <string name="profile_picture">תמונת פרופיל:</string>
+    <string name="gender">מגדר:</string>
+    <string name="birthdate">תאריך לידה:</string>
+    <string name="running_level">רמת ריצה:</string>
+    <string name="both">לא משנה</string>
+    <string name="age">גיל:</string>
+    <string name="from">מ</string>
+    <string name="to">עד</string>
+    <string name="welcome_back">ברוכים השבים!</string>
+    <string name="required_field">שדה חובה</string>
+    <string name="email_badly_formatted">אימייל לא תקין</string>
+    <string name="no_such_user">לא נמצא משתמש עם האימייל הזה</string>
+    <string name="wrong_password">סיסמא לא נכונה</string>
+    <string name="failed_sign_in">התחברות נכשלה</string>
+    <string name="passwords_not_identical">סיסמאות לא תואמות</string>
+    <string name="password_must_be_8_letters">סיסמא בת 8 תווים לפחות</string>
+    <string name="invalid_credentials">אשרות לא חוקיות</string>
+    <string name="user_already_exists">משתמש כבר קיים</string>
+    <string name="failed_to_sign_up">הרשמה נכשלה</string>
+    <string name="fill_all_details">השלם את כל הפרטים</string>
+    <string name="are_you_coming_for_a_run">אתה מוכן לריצה?</string>
+    <string name="find_runners_around_you">למצוא רצים סביבך</string>
+    <string name="find_event_around_you">למצוא אירועים סביבך</string>
+    <string name="create_new_event">ליצור אירוע חדש</string>
+    <string name="my_profile">הפרופיל שלי</string>
+    <string name="gender">מין:</string>
+    <string name="both">שניהם</string>
+    <string name="age">גיל:</string>
+    <string name="from">מגיל</string>
+    <string name="to">לגיל</string>
+    <string name="running_level">רמת ריצה:</string>
+    <string name="save">שמירה</string>
+    <string name="edit_profile">עריכת פרופיל</string>
+    <string name="full_name">שם מלא:</string>
+    <string name="birthdate">תאריך לידה:</string>
+    <string name="enter_full_name">הכנס שם מלא</string>
+
+
 
 </resources>

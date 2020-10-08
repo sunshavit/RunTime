@@ -1,75 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:gravity="center_horizontal"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up"
+        android:textSize="25sp"
+        android:textColor="@color/DarkBlue"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/preferred_running_partner"
+        android:textSize="18sp"
+        android:textColor="@color/DarkBlue"
+        />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.6"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10">
+
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="30dp"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="from age"
-        android:id="@+id/fromAge"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="to age"
-        android:id="@+id/toAge"/>
-
-
-        <RadioGroup
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/genderGroupPartner">
+            app:cardElevation="1.5dp"
+            app:cardMaxElevation="2dp"
+            app:cardCornerRadius="10dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/lightBlue2"
+                    android:text="@string/gender"
+                    android:id="@+id/gender_text_signUp3"/>
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/genderGroupPartner"
+                    android:layout_toEndOf="@+id/gender_text_signUp3"
+                    android:layout_marginStart="40dp">
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="male"
-                android:id="@+id/maleRBPartner"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/male"
+                        android:buttonTint="@color/orange"
+                        android:textColor="@color/lightGray"
+                        android:id="@+id/maleRBPartner"/>
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="female"
-                android:id="@+id/femaleRBPartner"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/female"
+                        android:buttonTint="@color/orange"
+                        android:textColor="@color/lightGray"
+                        android:id="@+id/femaleRBPartner"/>
 
-        </RadioGroup>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/both"
+                        android:buttonTint="@color/orange"
+                        android:textColor="@color/lightGray"
+                        android:id="@+id/bothRBPartner"/>
 
-        <RadioGroup
-            android:layout_width="wrap_content"
+                </RadioGroup>
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/levelGroupPartner">
+            app:cardElevation="1.5dp"
+            app:cardMaxElevation="2dp"
+            app:cardCornerRadius="10dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp">
 
-            <RadioButton
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="easy"
-                android:id="@+id/easyRBPartner"/>
+                android:textSize="18sp"
+                android:textColor="@color/lightBlue2"
+                android:text="@string/age"
+                android:id="@+id/age_text_signUp3"/>
 
-            <RadioButton
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="medium"
-                android:id="@+id/mediumRBPartner"/>
+                android:textSize="18sp"
+                android:layout_marginStart="70dp"
+                android:layout_toEndOf="@+id/age_text_signUp3"
+                android:textColor="@color/lightGray"
+                android:text="@string/from"
+                android:id="@+id/from_text_signUp3"/>
 
-            <RadioButton
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="expert"
-                android:id="@+id/expertRBPartner"/>
-        </RadioGroup>
+                android:textSize="18sp"
+                android:layout_marginStart="70dp"
+                android:layout_toEndOf="@+id/age_text_signUp3"
+                android:textColor="@color/lightGray"
+                android:layout_below="@+id/spinnerFrom"
+                android:text="@string/to"
+                android:id="@+id/to_text_signUp3"/>
 
+
+            <Spinner
+                android:background="@drawable/spinner_style"
+                android:layout_width="80dp"
+                android:layout_marginStart="20dp"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/from_text_signUp3"
+                android:id="@+id/spinnerFrom"
+                android:layout_marginBottom="5dp"
+
+
+                />
+
+            <Spinner
+                android:background="@drawable/spinner_style"
+                android:layout_width="80dp"
+                android:layout_marginStart="20dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spinnerFrom"
+
+                android:layout_toEndOf="@+id/from_text_signUp3"
+                android:id="@+id/spinnerTo"/>
+
+
+
+        </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="1.5dp"
+            app:cardMaxElevation="2dp"
+            app:cardCornerRadius="10dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/lightBlue2"
+                    android:text="@string/running_level"
+                    android:id="@+id/runningLevel_text"/>
+
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_toEndOf="@+id/runningLevel_text"
+                    android:layout_marginStart="15dp"
+                    android:id="@+id/levelGroupPartner">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/easy"
+                        android:drawableTop="@drawable/easy_option"
+                        android:textAlignment="center"
+                        android:textColor="@drawable/option_text"
+                        android:button="@android:color/transparent"
+                        android:layout_marginEnd="10dp"
+
+                        android:id="@+id/easyRBPartner"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/medium_option"
+                        android:textAlignment="center"
+                        android:text="@string/medium"
+                        android:button="@android:color/transparent"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@drawable/option_text"
+                        android:id="@+id/mediumRBPartner"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/expert_option"
+                        android:textAlignment="center"
+                        android:text="@string/expert"
+                        android:button="@android:color/transparent"
+                        android:textColor="@drawable/option_text"
+                        android:id="@+id/expertRBPartner"/>
+                </RadioGroup>
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            />
+
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="invisible"
+            android:indeterminateDrawable="@drawable/progress_bar_sign_up"
+            android:id="@+id/signUp3_progressBar"/>
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/sign_up"
+            android:paddingHorizontal="30dp"
+            android:textSize="18sp"
+            android:background="@drawable/orange_btn"
+            android:textColor="#FFF"
             android:id="@+id/signUpDone"
-            android:text="sign up"/>
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:src="@drawable/circles_3"
+            android:layout_marginBottom="40dp"/>
 
     </LinearLayout>
-</RelativeLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

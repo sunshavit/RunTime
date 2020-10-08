@@ -5,12 +5,15 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,20 +21,32 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-public class SignUp1Fragment extends Fragment {
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+public class SignUp1Fragment extends Fragment implements RegisterClass.SignUpFailListener {
 
     /*interface OnNext1Listener{
         void onClickNext1(String email , String password);
     }*/
     SignUpVM viewModel;
     final int LOCATION_PERMISSION_REQUEST=0;
-    EditText fullNameEt;
-    EditText passwordEt;
-    EditText emailEt;
-    EditText passwordConfirmEt;
+    TextInputEditText fullNameEt;
+    TextInputEditText passwordEt;
+    TextInputEditText emailEt;
+    TextInputEditText passwordConfirmEt;
+
+    TextInputLayout fullNameInputLayout;
+    TextInputLayout emailInputLayout;
+    TextInputLayout passwordInputLayout;
+    TextInputLayout passwordConfirmInputLayout;
+    RegisterClass registerClass;
+    ProgressBar progressBar;
+
 
     String fullName;
     String email;
@@ -62,7 +77,95 @@ public class SignUp1Fragment extends Fragment {
         passwordEt=root.findViewById(R.id.passwordEt);
         emailEt=root.findViewById(R.id.emailEt);
         passwordConfirmEt=root.findViewById(R.id.passwordConfirmEt);
+
+        fullNameInputLayout = root.findViewById(R.id.signUp1_name_inputLayout);
+        emailInputLayout = root.findViewById(R.id.signUp1_email_inputLayout);
+        passwordInputLayout = root.findViewById(R.id.signUp1_password_inputLayout);
+        passwordConfirmInputLayout = root.findViewById(R.id.signUp1_passwordConfirm_inputLayout);
         Button nextButton = root.findViewById(R.id.next1);
+
+        registerClass = RegisterClass.getInstance();
+        registerClass.setFailListener(this);
+
+        progressBar = root.findViewById(R.id.signUp1_progressBar);
+        viewModel.getProgressBar1LiveData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean){
+                    progressBar.setVisibility(View.VISIBLE);
+                } else{
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        fullNameEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                fullNameInputLayout.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                viewModel.setFullName(s.toString());
+            }
+        });
+
+        emailEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                emailInputLayout.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                viewModel.setEmail(s.toString());
+            }
+        });
+
+        passwordEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                passwordInputLayout.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                viewModel.setPassword(s.toString());
+            }
+        });
+
+        passwordConfirmEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                passwordConfirmInputLayout.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                viewModel.setPasswordConfirm(s.toString());
+            }
+        });
 
         /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -71,9 +174,7 @@ public class SignUp1Fragment extends Fragment {
 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION}, 1000);
-        }
-*/
-
+        }*/
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,29 +184,53 @@ public class SignUp1Fragment extends Fragment {
                 password=passwordEt.getText().toString();
                 passwordConfirm=passwordConfirmEt.getText().toString();
                 email=emailEt.getText().toString();
+                String emptyFieldErrorStr = getString(R.string.required_field);
 
-                if(Build.VERSION.SDK_INT>=23){
-                    Log.d("tag","over 23");
-                    int hasLocationPermission= ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_FINE_LOCATION);
-                    int hasLocationPermission1= ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_COARSE_LOCATION);
-                    if(hasLocationPermission!=PackageManager.PERMISSION_GRANTED || hasLocationPermission1!=PackageManager.PERMISSION_GRANTED){
-                        Log.d("tag","no granted");
-                        requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},LOCATION_PERMISSION_REQUEST);
+                if (fullName.equals("") || password.equals("") || passwordConfirm.equals("") || email.equals("")){
+                    if (fullName.equals(""))
+                        fullNameInputLayout.setError(emptyFieldErrorStr);
+                    if (email.equals(""))
+                        emailInputLayout.setError(emptyFieldErrorStr);
+                    if (password.equals(""))
+                        passwordInputLayout.setError(emptyFieldErrorStr);
+                    if (passwordConfirm.equals("")){
+                        passwordConfirmInputLayout.setError(emptyFieldErrorStr);
                     }
-                    else {
-                        if(!viewModel.setDataNext1(fullName,password,passwordConfirm,email)){
-                            Log.d("tag","granted");
-                            Toast.makeText(getActivity(),"passwords not identical",Toast.LENGTH_LONG).show();
+
+                } else {
+                    if(Build.VERSION.SDK_INT>=23){
+                        Log.d("tag","over 23");
+                        int hasLocationPermission= ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_FINE_LOCATION);
+                        int hasLocationPermission1= ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_COARSE_LOCATION);
+                        if(hasLocationPermission!=PackageManager.PERMISSION_GRANTED || hasLocationPermission1!=PackageManager.PERMISSION_GRANTED){
+                            Log.d("tag","no granted");
+                            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},LOCATION_PERMISSION_REQUEST);
+                        }
+                        else {
+                            if(!viewModel.setDataNext1(fullName,password,passwordConfirm,email)){
+                                Log.d("tag","granted");
+                                Toast.makeText(getActivity(),"passwords not identical",Toast.LENGTH_LONG).show();
+                                String passwordsConfirmError = getString(R.string.passwords_not_identical);
+                                passwordConfirmInputLayout.setError(passwordsConfirmError);
+                                passwordInputLayout.setError(passwordsConfirmError);
+                                progressBar.setVisibility(View.INVISIBLE);
+                            }
                         }
                     }
-                }
-                else{
-                    Log.d("tag","less 23");
-                    if(!viewModel.setDataNext1(fullName,password,passwordConfirm,email)){
-                        Toast.makeText(getActivity(),"passwords not identical",Toast.LENGTH_LONG).show();
-                    }
+                    else{
+                        Log.d("tag","less 23");
+                        if(!viewModel.setDataNext1(fullName,password,passwordConfirm,email)){
+                            Toast.makeText(getActivity(),"passwords not identical",Toast.LENGTH_LONG).show();
+                            String passwordsConfirmError = getString(R.string.passwords_not_identical);
+                            passwordConfirmInputLayout.setError(passwordsConfirmError);
+                            passwordInputLayout.setError(passwordsConfirmError);
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
 
+                    }
                 }
+
+
 
             }
         });
@@ -123,8 +248,36 @@ public class SignUp1Fragment extends Fragment {
                 if(!viewModel.setDataNext1(fullName,password,passwordConfirm,email)){
                     Log.d("tag",fullName);
                     Toast.makeText(getActivity(),"passwords not identical",Toast.LENGTH_LONG).show();
+                    String passwordsConfirmError = getString(R.string.passwords_not_identical);
+                    passwordConfirmInputLayout.setError(passwordsConfirmError);
+                    passwordInputLayout.setError(passwordsConfirmError);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
+        }
+    }
+
+
+
+    @Override
+    public void onFailedSignUp(String problem) {
+
+        progressBar.setVisibility(View.INVISIBLE);
+        switch (problem){
+            case "Password must be at least 8 letters":
+                String error = getString(R.string.password_must_be_8_letters);
+                passwordInputLayout.setError(error);
+                break;
+            case "Invalid Credentials":
+                String error2 = getString(R.string.email_badly_formatted);
+                emailInputLayout.setError(error2);
+                break;
+            case "User already exists":
+                String error3 = getString(R.string.user_already_exists);
+                emailInputLayout.setError(error3);
+                break;
+            case "Error":
+                Toast.makeText(getContext(),R.string.failed_to_sign_up,Toast.LENGTH_SHORT).show();
         }
     }
 }
