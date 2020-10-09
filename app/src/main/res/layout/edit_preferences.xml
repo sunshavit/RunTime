@@ -37,72 +37,92 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/male"
+                android:buttonTint="@color/lightBlue2"
+                android:textColor="@color/lightGray"
                 android:id="@+id/maleRBPartnerEditP"/>
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/lightGray"
+                android:buttonTint="@color/lightBlue2"
                 android:text="@string/female"
                 android:id="@+id/femaleRBPartnerEditP"/>
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/lightGray"
+                android:buttonTint="@color/lightBlue2"
                 android:text="@string/both"
                 android:id="@+id/bothRBPartnerEditP"/>
         </RadioGroup>
 
         </LinearLayout>
 
-        <LinearLayout
+
+
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:padding="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:textSize="18sp"
+                android:textColor="@color/lightBlue2"
                 android:text="@string/age"
-                android:textSize="15sp"
-                android:textColor="@color/lightBlue2"/>
+                android:id="@+id/age_text_signUp3"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:text="@string/from"/>
-        <Spinner
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/spinner_style_blue"
-            android:id="@+id/fromAgeEditP"/>
-        </LinearLayout>
+                android:textSize="18sp"
+                android:layout_marginStart="70dp"
+                android:layout_toEndOf="@+id/age_text_signUp3"
+                android:textColor="@color/lightGray"
+                android:text="@string/from"
+                android:id="@+id/from_text_signUp3"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginStart="70dp"
+                android:layout_toEndOf="@+id/age_text_signUp3"
+                android:textColor="@color/lightGray"
+                android:layout_below="@+id/fromAgeEditP"
+                android:text="@string/to"
+                android:id="@+id/to_text_signUp3"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="105dp"
-            android:layout_gravity="center_vertical"
-            android:textSize="15sp"
-            android:text="@string/to"/>
 
-        <Spinner
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:background="@drawable/spinner_style_blue"
-            android:id="@+id/toAgeEditP"/>
+            <Spinner
+                android:background="@drawable/spinner_style_blue"
+                android:layout_width="80dp"
+                android:layout_marginStart="20dp"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/from_text_signUp3"
+                android:id="@+id/fromAgeEditP"
+                android:layout_marginBottom="5dp"
 
-    </LinearLayout>
+
+                />
+
+            <Spinner
+                android:background="@drawable/spinner_style_blue"
+                android:layout_width="80dp"
+                android:layout_marginStart="20dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fromAgeEditP"
+
+                android:layout_toEndOf="@+id/from_text_signUp3"
+                android:id="@+id/toAgeEditP"/>
+
+
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"

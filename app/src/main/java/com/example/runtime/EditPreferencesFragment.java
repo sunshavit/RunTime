@@ -62,7 +62,9 @@ public class EditPreferencesFragment extends Fragment {
         final RadioButton radioButtonExpert = root.findViewById(R.id.expertRBPartnerEditP);
         final RadioButton radioButtonBoth = root.findViewById(R.id.bothRBPartnerEditP);
 
-        editPreferencesVM.getFromAge().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        editPreferencesVM.getUserPreferences();
+
+        /*editPreferencesVM.getFromAge().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 from = integer;
@@ -74,9 +76,9 @@ public class EditPreferencesFragment extends Fragment {
             @Override
             public void onChanged(Integer integer) {
                 to = integer;
-                spinnerAgeTo.setSelection(integer);
+                spinnerAgeTo.setSelection(integer-from);
             }
-        });
+        });*/
 
         editPreferencesVM.getPreferencesMutableLiveData().observe(getViewLifecycleOwner(), new Observer<UserPreferences>() {
             @Override
@@ -114,12 +116,14 @@ public class EditPreferencesFragment extends Fragment {
         spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("spinner1", "position" +position +"");
+                Log.d("spinner1", " to " +to +"");
+                Log.d("spinner1",  "from" +from +"");
+                Log.d("spinner1", " size" + toAgesArray.size() +"");
                 if ((int)parent.getItemAtPosition(position) == 0){
 
                 }else{
                     from = (int) parent.getItemAtPosition(position);
-
-
                     toAgesArray.clear();
                     int i;
                     for (i = from; i < 121 ; i++) {
@@ -140,14 +144,19 @@ public class EditPreferencesFragment extends Fragment {
         spinnerAgeTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("spinner", "position" +position +"");
+                Log.d("spinner", " to " +to +"");
+                Log.d("spinner",  "from" +from +"");
+                Log.d("spinner", " size" + toAgesArray.size() +"");
                 if((int)parent.getItemAtPosition(position) == 0){
 
                 }else{
-                    to = (int) parent.getItemAtPosition(position);
+                   // to = (int) parent.getItemAtPosition(position);
+                    to = position + from;
                     fromAgesArray.clear();
                     int i;
                     Log.d("aaa",to+"");
-                    for (i = 0; i < to ; i++) {
+                    for (i = 1; i < to ; i++) {
                         Integer age = i;
                         fromAgesArray.add(age);
                     }

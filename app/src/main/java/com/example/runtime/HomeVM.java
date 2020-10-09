@@ -50,7 +50,8 @@ public class HomeVM extends ViewModel implements DataBaseClass.OnLocationUpdateL
     public void onLocationUpdate() {
         Geocoder geocoder = new Geocoder(context,Locale.getDefault());
         try {
-            location.setValue(geocoder.getFromLocation(userInstance.getUser().getLatitude(),userInstance.getUser().getLongitude(),1).get(0).getLocality());
+            location.setValue(geocoder.getFromLocation(userInstance.getUser().getLatitude(),userInstance.getUser().getLongitude(),1).get(0).getAddressLine(0));
+
         } catch (IOException e) {
             e.printStackTrace();
         }

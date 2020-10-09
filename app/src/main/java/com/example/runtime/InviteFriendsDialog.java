@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedDispatcherOwner;
@@ -33,6 +34,12 @@ public class InviteFriendsDialog extends DialogFragment implements InviteFriends
         void onFinishEditDialog(ArrayList<String> invitedFriendsIds);
     }
 
+    public static InviteFriendsDialog getInstance(ArrayList<String> invitedFriends){
+        InviteFriendsDialog dialog = new InviteFriendsDialog();
+        dialog.invitedFriendsIds.addAll(invitedFriends);
+        return dialog;
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -56,10 +63,14 @@ public class InviteFriendsDialog extends DialogFragment implements InviteFriends
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button doneBtn = view.findViewById(R.id.doneBtnFriendDialog);
+        final TextView noFriends = view.findViewById(R.id.no_friends_TV);
+
+        final Button doneBtn = view.findViewById(R.id.doneBtnFriendDialog);
+        final RelativeLayout doneLayout = view.findViewById(R.id.done_Layout);
+        final RelativeLayout noFriendsLayout = view.findViewById(R.id.no_friend_layout);
         ImageView cancelBtn = view.findViewById(R.id.cancelBtnFriendDialog);
-        RecyclerView inviteFriendsRecycler = view.findViewById(R.id.myFriendsRecycler);
-        adapter = new InviteFriendsDialogAdapter(myFriends,getContext());
+        final RecyclerView inviteFriendsRecycler = view.findViewById(R.id.myFriendsRecycler);
+        adapter = new InviteFriendsDialogAdapter(myFriends,getContext(), invitedFriendsIds);
         inviteFriendsRecycler.setAdapter(adapter);
         adapter.setInviteFriendToEventCallback(this);
 
@@ -75,6 +86,11 @@ public class InviteFriendsDialog extends DialogFragment implements InviteFriends
                 myFriends.clear();
                 myFriends.addAll(users);
                 adapter.notifyDataSetChanged();
+                if(myFriends.size() < 1){
+                    noFriendsLayout.setVisibility(View.VISIBLE);
+                    doneLayout.setVisibility(View.GONE);
+                   inviteFriendsRecycler.setVisibility(View.GONE);
+                }
             }
         });
 

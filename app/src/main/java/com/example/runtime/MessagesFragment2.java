@@ -104,7 +104,7 @@ public class MessagesFragment2 extends Fragment {
 
         if(editTextMessage.getText().toString().equals("")) {
             buttonSend.setEnabled(false);
-            buttonSend.setImageResource(R.drawable.ic_send_black_diable_24dp);
+            buttonSend.setImageResource(R.drawable.ic_send_gray_24dp);
         }
 
         editTextMessage.addTextChangedListener(new TextWatcher() {
@@ -122,11 +122,11 @@ public class MessagesFragment2 extends Fragment {
             public void afterTextChanged(Editable s) {
                 if(editTextMessage.getText().toString().equals("")) {
                     buttonSend.setEnabled(false);
-                    buttonSend.setImageResource(R.drawable.ic_send_black_diable_24dp);
+                    buttonSend.setImageResource(R.drawable.ic_send_gray_24dp);
                 }
                 else {
                     buttonSend.setEnabled(true);
-                    buttonSend.setImageResource(R.drawable.ic_send_black_24dp);
+                    buttonSend.setImageResource(R.drawable.ic_send_orange_24dp);
                 }
             }
         });
@@ -148,7 +148,7 @@ public class MessagesFragment2 extends Fragment {
                     messagesVM.sendMessage(editTextMessage.getText().toString(),getArguments().getString("token"),UserInstance.getInstance().getUser().getFullName());
                     editTextMessage.getText().clear();
                     buttonSend.setEnabled(false);
-                    buttonSend.setImageResource(R.drawable.ic_send_black_diable_24dp);
+                    buttonSend.setImageResource(R.drawable.ic_send_gray_24dp);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

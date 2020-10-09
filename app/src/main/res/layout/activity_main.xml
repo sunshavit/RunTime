@@ -42,6 +42,8 @@
         android:layout_gravity="start"
         android:id="@+id/NavigationSide"
         app:menu="@menu/sidebar_menu"
+        android:theme="@style/DrawerTextStyle"
+        app:itemTextColor="@color/lightBlue2"
         app:headerLayout="@layout/header_layout_nav"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

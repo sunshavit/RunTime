@@ -47,6 +47,15 @@ public class EditProfileFragment extends Fragment {
     private Uri filePath;
     private CircleImageView imageViewProfile;
     private EditProfileVM editProfileVM;
+    private TextView textViewFullName;
+    private TextView textViewDate;
+    RadioButton radioButtonMale;
+    RadioButton radioButtonFemale;
+    RadioGroup radioGroupGender;
+    RadioGroup radioGroupLevel;
+    RadioButton radioButtonEasy;
+    RadioButton radioButtonMedium;
+    RadioButton radioButtonExpert;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -71,12 +80,22 @@ public class EditProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.edit_profile_fragment,container,false);
         ImageButton imageButton = root.findViewById(R.id.dateEditImageButton);
-        final TextView textViewDate = root.findViewById(R.id.dateEditProfileET);
+        textViewDate = root.findViewById(R.id.dateEditProfileET);
+        textViewFullName = root.findViewById(R.id.fullNameEditProfileEt);
+        radioGroupGender = root.findViewById(R.id.genderGroupEditProfile);
+        radioGroupLevel = root.findViewById(R.id.levelGroupEditProfile);
+        radioButtonMale = root.findViewById(R.id.maleEditProfileRB);
+       radioButtonFemale = root.findViewById(R.id.femaleEditProfileRB);
+        radioButtonEasy = root.findViewById(R.id.easyEditProfileRB);
+        radioButtonMedium = root.findViewById(R.id.mediumEditProfileRB);
+        radioButtonExpert = root.findViewById(R.id.expertEditProfileRB);
 
         Button buttonDone= root.findViewById(R.id.saveEditProfileButton);
         final Context context=getContext();
         imageViewProfile = root.findViewById(R.id.imageEditProfile);
         editProfileVM.getImageFromData();
+
+        editProfileVM.setUserLiveData(userInstance.getUser());
 
         Observer<String> resultObserverImage = new Observer<String>() {
             @Override
@@ -89,14 +108,40 @@ public class EditProfileFragment extends Fragment {
 
         editProfileVM.getImageLivedata().observe(getViewLifecycleOwner() , resultObserverImage);
 
-        final TextView textViewFullName = root.findViewById(R.id.fullNameEditProfileEt);
+        editProfileVM.getUserLiveData().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                textViewDate.setText(user.getDayOfMonth() + "." + user.getMonth() + "." + user.getYear());
+                textViewFullName.setText(user.getFullName());
+                if(user.getGender().equals("male")){
+                    radioButtonMale.setChecked(true);
+                }
+                else {
+                    radioButtonFemale.setChecked(true);
+                }
+                switch (userInstance.getUser().getRunningLevel()){
+                    case "easy" :
+                        radioButtonEasy.setChecked(true);
+                        break;
+                    case "medium" :
+                        radioButtonMedium.setChecked(true);
+                        break;
+                    case "expert" :
+                        radioButtonExpert.setChecked(true);
+                        break;
+                }
 
-        editProfileVM.getLiveDataName().observe(getViewLifecycleOwner(), new Observer<String>() {
+            }
+        });
+
+
+
+        /*editProfileVM.getLiveDataName().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 textViewFullName.setText(s);
             }
-        });
+        });*/
 
         gender = userInstance.getUser().getGender();
         dayOfMonthOfBirth = userInstance.getUser().getDayOfMonth();
@@ -120,19 +165,18 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        RadioGroup radioGroupGender = root.findViewById(R.id.genderGroupEditProfile);
-        RadioGroup radioGroupLevel = root.findViewById(R.id.levelGroupEditProfile);
+
 
         radioGroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId)
                 {
-                    case R.id.maleRB: {
+                    case R.id.maleEditProfileRB: {
                         gender="male" ;
                         break;
                     }
-                    case R.id.femaleRB: {
+                    case R.id.femaleEditProfileRB: {
                         gender="female" ;
                         break;
                     }
@@ -144,15 +188,15 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
-                    case R.id.easyRB:{
+                    case R.id.easyEditProfileRB:{
                         level = "easy";
                         break;
                     }
-                    case R.id.mediumRB:{
+                    case R.id.mediumEditProfileRB:{
                         level = "medium";
                         break;
                     }
-                    case R.id.expertRB:{
+                    case R.id.expertEditProfileRB:{
                         level = "expert";
                         break;
                     }
@@ -160,37 +204,24 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        RadioButton radioButtonMale = root.findViewById(R.id.maleEditProfileRB);
-        RadioButton radioButtonFemale = root.findViewById(R.id.femaleEditProfileRB);
-        if(userInstance.getUser().getGender().equals("male")){
+
+        /*if(userInstance.getUser().getGender().equals("male")){
             radioButtonMale.setChecked(true);
         }
         else {
             radioButtonFemale.setChecked(true);
-        }
+        }*/
 
-        RadioButton radioButtonEasy = root.findViewById(R.id.easyEditProfileRB);
-        RadioButton radioButtonMedium = root.findViewById(R.id.mediumEditProfileRB);
-        RadioButton radioButtonExpert = root.findViewById(R.id.expertEditProfileRB);
 
-        switch (userInstance.getUser().getRunningLevel()){
-            case "easy" :
-                radioButtonEasy.setChecked(true);
-                break;
-            case "medium" :
-                radioButtonMedium.setChecked(true);
-                break;
-            case "expert" :
-                radioButtonExpert.setChecked(true);
-                break;
-        }
 
-        editProfileVM.getLiveDataDate().observe(getViewLifecycleOwner(), new Observer<String>() {
+
+
+        /*editProfileVM.getLiveDataDate().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 textViewDate.setText(s);
             }
-        });
+        });*/
 
         CircleImageView imageButtonEditText = root.findViewById(R.id.changeFullNameImage);
         imageButtonEditText.setOnClickListener(new View.OnClickListener() {
@@ -203,7 +234,7 @@ public class EditProfileFragment extends Fragment {
                 dialogBuilder.setView(dialogView);
 
                 final EditText editText = (EditText) dialogView.findViewById(R.id.editTextDialog);
-                dialogBuilder.setTitle("change name");
+                //dialogBuilder.setTitle("change name");
                 final AlertDialog alertDialog = dialogBuilder.create();
                 alertDialog.show();
 
@@ -211,7 +242,8 @@ public class EditProfileFragment extends Fragment {
                 buttonNameDialog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        editProfileVM.setName(editText.getText().toString());
+                        //editProfileVM.setName(editText.getText().toString());
+                        textViewFullName.setText(editText.getText().toString());
                         alertDialog.dismiss();
                     }
                 });
@@ -234,10 +266,12 @@ public class EditProfileFragment extends Fragment {
                         yearOfBirth=year;
                         monthOfBirth=month+1;
                         dayOfMonthOfBirth=dayOfMonth;
-                        editProfileVM.setDate(dayOfMonthOfBirth+"."+monthOfBirth+'.'+yearOfBirth);
+                        textViewDate.setText(dayOfMonthOfBirth+"."+monthOfBirth+'.'+yearOfBirth);
+                        //editProfileVM.setDate(dayOfMonthOfBirth+"."+monthOfBirth+'.'+yearOfBirth);
 
                     }
                 },year1,month1,dayOfMonth1);
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis()-1000);
                 datePickerDialog.show();
             }
         });
@@ -256,6 +290,7 @@ public class EditProfileFragment extends Fragment {
                 userInstance.getUser().setMonth(monthOfBirth);
                 userInstance.getUser().setDayOfMonth(dayOfMonthOfBirth);
                 editProfileVM.saveUserEdit();
+
                 if(filePath!=null)
                     editProfileVM.saveUserImageEdit(filePath);
             }

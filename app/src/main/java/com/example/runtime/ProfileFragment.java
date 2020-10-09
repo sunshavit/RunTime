@@ -1,6 +1,7 @@
 package com.example.runtime;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,14 +38,16 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        profileVM.setNewUser();
         View root = inflater.inflate(R.layout.profile_fragment, container,false);
         final CircleImageView circleImageView = root.findViewById(R.id.profile_image);
         profileVM.getImageFromData();
         final Context context = getActivity();
-        Observer<String> resultObserverImage = new Observer<String>() {
+        Observer<Uri> resultObserverImage = new Observer<Uri>() {
             @Override
-            public void onChanged(String s) {
-                Glide.with(context).load(s).into(circleImageView);
+            public void onChanged(Uri uri) {
+                Glide.with(context).load(uri).into(circleImageView);
             }
         };
 
@@ -52,7 +55,7 @@ public class ProfileFragment extends Fragment {
         profileVM.getImageLivedata().observe(getViewLifecycleOwner() , resultObserverImage);
 
         final TextView textViewLocation = root.findViewById(R.id.locationProfileTV);
-        final TextView textViewAge = root.findViewById(R.id.ageProfileTV);
+        //final TextView textViewAge = root.findViewById(R.id.ageProfileTV);
         final TextView textViewName = root.findViewById(R.id.fullNameProfileTV);
         final TextView textViewLevel = root.findViewById(R.id.levelProfileTV);
         final TextView textViewGender = root.findViewById(R.id.genderProfile);
@@ -71,10 +74,10 @@ public class ProfileFragment extends Fragment {
                         //imageViewLevel.setImageResource(R.drawable.);
                         break;
                 }
-                textViewAge.setText(profileVM.getAge(user.getYear(),user.getMonth(),user.getDayOfMonth())+"");
+                //textViewAge.setText(profileVM.getAge(user.getYear(),user.getMonth(),user.getDayOfMonth())+"");
                 textViewLevel.setText(user.getRunningLevel());
                 textViewLocation.setText(profileVM.getAddress(context,user.getLatitude(),user.getLongitude()));
-                textViewName.setText(user.getFullName()+",");
+                textViewName.setText(user.getFullName()+", " + profileVM.getAge(user.getYear(),user.getMonth(),user.getDayOfMonth()));
                 textViewGender.setText(user.getGender());
             }
         };

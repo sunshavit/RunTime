@@ -36,7 +36,7 @@
                     android:layout_marginTop="7dp"
                     android:layout_width="29dp"
                     android:layout_height="29dp"
-                    android:src="@drawable/ic_date_range_black_24dp"
+                    android:src="@drawable/ic_date_range_lightblue2_24dp"
                     android:layout_marginEnd="9dp" />
 
                 <TextView
