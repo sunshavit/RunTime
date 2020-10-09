@@ -36,54 +36,20 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
     private Button findPeopleButton;
     private Button findEventsBtn;
 
-    /*findPeopleListener findPeopleCallback;
-    CreateNewEventListener createnewEventCallBack;
-    findEventsListener findEventsCallback;
-*/
-   /* interface CreateNewEventListener{
-        void onCreateNewEvent(boolean isNew);
-    }
 
-    interface findPeopleListener{
-        void onFindPeopleClicked();
-    }
-
-    interface findEventsListener{
-        void onFindEventsClicked();
-    }*/
-
-    /*public void setFindPeopleCallback(findPeopleListener findPeopleCallback) {
-        this.findPeopleCallback = findPeopleCallback;
-    }
-
-    public void setFindEventsCallback(findEventsListener findEventsCallback) {
-        this.findEventsCallback = findEventsCallback;
-    }
-*/
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel= new ViewModelProvider(getActivity()).get(HomeVM.class);
         viewModel.setContext(getContext());
-       /* try {
-            createnewEventCallBack = (CreateNewEventListener) context;
-        }
-        catch (ClassCastException e){
-            throw new ClassCastException("Activity must implement CreateNewEventListener");
-        }*/
+
     }
 
     @Override
     public void onGetUser() {
-        title.setText("hello"+ " " +user.getUser().getFullName()+"!");
-        Log.d("sun",user.getUser().getLatitude()+"");
 
-       // String city = viewModel.getAddress(getContext(),user.getUser().getLatitude(),user.getUser().getLongitude());
-      //  locationtext.setText(city);
-
-
-        //String city = viewModel.getAddress(getContext(),user.getUser().getLatitude(),user.getUser().getLongitude());
-       // locationtext.setText(city);
+        String hello = getString(R.string.hello);
+        title.setText(hello+ " " +user.getUser().getFullName()+"!");
 
         if(user.getUser().getLongitude()!=0||user.getUser().getLatitude()!=0)
             locationtext.setText(viewModel.getAddress(getContext(),user.getUser().getLatitude(),user.getUser().getLongitude()));
@@ -111,19 +77,15 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
         findEventsBtn = root.findViewById(R.id.findUpcomingEventsBT);
         locationtext = root.findViewById(R.id.locationText);
         if(user.getUser().getFullName()!=null){
-            title.setText("hello"+ " " +user.getUser().getFullName()+"!");
+
+            String hello = getString(R.string.hello);
+            title.setText(hello+ " " +user.getUser().getFullName()+"!");
             progressBar.setVisibility(View.GONE);
             buttonNewEvent.setVisibility(View.VISIBLE);
             findEventsBtn.setVisibility(View.VISIBLE);
             findPeopleButton.setVisibility(View.VISIBLE);
             areYouComing.setVisibility(View.VISIBLE);
             locationtext.setVisibility(View.VISIBLE);
-
-            //Log.d("home", ""+ user.getUser().getFullName());
-            //Log.d("home", ""+ user.getUser().getLatitude());
-           // String city = viewModel.getAddress(getActivity(),user.getUser().getLatitude(),user.getUser().getLongitude());
-
-           // locationtext.setText(city);
 
         }
 
@@ -143,7 +105,7 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
         buttonNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //createnewEventCallBack.onCreateNewEvent(true);
+
                 Fragment fragment = CreateEventFragment.getCreateEventFragment(true);
                 FragmentManager fragmentManager = getFragmentManager();
                 assert fragmentManager != null;
@@ -159,7 +121,7 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
         findPeopleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //findPeopleCallback.onFindPeopleClicked();
+
                 Fragment fragment = new FindPeopleFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 assert fragmentManager != null;
@@ -174,7 +136,7 @@ public class HomeFragment extends Fragment implements UserInstance.OnGetUserList
         findEventsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //findEventsCallback.onFindEventsClicked();
+
                 Fragment fragment = new FindEventsFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 assert fragmentManager != null;

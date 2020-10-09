@@ -23,7 +23,7 @@ public class UserInstance {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             User userNew;
-            Log.d("sun","sunsun");
+
             userNew = snapshot.getValue(User.class);
             user = userNew;
             callBackUserGet.onGetUser();

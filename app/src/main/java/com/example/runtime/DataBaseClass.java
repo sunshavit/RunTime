@@ -30,8 +30,6 @@ public class DataBaseClass {
     private final String USERSTABLE = "users";
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
-    //private UserInstance userInstance = UserInstance.getInstance();
-
 
     private static DataBaseClass dataBaseClass = null;
 
@@ -391,7 +389,7 @@ public class DataBaseClass {
     }
 
     public void retrieveUserPreferences(ValueEventListener listener) {
-        //final UserPreferences[] userPreferences = new UserPreferences[1];
+
         databaseReference = firebaseDatabase.getReference();
         DatabaseReference userPreferenceTable = databaseReference.child("user_preferences");
         userPreferenceTable.child(registerClass.getUserId()).addListenerForSingleValueEvent(listener);

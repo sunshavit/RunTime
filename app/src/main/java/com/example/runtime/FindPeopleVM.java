@@ -39,15 +39,13 @@ import java.util.Map;
 
 public class FindPeopleVM extends AndroidViewModel {
 
-    MutableLiveData<ArrayList<User>> relevantUsers = new MutableLiveData<>();
-    MutableLiveData<ArrayList<String>> recentSentRequests = new MutableLiveData<>();
-
-    MutableLiveData<String> addressLiveData = new MutableLiveData<>();
-    ArrayList<String> recentSentRequestsArrayList = new ArrayList<>();
-    ArrayList<User> relevant = new ArrayList<>();
-
-    ArrayList<String> userFriendsIds = new ArrayList<>();
-    ArrayList<String> userFriendRequestsIds = new ArrayList<>();
+    private MutableLiveData<ArrayList<User>> relevantUsers = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<String>> recentSentRequests = new MutableLiveData<>();
+    private MutableLiveData<String> addressLiveData = new MutableLiveData<>();
+    private ArrayList<String> recentSentRequestsArrayList = new ArrayList<>();
+    private ArrayList<User> relevant = new ArrayList<>();
+    private ArrayList<String> userFriendsIds = new ArrayList<>();
+    private ArrayList<String> userFriendRequestsIds = new ArrayList<>();
     private User currentUser;
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
     private ArrayList<User> usersFromDatabase = new ArrayList<>();
@@ -106,7 +104,6 @@ public class FindPeopleVM extends AndroidViewModel {
         }
 
         Integer ageInt = Integer.valueOf(age);
-        //String ageS = ageInt.toString();
 
         return ageInt;
     }
@@ -118,8 +115,6 @@ public class FindPeopleVM extends AndroidViewModel {
     }
 
 
-    //trying
-
     private void getAllUsersList(){
 
         usersFromDatabase.clear();
@@ -129,17 +124,9 @@ public class FindPeopleVM extends AndroidViewModel {
                 if (snapshot.exists()){
                     for (DataSnapshot snapshot1 : snapshot.getChildren()){
                         User user = snapshot1.getValue(User.class);
-                        Log.d("tag", "inside first listener");
-                       /* if(user != null){
-                         //   Log.d("tag1", user.toString());
-                           // Log.d("tag1", user.getFullName());
-                        }*/
-
                         usersFromDatabase.add(user);
 
                     }
-                    //Log.d("tag1", usersFromDatabase.get(0).getGender());
-                   // Log.d("tag1", usersFromDatabase.toString());
                     getUserPreferences();
                 }
             }
@@ -162,7 +149,6 @@ public class FindPeopleVM extends AndroidViewModel {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     userPreferences = snapshot.getValue(UserPreferences.class);
-                    Log.d("tag", "inside second listener");
                     getCurrentUser();
                 }
             }
@@ -193,7 +179,6 @@ public class FindPeopleVM extends AndroidViewModel {
             if (geocoder.getFromLocation(latitude,longitude,1) != null){
                 if (geocoder.getFromLocation(latitude,longitude,1).size() > 0){
 
-                   // address = geocoder.getFromLocation(latitude,longitude,1).get(0).getLocality();
                     address = geocoder.getFromLocation(latitude,longitude,1).get(0).getAddressLine(0);
 
                 }
@@ -203,10 +188,6 @@ public class FindPeopleVM extends AndroidViewModel {
         }
         addressLiveData.setValue(address);
     }
-
-
-    //use sun's class
-        //dataBaseClass.retrieveUserDetails(listener);
 
     private void getFriendsIds(){
         ValueEventListener listener = new ValueEventListener() {
@@ -250,23 +231,17 @@ public class FindPeopleVM extends AndroidViewModel {
         dataBaseClass.retrieveFriendsRequestsIds(currentUser.getUserId(), listener);
     }
 
-
-
     private void findRelevantUsers() {
 
         relevant.clear();
-        Log.d("tag", "inside final function");
-        Log.d("tag", userPreferences.getRuningLevel());
-        Log.d("tag", currentUser.getFullName());
-        Log.d("tag", usersFromDatabase.get(0).getFullName());
-        Log.d("tag", usersFromDatabase.get(0).getFullName());
+
         //user location
         double longitude = currentUser.getLongitude();
         double latitude = currentUser.getLatitude();
         //user preferences
 
         String preferredGender = userPreferences.getGender();
-        Log.d("gender", preferredGender);
+
         String preferredLevel = userPreferences.getRuningLevel();
         int preferredFromAge = userPreferences.getFromAge();
         int preferredToAge = userPreferences.getToAge();
@@ -280,11 +255,11 @@ public class FindPeopleVM extends AndroidViewModel {
                 if (user.getGender() != null && user.getRunningLevel() != null && user.getUserId() != null){
                     int age = getAge(user.getYear(), user.getMonth(), user.getDayOfMonth());
                     double distance = haversine(user.getLatitude(), user.getLongitude(), latitude, longitude);
-                    Log.d("distance", distance+"");
+
 
                     //also check if user not on friends list already!
                     if (!userFriendsIds.contains(user.getUserId()) && !userFriendRequestsIds.contains(user.getUserId())){
-                        Log.d("user", user.getGender());
+
                         if((user.getGender().equals(preferredGender) || preferredGender.equals("both"))
                                 && user.getRunningLevel().equals(preferredLevel)
                                 && age >= preferredFromAge && age <= preferredToAge
@@ -292,8 +267,7 @@ public class FindPeopleVM extends AndroidViewModel {
                                 && !(user.getUserId().equals(currentUser.getUserId()))
                         ) {
                             relevant.add(user);
-                            Log.d("distance", "relevant user distance " +distance+"");
-                            Log.d("tag2", "inside findRelevant users "+relevant.size()+"");
+
                         }
                     }
                 }
@@ -302,8 +276,8 @@ public class FindPeopleVM extends AndroidViewModel {
             }
         }
 
-     //   Log.d("tag", "relevant" + relevant.get(0).getFullName());
-        relevantUsers.setValue(relevant);//not here
+
+        relevantUsers.setValue(relevant);
     }
 
     public void getSentRequests(){
@@ -316,10 +290,10 @@ public class FindPeopleVM extends AndroidViewModel {
                 if (snapshot.exists()){
                     for (DataSnapshot snapshot1 : snapshot.getChildren()){
                         recentSentRequestsArrayList.add(snapshot1.getKey());
-                        Log.d("snapshot", snapshot1.getKey());
+
                     }
                 }
-                Log.d("snapshot", "" +recentSentRequestsArrayList.size());
+
                 updateSentRequestsMutable();
 
             }
@@ -331,13 +305,13 @@ public class FindPeopleVM extends AndroidViewModel {
         };
 
         dataBaseClass.retrieveSentRequests(listener);
-        //get from database
+
 
     }
 
     private void updateSentRequestsMutable() {
         recentSentRequests.setValue(recentSentRequestsArrayList);
-        //notify adapter
+
     }
 
 
@@ -374,7 +348,7 @@ public class FindPeopleVM extends AndroidViewModel {
 
     private void createFriendRequestNotificationMessage(String token) throws JSONException {
 
-        Log.d("tag2", "inside create friendRequestNotificationMessage");
+
 
         final JSONObject rootObject = new JSONObject();
         rootObject.put("to", token);

@@ -53,7 +53,7 @@ public class MapFragment extends Fragment {
 
     interface OnCreateEventListener{
         void onCreateEventFromMap(boolean isNew);
-        //void onInputSent(String locationName);
+
     }
 
     OnCreateEventListener createEventCallback;
@@ -69,11 +69,6 @@ public class MapFragment extends Fragment {
         }
 
          viewModel= new ViewModelProvider(getActivity()).get(CreateEventVM.class);
-        //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
-
-        //viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(CreateEventVM.class);
-
-
     }
 
 
@@ -200,20 +195,8 @@ public class MapFragment extends Fragment {
 
                 viewModel.setLongitudeLatitude(longitude,latitude);
 
-                //Toast.makeText(getContext(),streetAddress,Toast.LENGTH_LONG).show();
-                //createEventCallback.onInputSent(streetAddress);
                 viewModel.setStreetAddress(streetAddress);
                 createEventCallback.onCreateEventFromMap(false);
-
-               /* Bundle bundle = new Bundle();
-                bundle.putDouble("latitude",latitude);
-                bundle.putDouble("longitude", longitude);
-                bundle.putString("streetAddress",streetAddress);
-                CreateEventFragment createEventFragment = CreateEventFragment.getCreateEventFragment(false);
-                createEventFragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.rootLayout,createEventFragment).commit();*/
-
-
 
             }
         });

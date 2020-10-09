@@ -56,8 +56,7 @@ public class EditPreferencesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.edit_preferences,container,false);
-        //final Spinner spinnerFrom  = root.findViewById(R.id.fromAgeEditP);
-        //final Spinner spinnerAgeTo = root.findViewById(R.id.toAgeEditP);
+
         final RadioButton radioButtonMale = root.findViewById(R.id.maleRBPartnerEditP);
         final RadioButton radioButtonFemale = root.findViewById(R.id.femaleRBPartnerEditP);
         final RadioButton radioButtonEasy = root.findViewById(R.id.easyRBPartnerEditP);
@@ -131,62 +130,6 @@ public class EditPreferencesFragment extends Fragment {
         });
 
 
-        ArrayAdapter<Integer> adapterFrom = new ArrayAdapter<>(getContext(), R.layout.spinner_item, fromAgesArray);
-        //spinnerFrom.setAdapter(adapterFrom);
-        //spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.d("spinner1", "position" +position +"");
-//                Log.d("spinner1", " to " +to +"");
-//                Log.d("spinner1",  "from" +from +"");
-//                Log.d("spinner1", " size" + toAgesArray.size() +"");
-//                if ((int)parent.getItemAtPosition(position) == 0){
-//
-//                }else{
-//                    from = (int) parent.getItemAtPosition(position);
-//                    toAgesArray.clear();
-//                    int i;
-//                    for (i = from; i < 121 ; i++) {
-//                        Integer age = i;
-//                        toAgesArray.add(age);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-//
-//        ArrayAdapter<Integer> adapterTo = new ArrayAdapter<>(getContext(), R.layout.spinner_item, toAgesArray);
-//        spinnerAgeTo.setAdapter(adapterTo);
-//        spinnerAgeTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.d("spinner", "position" +position +"");
-//                Log.d("spinner", " to " +to +"");
-//                Log.d("spinner",  "from" +from +"");
-//                Log.d("spinner", " size" + toAgesArray.size() +"");
-//                if((int)parent.getItemAtPosition(position) == 0){
-//
-//                }else{
-//                    to = (int) parent.getItemAtPosition(position);
-//                    fromAgesArray.clear();
-//                    int i;
-//                    Log.d("aaa",to+"");
-//                    for (i = 1; i <= to ; i++) {
-//                        Integer age = i;
-//                        fromAgesArray.add(age);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
 
         Button buttonDone = root.findViewById(R.id.signUpDoneEditP);
 

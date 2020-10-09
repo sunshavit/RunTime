@@ -149,6 +149,7 @@
     <string name="chat">צ\'אט</string>
     <string name="edit_name">ערוך שם</string>
     <string name="enter_your_message">הקלד הודעה</string>
+    <string name="no_location_detected">לא זוהה מיקום</string>
 
 
 </resources>

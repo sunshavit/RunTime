@@ -19,7 +19,7 @@ public class FriendModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(FriendDialogVM.class)) {
             return (T) new FriendDialogVM(friendId);
         }
-        //noinspection unchecked
+
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
 }

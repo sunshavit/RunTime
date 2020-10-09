@@ -55,8 +55,7 @@ public class FriendsRequestsTabAdapter extends RecyclerView.Adapter<FriendsReque
     @Override
     public void onBindViewHolder(@NonNull final FriendRequestViewHolder holder, int position) {
         holder.friendRequestTextView.setText(friendsRequests.get(position).getFullName());
-        /*StorageReference requestImageRef = dataBaseClass.retrieveImageStorageReference(friendsRequests.get(position).getUserId());
-        Glide.with(context).load(requestImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.friendRequestImageView);*/
+
         OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {

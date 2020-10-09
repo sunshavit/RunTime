@@ -22,9 +22,7 @@ public class HomeVM extends ViewModel implements DataBaseClass.OnLocationUpdateL
         location = new MutableLiveData<>();
     }
 
-    public void updateActive(boolean isActive){
-        dataBaseClass.updateActive(isActive);
-    }
+
 
     public MutableLiveData<String> getLocation() {
         return location;

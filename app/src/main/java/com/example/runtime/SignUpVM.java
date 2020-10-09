@@ -179,10 +179,6 @@ public class SignUpVM extends ViewModel  {
 
     public boolean setDataNext1(String fullName , String password , String passwordConfirm , String email) {
 
-        /*this.email = email;
-        this.password = password;
-        this.passwordConfirm = passwordConfirm;
-        this.fullName = fullName;*/
         if (this.password.equals(this.passwordConfirm)) {
             setProgressBar1LiveData(true);
 
@@ -197,12 +193,7 @@ public class SignUpVM extends ViewModel  {
 
 
     public void setDataNext2(Uri userImage ,int year,int month,int dayOfMonth, String gender , String runningLevel){
-        /*this.userImage = userImage;
-        this.year=year;
-        this.month=month;
-        this.dayOfMonth=dayOfMonth;
-        this.gender = gender;
-        this.runningLevel = runningLevel;*/
+
         setProgressBar2LiveData(true);
 
         final User user = new User("0",registerClass.getUserId(),this.fullName,this.gender,this.year,this.month,this.dayOfMonth,this.runningLevel,userInstance.getUser().getLongitude(),userInstance.getUser().getLatitude());
@@ -220,10 +211,7 @@ public class SignUpVM extends ViewModel  {
     }
 
     public void setDataNext3(int startAge , int endAge , String partnerGender , String partnerLevel){
-        /*this.startAge = startAge;
-        this.endAge = endAge;
-        this.partnerGender = partnerGender;
-        this.partnerLevel = partnerLevel;*/
+
         setProgressBar3LiveData(true);
 
         UserPreferences userPreferences=new UserPreferences(this.startAge, this.endAge,this.partnerGender,this.partnerLevel);

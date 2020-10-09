@@ -42,7 +42,7 @@ public class ManagedTabVM extends AndroidViewModel {
 
     public ManagedTabVM(@NonNull Application application) {
         super(application);
-        //getManagedEventsIds();
+
     }
 
     public void getManagedEventsIds(){
@@ -67,7 +67,7 @@ public class ManagedTabVM extends AndroidViewModel {
         };
 
         dataBaseClass.retrieveManagedEventsIds(registerClass.getUserId(), listener);
-        //database call here
+
     }
 
     private void getManagedEvents() {

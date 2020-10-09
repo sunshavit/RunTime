@@ -27,7 +27,7 @@ public class ManagedTabAdapter extends RecyclerView.Adapter<ManagedTabAdapter.Ma
 
     }
 
-    ManagedListener managedCallback;
+    private ManagedListener managedCallback;
 
     public void setManagedCallback(ManagedListener managedCallback) {
         this.managedCallback = managedCallback;

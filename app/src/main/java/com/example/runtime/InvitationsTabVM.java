@@ -20,7 +20,7 @@ public class InvitationsTabVM extends ViewModel {
     private MutableLiveData<Boolean> swipeLayoutBool = new MutableLiveData<>();
 
     public InvitationsTabVM() {
-        //getInvitationsIds();
+
     }
 
     public void getInvitationsIds(){

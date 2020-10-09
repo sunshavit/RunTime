@@ -129,12 +129,6 @@
     <string name="find_event_around_you">Find event around you</string>
 
     <string name="my_profile">My profile</string>
-
-
-
-
-
-
     <string name="save">Save</string>
     <string name="edit_profile">Edit profile</string>
     <string name="full_name">Full Name:</string>
@@ -151,6 +145,7 @@
     <string name="chat">Chat</string>
     <string name="edit_name">Edit name</string>
     <string name="enter_your_message">Enter your message</string>
+    <string name="no_location_detected">No location detected</string>
 
 
 </resources>

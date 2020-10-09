@@ -65,12 +65,10 @@ public class FindPeopleAdapter extends RecyclerView.Adapter<FindPeopleAdapter.Us
     @Override
     public void onBindViewHolder(@NonNull final UserViewHolder holder, int position) {
         User user = users.get(position);
-        Log.d("tag", "inside adapter" + user.getFullName());
+
         int userAge = getAge(user.getYear(), user.getMonth(), user.getDayOfMonth());
         holder.userNameTV.setText(user.getFullName() + ", " + userAge);
-        //glide and get from storage
-        /*StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(user.getUserId());
-        Glide.with(context).load(userImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.userImageView);*/
+
 
         OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
             @Override
@@ -81,7 +79,7 @@ public class FindPeopleAdapter extends RecyclerView.Adapter<FindPeopleAdapter.Us
 
         dataBaseClass.getImageUserId(user.getUserId(), listener);
 
-        //check which button should be displayed cancel / add and set checked accordingly
+
         if (recentSentRequests.contains(user.getUserId())){
             holder.addFriendBtn.setChecked(true);
         }
@@ -107,7 +105,7 @@ public class FindPeopleAdapter extends RecyclerView.Adapter<FindPeopleAdapter.Us
         }
 
         Integer ageInt = Integer.valueOf(age);
-        //String ageS = ageInt.toString();
+
 
         return ageInt;
     }

@@ -44,7 +44,7 @@ public class Messages2VM extends AndroidViewModel {
     private User user = UserInstance.getInstance().getUser();
     private final String API_TOKEN_KEY = "AAAAfwvvO64:APA91bG6RWYJYEROIIoBMpzKm6kMdCbqDdqpzhynZ4YnFKEiQ0vu5QuLfJdGTtlixdzqBoL2Ul99A5Mf9kspOh8Whz9U-AY1-7rQTBiOUNUeYZM3UHh4A7Tm4Kb-u4Hrv98zApJn76NQ";
 
-    //TODO maybe we should use the user object instead
+
     private String activeConversationFriendId;
 
     public Messages2VM(@NonNull Application application) {
@@ -71,7 +71,7 @@ public class Messages2VM extends AndroidViewModel {
 
     }
 
-    //TODO check why we should return LiveData instead of MutableLiveData
+
     public LiveData<String> getLiveDataFullName() {
         return liveDataFullName;
     }
@@ -96,7 +96,7 @@ public class Messages2VM extends AndroidViewModel {
     public void sendMessage(String message,String token,String name) throws JSONException {
         List<Message> list = new ArrayList<>(messageListLiveData.getValue() == null ? new ArrayList<Message>() : messageListLiveData.getValue());
 
-        //TODO change it to whatever
+
         String pattern = "dd-MM-yyyy HH:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
@@ -138,13 +138,10 @@ public class Messages2VM extends AndroidViewModel {
 
     private void createNotificationMessage(String token,Message message,String name) throws JSONException {
 
-        Log.d("tag2", "inside create friendRequestNotificationMessage");
-
         final JSONObject rootObject = new JSONObject();
         rootObject.put("to", token);
         JSONObject data = new JSONObject();
         data.put("messageType","message");
-        //JSONObject notificationObject = new JSONObject();
         data.put("title", "New message from "+ name);
         data.put("body",message.getContent());
 

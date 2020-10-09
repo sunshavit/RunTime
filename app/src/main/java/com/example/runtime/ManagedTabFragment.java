@@ -35,13 +35,13 @@ public class ManagedTabFragment extends Fragment implements SwipeRefreshLayout.O
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(ManagedTabVM.class);
-        //viewModel= new ViewModelProvider(getActivity()).get(ManagedTabVM.class);
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("managed", "inside onCreateView");
+
         return inflater.inflate(R.layout.managed_tab_fragment, container, false);
 
     }
@@ -83,7 +83,7 @@ public class ManagedTabFragment extends Fragment implements SwipeRefreshLayout.O
 
     @Override
     public void onRefresh() {
-        //swipeRefreshLayout.setRefreshing(true);
+
         viewModel.getManagedEventsIds();
     }
 
@@ -92,8 +92,7 @@ public class ManagedTabFragment extends Fragment implements SwipeRefreshLayout.O
         //openDialog
         FragmentManager fm = getFragmentManager();
         RunnersDialog editNameDialogFragment = RunnersDialog.newInstance(eventId);
-        // SETS the target fragment for use later when sending results
-        //editNameDialogFragment.setTargetFragment(MyParentFragment.this, 300);
+
         assert fm != null;
         editNameDialogFragment.show(fm, "fragment_runners");
     }

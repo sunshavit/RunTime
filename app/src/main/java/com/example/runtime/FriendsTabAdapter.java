@@ -42,7 +42,7 @@ public class FriendsTabAdapter extends RecyclerView.Adapter<FriendsTabAdapter.Fr
 
     public FriendsTabAdapter(ArrayList<User> friends, Context context) {
         this.friends = friends;
-        Log.d("friendId", "num of friends in adapter" + friends.size());
+
         this.context = context;
     }
 
@@ -56,8 +56,7 @@ public class FriendsTabAdapter extends RecyclerView.Adapter<FriendsTabAdapter.Fr
     @Override
     public void onBindViewHolder(@NonNull final FriendViewHolder holder, int position) {
         holder.friendTextView.setText(friends.get(position).getFullName());
-        /*StorageReference friendImageRef = dataBaseClass.retrieveImageStorageReference(friends.get(position).getUserId());
-        Glide.with(context).load(friendImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.friendImageView);*/
+
         OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -119,7 +118,7 @@ public class FriendsTabAdapter extends RecyclerView.Adapter<FriendsTabAdapter.Fr
             removeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //report
+
                     friendTabCallback.onRemoveBtnClicked(registerClass.getUserId(), friends.get(getAdapterPosition()).getUserId(), friends.get(getAdapterPosition()).getFullName());
                 }
             });
@@ -128,7 +127,7 @@ public class FriendsTabAdapter extends RecyclerView.Adapter<FriendsTabAdapter.Fr
                 @Override
                 public void onClick(View v) {
                     friendTabCallback.onFriendCellClicked(friends.get(getAdapterPosition()).getUserId());
-                    //friend page where you can delete friend or send messages
+
                 }
             });
         }

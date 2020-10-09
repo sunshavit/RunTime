@@ -43,7 +43,7 @@ public class StrangerFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        //viewModel= new ViewModelProvider(getActivity()).get(StrangerVM.class);
+
         viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(StrangerVM.class);
     }
 
@@ -62,7 +62,7 @@ public class StrangerFragment extends Fragment {
         if (getArguments()!= null){
             currentStrangerId = getArguments().getString("userId");
             isRequested = getArguments().getBoolean("isRequested");
-            Log.d("bool", isRequested +"");
+
             viewModel.fetchStrangerUser(currentStrangerId);
         }
 
@@ -72,7 +72,7 @@ public class StrangerFragment extends Fragment {
         }
 
 
-        viewModel.getStrangerUserForDisplay().observe(this, new Observer<User>() {
+        viewModel.getStrangerUserForDisplay().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 int age = getAge(user.getYear(), user.getMonth(), user.getDayOfMonth());
@@ -94,7 +94,7 @@ public class StrangerFragment extends Fragment {
                     viewModel.onSendFriendRequest(currentStrangerId);
                     isRequested = isChecked;
                     sentRequestTV.setVisibility(View.VISIBLE);
-                    Log.d("stranger", "current stranger id = " + currentStrangerId);
+
                 }else{
                     viewModel.onCancelFriendRequest(currentStrangerId);
                     isRequested = isChecked;
@@ -119,7 +119,7 @@ public class StrangerFragment extends Fragment {
         }
 
         Integer ageInt = Integer.valueOf(age);
-        //String ageS = ageInt.toString();
+
 
         return ageInt;
     }

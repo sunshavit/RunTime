@@ -63,8 +63,6 @@ public class InviteFriendsDialog extends DialogFragment implements InviteFriends
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final TextView noFriends = view.findViewById(R.id.no_friends_TV);
-
         final Button doneBtn = view.findViewById(R.id.doneBtnFriendDialog);
         final RelativeLayout doneLayout = view.findViewById(R.id.done_Layout);
         final RelativeLayout noFriendsLayout = view.findViewById(R.id.no_friend_layout);

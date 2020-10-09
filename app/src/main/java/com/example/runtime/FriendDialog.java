@@ -135,12 +135,7 @@ public class FriendDialog extends DialogFragment {
             }
         });
 
-        /*viewModel.getImageRefLiveData().observe(getViewLifecycleOwner(), new Observer<StorageReference>() {
-            @Override
-            public void onChanged(StorageReference storageReference) {
-                Glide.with(Objects.requireNonNull(getContext())).load(storageReference).into(friendImageView);
-            }
-        });*/
+
 
         viewModel.getImageUriLiveData().observe(getViewLifecycleOwner(), new Observer<Uri>() {
             @Override
@@ -155,7 +150,7 @@ public class FriendDialog extends DialogFragment {
                 mutualFriends.clear();
                 mutualFriends.addAll(users);
                 adapter.notifyDataSetChanged();
-                //notifyAdapter
+
             }
         });
 

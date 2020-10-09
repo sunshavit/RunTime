@@ -32,11 +32,8 @@ public class CurrentLocationListener extends LiveData<Location> {
             @Override
             public void onSuccess(Location location) {
                 if (location != null){
-                    Toast.makeText(appContext,location.toString(),Toast.LENGTH_LONG).show();
+
                     setValue(location);}
-                else{
-                    Toast.makeText(appContext,"nolocation",Toast.LENGTH_LONG).show();
-                }
 
             }
         });

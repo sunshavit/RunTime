@@ -52,7 +52,7 @@ public class InvitationsTabFragment extends Fragment implements InvitationsTabAd
 
         viewModel.getInvitationsIds();
 
-        viewModel.getSwipeLayoutBool().observe(this, new Observer<Boolean>() {
+        viewModel.getSwipeLayoutBool().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 swipeRefreshLayout.setRefreshing(true);
@@ -60,7 +60,7 @@ public class InvitationsTabFragment extends Fragment implements InvitationsTabAd
         });
 
 
-        viewModel.getInvitationsLiveData().observe(this, new Observer<ArrayList<Event>>() {
+        viewModel.getInvitationsLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Event>>() {
             @Override
             public void onChanged(ArrayList<Event> events) {
                 invitations.clear();
@@ -90,15 +90,13 @@ public class InvitationsTabFragment extends Fragment implements InvitationsTabAd
         //openDialog
         FragmentManager fm = getFragmentManager();
         RunnersDialog editNameDialogFragment = RunnersDialog.newInstance(eventId);
-        // SETS the target fragment for use later when sending results
-        //editNameDialogFragment.setTargetFragment(MyParentFragment.this, 300);
         assert fm != null;
         editNameDialogFragment.show(fm, "fragment_runners");
     }
 
     @Override
     public void onRefresh() {
-        //swipeRefreshLayout.setRefreshing(true);
+
         viewModel.getInvitationsIds();
     }
 }

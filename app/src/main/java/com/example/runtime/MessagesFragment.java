@@ -57,7 +57,7 @@ public class MessagesFragment extends Fragment {
         View root = inflater.inflate(R.layout.messages_fragment,container,false);
         messagesVM.getFriendsId();
         RecyclerView recyclerView = root.findViewById(R.id.recycleMessages);
-        //ProgressBar progressBar = root.findViewById(R.id.progressBarMessage);
+
         adapter = new MessagesAdepter(friends,getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);

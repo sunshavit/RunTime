@@ -21,8 +21,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FriendDialogAdapter extends RecyclerView.Adapter<FriendDialogAdapter.MutualFriendsViewHolder>  {
 
     private ArrayList<User> mutualFriends = new ArrayList<>();
-    DataBaseClass dataBaseClass = DataBaseClass.getInstance();
-    Context context;
+    private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
+    private Context context;
 
     public FriendDialogAdapter(ArrayList<User> mutualFriends, Context context) {
         this.mutualFriends = mutualFriends;
@@ -38,8 +38,7 @@ public class FriendDialogAdapter extends RecyclerView.Adapter<FriendDialogAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final MutualFriendsViewHolder holder, int position) {
-        /*StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(mutualFriends.get(position).getUserId());
-        Glide.with(context).load(userImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.mutualFriendImageView);*/
+
         OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {

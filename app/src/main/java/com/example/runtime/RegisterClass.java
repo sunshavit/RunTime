@@ -39,7 +39,7 @@ public class RegisterClass {
     }
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-   // private FirebaseAuth.AuthStateListener authStateListener;
+
 
     private static RegisterClass registerClass = null;
 
@@ -68,7 +68,7 @@ public class RegisterClass {
     public void setSignOutListener (SignOutListener callback){
         signOutCallback = callback;
     }
-    //2 methodes to connect and remove
+
 
 
     public static RegisterClass getInstance(){
@@ -117,24 +117,10 @@ public class RegisterClass {
 
     public void signOut(){
         firebaseAuth.signOut();
-//        signOutCallback.onSignOut();
+
     }
 
-  /*  public void stateListener(){
-        authStateListener=new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user=firebaseAuth.getCurrentUser();
-                if(user!=null) { //sign up or sign in
 
-                }
-                else { //sign out
-
-                }
-
-            }
-        };
-    }*/
 
     public void addStateListener(FirebaseAuth.AuthStateListener authStateListener){
         firebaseAuth.addAuthStateListener(authStateListener);    }

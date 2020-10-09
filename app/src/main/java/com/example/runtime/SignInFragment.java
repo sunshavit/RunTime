@@ -109,11 +109,11 @@ public class SignInFragment extends Fragment implements RegisterClass.SignInFail
                         passwordInputLayout.setError(emptyFieldErrorStr);
                 }else {
                     if(Build.VERSION.SDK_INT>=23){
-                        Log.d("tag","over 23");
+
                         int hasLocationPermission= ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
                         int hasLocationPermission1= ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_COARSE_LOCATION);
                         if(hasLocationPermission!= PackageManager.PERMISSION_GRANTED || hasLocationPermission1!=PackageManager.PERMISSION_GRANTED){
-                            Log.d("tag","no granted");
+
                             requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},LOCATION_PERMISSION_REQUEST);
                         }
                         else {
@@ -122,7 +122,7 @@ public class SignInFragment extends Fragment implements RegisterClass.SignInFail
                         }
                     }
                     else{
-                        Log.d("tag","less 23");
+
                         progressBar.setVisibility(View.VISIBLE);
                         registerClass.signInUser(email,password);
                     }
@@ -135,9 +135,9 @@ public class SignInFragment extends Fragment implements RegisterClass.SignInFail
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode==LOCATION_PERMISSION_REQUEST){
-            Log.d("tag","requset code");
+
             if(grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED){
-                Log.d("tag","result");
+
                 progressBar.setVisibility(View.VISIBLE);
                 registerClass.signInUser(email,password);
             }
@@ -148,7 +148,7 @@ public class SignInFragment extends Fragment implements RegisterClass.SignInFail
 
     @Override
     public void onFailedSignIn(String problem) {
-        Log.d("problem", problem);
+
         progressBar.setVisibility(View.INVISIBLE);
         switch (problem){
             case "The email address is badly formatted.":

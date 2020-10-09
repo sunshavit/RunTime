@@ -31,7 +31,7 @@ public class FriendsRequestsTabFragment extends Fragment implements FriendsReque
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        //viewModel= new ViewModelProvider(getActivity()).get(FriendsRequestsTabVM.class);
+
         viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(FriendsRequestsTabVM.class);
     }
 
@@ -93,7 +93,7 @@ public class FriendsRequestsTabFragment extends Fragment implements FriendsReque
 
     @Override
     public void onRefresh() {
-        //swipeRefreshLayout.setRefreshing(true);
+
         viewModel.getFriendsRequestsIds();
     }
 }

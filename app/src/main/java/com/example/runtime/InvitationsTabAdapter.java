@@ -104,8 +104,7 @@ public class InvitationsTabAdapter extends RecyclerView.Adapter<InvitationsTabAd
             joinBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //report outside
-                    //database update
+
                     invitationCallback.onJoinToEvent(registerClass.getUserId(), invitations.get(getAdapterPosition()).getEventId(), getAdapterPosition());
 
                 }
@@ -114,8 +113,7 @@ public class InvitationsTabAdapter extends RecyclerView.Adapter<InvitationsTabAd
             removeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //report outside
-                    //database update
+
                     invitationCallback.onRemoveEvent(registerClass.getUserId(), invitations.get(getAdapterPosition()).getEventId(), getAdapterPosition());
                 }
             });
@@ -123,7 +121,7 @@ public class InvitationsTabAdapter extends RecyclerView.Adapter<InvitationsTabAd
             runners.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //dialog
+
                     invitationCallback.onRunnersClicked(invitations.get(getAdapterPosition()).getEventId());
                 }
             });

@@ -41,7 +41,7 @@ public class FriendsRequestsTabVM extends AndroidViewModel {
 
     public FriendsRequestsTabVM(@NonNull Application application) {
         super(application);
-        //getFriendsRequestsIds();
+
     }
 
 

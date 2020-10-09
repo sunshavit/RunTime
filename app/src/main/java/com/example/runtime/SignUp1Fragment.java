@@ -30,9 +30,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class SignUp1Fragment extends Fragment implements RegisterClass.SignUpFailListener {
 
-    /*interface OnNext1Listener{
-        void onClickNext1(String email , String password);
-    }*/
+
     SignUpVM viewModel;
     final int LOCATION_PERMISSION_REQUEST=0;
     TextInputEditText fullNameEt;
@@ -53,18 +51,13 @@ public class SignUp1Fragment extends Fragment implements RegisterClass.SignUpFai
     String password;
     String passwordConfirm;
 
-    //OnNext1Listener callBackMainActivity;
+
 
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        /*try {
-            callBackMainActivity= (OnNext1Listener) context;
-        }
-        catch (ClassCastException e){
-            throw new ClassCastException("Activity must implement OnNextListener");
-        }*/
+
         viewModel= new ViewModelProvider(getActivity()).get(SignUpVM.class);
     }
 
@@ -167,14 +160,7 @@ public class SignUp1Fragment extends Fragment implements RegisterClass.SignUpFai
             }
         });
 
-        /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION}, 1000);
-        }*/
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,17 +185,17 @@ public class SignUp1Fragment extends Fragment implements RegisterClass.SignUpFai
 
                 } else {
                     if(Build.VERSION.SDK_INT>=23){
-                        Log.d("tag","over 23");
+
                         int hasLocationPermission= ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_FINE_LOCATION);
                         int hasLocationPermission1= ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_COARSE_LOCATION);
                         if(hasLocationPermission!=PackageManager.PERMISSION_GRANTED || hasLocationPermission1!=PackageManager.PERMISSION_GRANTED){
-                            Log.d("tag","no granted");
+
                             requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},LOCATION_PERMISSION_REQUEST);
                         }
                         else {
                             if(!viewModel.setDataNext1(fullName,password,passwordConfirm,email)){
-                                Log.d("tag","granted");
-                                Toast.makeText(getActivity(),"passwords not identical",Toast.LENGTH_LONG).show();
+
+
                                 String passwordsConfirmError = getString(R.string.passwords_not_identical);
                                 passwordConfirmInputLayout.setError(passwordsConfirmError);
                                 passwordInputLayout.setError(passwordsConfirmError);
@@ -218,9 +204,9 @@ public class SignUp1Fragment extends Fragment implements RegisterClass.SignUpFai
                         }
                     }
                     else{
-                        Log.d("tag","less 23");
+
                         if(!viewModel.setDataNext1(fullName,password,passwordConfirm,email)){
-                            Toast.makeText(getActivity(),"passwords not identical",Toast.LENGTH_LONG).show();
+
                             String passwordsConfirmError = getString(R.string.passwords_not_identical);
                             passwordConfirmInputLayout.setError(passwordsConfirmError);
                             passwordInputLayout.setError(passwordsConfirmError);
@@ -242,12 +228,12 @@ public class SignUp1Fragment extends Fragment implements RegisterClass.SignUpFai
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if(requestCode==LOCATION_PERMISSION_REQUEST){
-            Log.d("tag","requset code");
+
             if(grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED){
-                Log.d("tag","result");
+
                 if(!viewModel.setDataNext1(fullName,password,passwordConfirm,email)){
-                    Log.d("tag",fullName);
-                    Toast.makeText(getActivity(),"passwords not identical",Toast.LENGTH_LONG).show();
+
+
                     String passwordsConfirmError = getString(R.string.passwords_not_identical);
                     passwordConfirmInputLayout.setError(passwordsConfirmError);
                     passwordInputLayout.setError(passwordsConfirmError);

@@ -29,25 +29,11 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
     private ArrayList<String> recentSentRequests = new ArrayList<>();
     private SwipeRefreshLayout swipeRefreshLayout;
 
-
-
-    /*interface OnStrangerCellClickListener{
-       //void onStrangerCellClicked(String strangerId, boolean isRequested);
-    }*/
-
-   // OnStrangerCellClickListener strangerCellCallback;
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        //viewModel= new ViewModelProvider(getActivity()).get(FindPeopleVM.class);
-        viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(FindPeopleVM.class);
 
-       /* try {
-            strangerCellCallback = (OnStrangerCellClickListener) context;
-        } catch (ClassCastException e){
-            throw new ClassCastException("Activity must implement OnStrangerCellClickedListener");
-        }*/
+        viewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(FindPeopleVM.class);
     }
 
     @Nullable
@@ -59,7 +45,7 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
         final TextView locationTV = root.findViewById(R.id.findPeopleLocationTV);//geocode address
 
 
-        Log.d("tag2", relevantUsers.size()+"");
+
 
         adapter = new FindPeopleAdapter(relevantUsers, getContext(), recentSentRequests);
         recyclerView.setAdapter(adapter);
@@ -94,8 +80,6 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
 
                 relevantUsers.clear();
                 relevantUsers.addAll(users);
-               // Log.d("tag2", "inside observe " + users.get(0).getFullName());
-                Log.d("tag2", relevantUsers.size()+"");
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
 
@@ -116,9 +100,6 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
                 recentSentRequests.clear();
                 recentSentRequests.addAll(strings);
                 adapter.notifyDataSetChanged();
-                // Log.d("tag2", "inside observe " + users.get(0).getFullName());
-                Log.d("tag2", "inside observer");
-                Log.d("tag2", recentSentRequests.size()+"");
 
             }
         });
@@ -136,7 +117,7 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
 
     @Override
     public void onStrangerClicked(String strangerId, boolean isRequested) {
-       // strangerCellCallback.onStrangerCellClicked(strangerId, isRequested);
+
         FragmentManager fm = getFragmentManager();
         FriendDialog dialog = FriendDialog.newInstance(strangerId);
         assert fm != null;
@@ -145,7 +126,7 @@ public class FindPeopleFragment extends Fragment implements FindPeopleAdapter.Ad
 
     @Override
     public void onRefresh() {
-       //swipeRefreshLayout.setRefreshing(true);
+
        viewModel.retrieveUsersList();
        viewModel.getSentRequests();
     }

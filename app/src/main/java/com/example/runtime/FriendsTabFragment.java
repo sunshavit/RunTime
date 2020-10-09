@@ -38,7 +38,7 @@ public class FriendsTabFragment extends Fragment implements FriendsTabAdapter.Fr
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel= new ViewModelProvider(getActivity()).get(FriendsTabVM.class);
-        Log.d("attach","attach");
+
     }
 
     @Nullable
@@ -76,7 +76,7 @@ public class FriendsTabFragment extends Fragment implements FriendsTabAdapter.Fr
         viewModel.getFriendsLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
-                Log.d("friendId", "num of users" + users.size());
+
                 friends.clear();
                 friends.addAll(users);
                 adapter.notifyDataSetChanged();
@@ -124,7 +124,7 @@ public class FriendsTabFragment extends Fragment implements FriendsTabAdapter.Fr
 
     @Override
     public void onRefresh() {
-        //swipeRefreshLayout.setRefreshing(true);
+
         viewModel.getFriendsIds();
     }
 }

@@ -101,7 +101,7 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onChanged(String s) {
                 Glide.with(context).load(s).into(imageViewProfile);
-                Log.d("sun","aaaaaaaaaaaaaaaaa");
+
             }
         };
 
@@ -134,23 +134,12 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-
-
-        /*editProfileVM.getLiveDataName().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                textViewFullName.setText(s);
-            }
-        });*/
-
         gender = userInstance.getUser().getGender();
         dayOfMonthOfBirth = userInstance.getUser().getDayOfMonth();
         monthOfBirth = userInstance.getUser().getMonth();
         yearOfBirth = userInstance.getUser().getYear();
         level = userInstance.getUser().getRunningLevel();
         textViewFullName.setText(userInstance.getUser().getFullName());
-
-
         imageViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,36 +194,19 @@ public class EditProfileFragment extends Fragment {
         });
 
 
-        /*if(userInstance.getUser().getGender().equals("male")){
-            radioButtonMale.setChecked(true);
-        }
-        else {
-            radioButtonFemale.setChecked(true);
-        }*/
-
-
-
-
-
-        /*editProfileVM.getLiveDataDate().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                textViewDate.setText(s);
-            }
-        });*/
 
         CircleImageView imageButtonEditText = root.findViewById(R.id.changeFullNameImage);
         imageButtonEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-// ...Irrelevant code for customizing the buttons and title
+
                 LayoutInflater inflater = getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.dialog_name, null);
                 dialogBuilder.setView(dialogView);
 
                 final EditText editText = (EditText) dialogView.findViewById(R.id.editTextDialog);
-                //dialogBuilder.setTitle("change name");
+
                 final AlertDialog alertDialog = dialogBuilder.create();
                 alertDialog.show();
 
@@ -242,7 +214,7 @@ public class EditProfileFragment extends Fragment {
                 buttonNameDialog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //editProfileVM.setName(editText.getText().toString());
+
                         textViewFullName.setText(editText.getText().toString());
                         alertDialog.dismiss();
                     }
@@ -267,7 +239,7 @@ public class EditProfileFragment extends Fragment {
                         monthOfBirth=month+1;
                         dayOfMonthOfBirth=dayOfMonth;
                         textViewDate.setText(dayOfMonthOfBirth+"."+monthOfBirth+'.'+yearOfBirth);
-                        //editProfileVM.setDate(dayOfMonthOfBirth+"."+monthOfBirth+'.'+yearOfBirth);
+
 
                     }
                 },year1,month1,dayOfMonth1);

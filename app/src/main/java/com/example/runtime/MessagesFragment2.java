@@ -65,8 +65,7 @@ public class MessagesFragment2 extends Fragment {
         return messagesFragment2;
     }
 
-    //TODO check why we need getViewLifecycleOwner instead of this
-    //TODO when to observe livedata
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -169,7 +168,7 @@ public class MessagesFragment2 extends Fragment {
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("messageChat", intent.getStringExtra("message") );
+
                 messagesVM.addToList(intent.getStringExtra("message"));
 
 

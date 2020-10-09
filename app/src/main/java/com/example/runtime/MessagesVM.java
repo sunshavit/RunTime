@@ -34,15 +34,14 @@ public class MessagesVM extends ViewModel {
                 if (snapshot.exists()) {
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         String userId = snapshot1.getKey();
-                        Log.d("sun", "inside first listener");
-                        Log.d("sun",userId );
+
                         if(!userId.equals("false")){
                             usersIdFromDatabase.add(userId);
                             getFriends(userId);
                         }
 
                     }
-                    //usersIdFromDatabase.remove("false");
+
                 }
 
             }

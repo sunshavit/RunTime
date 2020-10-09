@@ -38,8 +38,7 @@ public class RunnersDialogAdapter extends RecyclerView.Adapter<RunnersDialogAdap
 
     @Override
     public void onBindViewHolder(@NonNull final RunnersViewHolder holder, int position) {
-        /*StorageReference userImageRef = dataBaseClass.retrieveImageStorageReference(runners.get(position).getUserId());
-        Glide.with(context).load(userImageRef).placeholder(R.drawable.ic_launcher_background).into(holder.runnerImageView);*/
+
 
         OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
             @Override

@@ -17,7 +17,7 @@ public class EditPreferencesVM extends ViewModel{
     MutableLiveData <Integer> fromAge = new MutableLiveData<>();
 
     public EditPreferencesVM() {
-        //getUserPreferences();
+
     }
 
     public void getUserPreferences(){

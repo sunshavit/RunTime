@@ -27,7 +27,6 @@ public class FriendDialogVM extends ViewModel {
     MutableLiveData<String> runningLevelLiveData = new MutableLiveData<>();
     MutableLiveData<String> nameLiveData = new MutableLiveData<>();
     MutableLiveData<String> genderLiveData = new MutableLiveData<>();
-    //MutableLiveData<StorageReference> imageRefLiveData = new MutableLiveData<>();
     MutableLiveData<Uri> imageUriLiveData = new MutableLiveData<>();
     private ArrayList<User> mutualFriends = new ArrayList<>();
     MutableLiveData<ArrayList<User>> mutualFriendsLiveData = new MutableLiveData<>();
@@ -41,7 +40,7 @@ public class FriendDialogVM extends ViewModel {
     public FriendDialogVM(String friendId) {
        this.friendId = friendId;
        getFriendUser();
-       //getFriendImageRef();
+
         getFriendImageUri();
        getFriendFriendsIdsList();
     }
@@ -116,10 +115,6 @@ public class FriendDialogVM extends ViewModel {
         dataBaseClass.retrieveAllUsersList(listener);
     }
 
-    /*private void getFriendImageRef() {
-        StorageReference imageRef = dataBaseClass.retrieveImageStorageReference(friendId);
-        imageRefLiveData.setValue(imageRef);
-    }*/
 
     private void getFriendImageUri(){
         OnSuccessListener<Uri> listener = new OnSuccessListener<Uri>() {
@@ -174,9 +169,7 @@ public class FriendDialogVM extends ViewModel {
         return genderLiveData;
     }
 
-    /*public MutableLiveData<StorageReference> getImageRefLiveData(){
-        return imageRefLiveData;
-    }*/
+
 
     public MutableLiveData<Uri> getImageUriLiveData (){
       return imageUriLiveData;
@@ -203,7 +196,7 @@ public class FriendDialogVM extends ViewModel {
         }
 
         Integer ageInt = Integer.valueOf(age);
-        //String ageS = ageInt.toString();
+
 
         return ageInt;
     }

@@ -62,8 +62,7 @@ public class SignUp3Fragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root= inflater.inflate(R.layout.sign_up3,container,false);
-        //final EditText editTextFrom = root.findViewById(R.id.fromAge);
-        //final EditText editTextTo = root.findViewById(R.id.toAge);
+
         viewModel.setProgressBar2LiveData(false);
         final RadioGroup radioGroupGender = root.findViewById(R.id.genderGroupPartner);
         RadioGroup radioGroupLevel = root.findViewById(R.id.levelGroupPartner);
@@ -153,8 +152,7 @@ public class SignUp3Fragment extends Fragment {
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ageFrom =Integer.parseInt(editTextFrom.getText().toString());
-                //ageTo =Integer.parseInt(editTextTo.getText().toString());
+
 
                 if (viewModel.getEndAge() == 0 || viewModel.getStartAge() == 0 ||
                 viewModel.getPartnerGender() == null || viewModel.getPartnerLevel() == null){

@@ -22,7 +22,7 @@ public class ProfileVM extends ViewModel /*implements DataBaseClass.OnGetUserIma
     private UserInstance userInstance;
 
     public ProfileVM() {
-        //dataBaseClass.setCallBackGetImage(this);
+
         this.userInstance = UserInstance.getInstance();
         liveDataUser.setValue(userInstance.getUser());
     }
@@ -65,7 +65,7 @@ public class ProfileVM extends ViewModel /*implements DataBaseClass.OnGetUserIma
         }
 
         Integer ageInt = Integer.valueOf(age);
-        //String ageS = ageInt.toString();
+
 
         return ageInt;
     }
@@ -84,12 +84,5 @@ public class ProfileVM extends ViewModel /*implements DataBaseClass.OnGetUserIma
         return liveDataImage;
     }
 
-   /* @Override
-    public void onSuccessGetImage(String uri) {
-        liveDataImage.setValue(uri);
-    }*/
-/*
-    @Override
-    public void onFailedGetImage() {
-    }*/
+
 }

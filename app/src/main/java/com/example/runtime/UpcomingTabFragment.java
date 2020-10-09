@@ -111,8 +111,7 @@ public class UpcomingTabFragment extends Fragment implements UpcomingTabAdapter.
         //openDialog
         FragmentManager fm = getFragmentManager();
         RunnersDialog editNameDialogFragment = RunnersDialog.newInstance(eventId);
-        // SETS the target fragment for use later when sending results
-        //editNameDialogFragment.setTargetFragment(MyParentFragment.this, 300);
+
         assert fm != null;
         editNameDialogFragment.show(fm, "fragment_runners");
     }

@@ -15,18 +15,17 @@ import java.util.List;
 
 public class FriendsTabVM extends ViewModel {
 
-    ArrayList<User> friends = new ArrayList<>();
-    ArrayList<String> friendsIds = new ArrayList<>();
-    MutableLiveData<ArrayList<User>> friendsLiveData = new MutableLiveData<>();
+    private ArrayList<User> friends = new ArrayList<>();
+    private ArrayList<String> friendsIds = new ArrayList<>();
+    private MutableLiveData<ArrayList<User>> friendsLiveData = new MutableLiveData<>();
 
-    DataBaseClass dataBaseClass = DataBaseClass.getInstance();
-    RegisterClass registerClass = RegisterClass.getInstance();
+    private DataBaseClass dataBaseClass = DataBaseClass.getInstance();
+    private RegisterClass registerClass = RegisterClass.getInstance();
 
     private MutableLiveData<Boolean> swipeLayoutBool = new MutableLiveData<>();
 
     public FriendsTabVM() {
-       // getFriendsIds();
-        //Log.d("attach","attach2");
+
     }
 
     public void getFriendsIds (){
@@ -36,11 +35,11 @@ public class FriendsTabVM extends ViewModel {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 friendsIds.clear();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
-                    Log.d("friendId", snapshot1.getKey());
+
                     friendsIds.add(snapshot1.getKey());
                 }
                 friendsIds.remove("false");
-                Log.d("friendId", "num of friends ids" + friendsIds.size());
+
                 getFriendsUsers();
             }
 
@@ -65,7 +64,7 @@ public class FriendsTabVM extends ViewModel {
                         friends.add(user);
                     }
                 }
-                Log.d("friendId", "num of friends" + friends.size());
+
                 friendsLiveData.setValue(friends);
             }
 
@@ -79,7 +78,7 @@ public class FriendsTabVM extends ViewModel {
     }
 
     public MutableLiveData<ArrayList<User>> getFriendsLiveData(){
-        Log.d("friendId", "mutable" + friendsLiveData);
+
         return friendsLiveData;
     }
 

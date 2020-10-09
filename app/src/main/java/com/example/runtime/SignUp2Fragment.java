@@ -80,7 +80,7 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
 
     @Override
     public void onFailedImage() {
-        Toast.makeText(getActivity(),"enter again",Toast.LENGTH_LONG).show();
+
     }
 
     @Nullable
@@ -98,7 +98,6 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
 
         final TextView ageView=root.findViewById(R.id.age);
 
-       // final Calendar calendar = Calendar.getInstance();
 
         final ProgressBar progressBar = root.findViewById(R.id.signUp2_progressBar);
         viewModel.getProgressBar2LiveData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
@@ -160,7 +159,7 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
                         yearOfBirth=year;
                         monthOfBirth=month+1;
                         dayOfMonthOfBirth=dayOfMonth;
-                        //textViewDate.setText(dayOfMonthOfBirth+"/"+monthOfBirth+'/'+yearOfBirth);
+
                         viewModel.setYear(year);
                         viewModel.setMonth(month +1);
                         viewModel.setDayOfMonth(dayOfMonth);
@@ -174,15 +173,7 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
 
 
 
-         /*  DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        localDate = LocalDate.of(year, month, dayOfMonth);
-                        editTextDate.setText(dayOfMonth+"/"+month+"/"+year);
-                    }
-                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.show();*/
+
             }
         });
 
@@ -202,7 +193,7 @@ public class SignUp2Fragment extends Fragment implements DataBaseClass.OnSaveIma
                         yearOfBirth=year;
                         monthOfBirth=month+1;
                         dayOfMonthOfBirth=dayOfMonth;
-                       // textViewDate.setText(dayOfMonthOfBirth+"/"+monthOfBirth+'/'+yearOfBirth);
+
                         viewModel.setYear(year);
                         viewModel.setMonth(month+1);
                         viewModel.setDayOfMonth(dayOfMonth);

@@ -40,9 +40,7 @@ public class InviteFriendsDialogVM extends ViewModel {
                     myFriendsIdsTemp.add(snapshot1.getKey());
                 }
                 myFriendsIdsTemp.remove("false");
-                for(String friends_ids: myFriendsIdsTemp ){
-                    Log.d("friend_id",friends_ids);
-                }
+
                 setMyFriends();
             }
             @Override
@@ -51,7 +49,7 @@ public class InviteFriendsDialogVM extends ViewModel {
             }
         };
 
-        Log.d("user_id",currentUser.getUserId());
+
         dataBaseClass.retrieveFriendsIds(currentUser.getUserId(),listener);
     }
 
