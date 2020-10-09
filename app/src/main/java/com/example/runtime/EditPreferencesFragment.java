@@ -64,7 +64,7 @@ public class EditPreferencesFragment extends Fragment {
 
         editPreferencesVM.getUserPreferences();
 
-        editPreferencesVM.getFromAge().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        /*editPreferencesVM.getFromAge().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 from = integer;
@@ -78,7 +78,7 @@ public class EditPreferencesFragment extends Fragment {
                 to = integer;
                 spinnerAgeTo.setSelection(integer-from);
             }
-        });
+        });*/
 
         editPreferencesVM.getPreferencesMutableLiveData().observe(getViewLifecycleOwner(), new Observer<UserPreferences>() {
             @Override
@@ -124,8 +124,6 @@ public class EditPreferencesFragment extends Fragment {
 
                 }else{
                     from = (int) parent.getItemAtPosition(position);
-
-
                     toAgesArray.clear();
                     int i;
                     for (i = from; i < 121 ; i++) {
@@ -153,11 +151,12 @@ public class EditPreferencesFragment extends Fragment {
                 if((int)parent.getItemAtPosition(position) == 0){
 
                 }else{
-                    to = (int) parent.getItemAtPosition(position);
+                   // to = (int) parent.getItemAtPosition(position);
+                    to = position + from;
                     fromAgesArray.clear();
                     int i;
                     Log.d("aaa",to+"");
-                    for (i = 0; i < to ; i++) {
+                    for (i = 1; i < to ; i++) {
                         Integer age = i;
                         fromAgesArray.add(age);
                     }
