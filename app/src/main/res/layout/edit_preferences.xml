@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -76,51 +76,14 @@
                 android:text="@string/age"
                 android:id="@+id/age_text_signUp3"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:layout_marginStart="70dp"
-                android:layout_toEndOf="@+id/age_text_signUp3"
-                android:textColor="@color/lightGray"
-                android:text="@string/from"
-                android:id="@+id/from_text_signUp3"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:layout_marginStart="70dp"
-                android:layout_toEndOf="@+id/age_text_signUp3"
-                android:textColor="@color/lightGray"
-                android:layout_below="@+id/fromAgeEditP"
-                android:text="@string/to"
-                android:id="@+id/to_text_signUp3"/>
-
-
-            <Spinner
-                android:background="@drawable/spinner_style_blue"
-                android:layout_width="80dp"
-                android:layout_marginStart="20dp"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/from_text_signUp3"
-                android:id="@+id/fromAgeEditP"
-                android:layout_marginBottom="5dp"
-
-
-                />
-
-            <Spinner
-                android:background="@drawable/spinner_style_blue"
-                android:layout_width="80dp"
-                android:layout_marginStart="20dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/fromAgeEditP"
-
-                android:layout_toEndOf="@+id/from_text_signUp3"
-                android:id="@+id/toAgeEditP"/>
-
-
+           <com.google.android.material.slider.RangeSlider
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:valueFrom="1"
+               android:valueTo="121"
+               android:stepSize="1"
+               android:id="@+id/slider_multiple_thumbs"
+               android:layout_toEndOf="@+id/age_text_signUp3"/>
 
         </RelativeLayout>
 

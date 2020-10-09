@@ -20,6 +20,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.slider.RangeSlider;
+import com.google.android.material.slider.Slider;
+
 import java.util.ArrayList;
 
 public class EditPreferencesFragment extends Fragment {
@@ -53,22 +56,23 @@ public class EditPreferencesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.edit_preferences,container,false);
-        final Spinner spinnerFrom  = root.findViewById(R.id.fromAgeEditP);
-        final Spinner spinnerAgeTo = root.findViewById(R.id.toAgeEditP);
+        //final Spinner spinnerFrom  = root.findViewById(R.id.fromAgeEditP);
+        //final Spinner spinnerAgeTo = root.findViewById(R.id.toAgeEditP);
         final RadioButton radioButtonMale = root.findViewById(R.id.maleRBPartnerEditP);
         final RadioButton radioButtonFemale = root.findViewById(R.id.femaleRBPartnerEditP);
         final RadioButton radioButtonEasy = root.findViewById(R.id.easyRBPartnerEditP);
         final RadioButton radioButtonMedium = root.findViewById(R.id.mediumRBPartnerEditP);
         final RadioButton radioButtonExpert = root.findViewById(R.id.expertRBPartnerEditP);
         final RadioButton radioButtonBoth = root.findViewById(R.id.bothRBPartnerEditP);
+        final RangeSlider slider =root.findViewById(R.id.slider_multiple_thumbs);
 
         editPreferencesVM.getUserPreferences();
 
-        /*editPreferencesVM.getFromAge().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        editPreferencesVM.getFromAge().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 from = integer;
-                spinnerFrom.setSelection(integer);
+                slider.setValues((float)from,(float)to);
             }
         });
 
@@ -76,9 +80,9 @@ public class EditPreferencesFragment extends Fragment {
             @Override
             public void onChanged(Integer integer) {
                 to = integer;
-                spinnerAgeTo.setSelection(integer-from);
+                slider.setValues((float)from,(float)to);
             }
-        });*/
+        });
 
         editPreferencesVM.getPreferencesMutableLiveData().observe(getViewLifecycleOwner(), new Observer<UserPreferences>() {
             @Override
@@ -111,64 +115,78 @@ public class EditPreferencesFragment extends Fragment {
 
 
 
+        slider.addOnSliderTouchListener(new RangeSlider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(@NonNull RangeSlider slider) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(@NonNull RangeSlider slider) {
+                float fromLocal = slider.getValues().get(0);
+                float toLocal = slider.getValues().get(1);
+                from = (int) fromLocal;
+                to = (int) toLocal;
+            }
+        });
+
+
         ArrayAdapter<Integer> adapterFrom = new ArrayAdapter<>(getContext(), R.layout.spinner_item, fromAgesArray);
-        spinnerFrom.setAdapter(adapterFrom);
-        spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("spinner1", "position" +position +"");
-                Log.d("spinner1", " to " +to +"");
-                Log.d("spinner1",  "from" +from +"");
-                Log.d("spinner1", " size" + toAgesArray.size() +"");
-                if ((int)parent.getItemAtPosition(position) == 0){
-
-                }else{
-                    from = (int) parent.getItemAtPosition(position);
-                    toAgesArray.clear();
-                    int i;
-                    for (i = from; i < 121 ; i++) {
-                        Integer age = i;
-                        toAgesArray.add(age);
-                    }
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        ArrayAdapter<Integer> adapterTo = new ArrayAdapter<>(getContext(), R.layout.spinner_item, toAgesArray);
-        spinnerAgeTo.setAdapter(adapterTo);
-        spinnerAgeTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("spinner", "position" +position +"");
-                Log.d("spinner", " to " +to +"");
-                Log.d("spinner",  "from" +from +"");
-                Log.d("spinner", " size" + toAgesArray.size() +"");
-                if((int)parent.getItemAtPosition(position) == 0){
-
-                }else{
-                   // to = (int) parent.getItemAtPosition(position);
-                    to = position + from;
-                    fromAgesArray.clear();
-                    int i;
-                    Log.d("aaa",to+"");
-                    for (i = 1; i < to ; i++) {
-                        Integer age = i;
-                        fromAgesArray.add(age);
-                    }
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        //spinnerFrom.setAdapter(adapterFrom);
+        //spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Log.d("spinner1", "position" +position +"");
+//                Log.d("spinner1", " to " +to +"");
+//                Log.d("spinner1",  "from" +from +"");
+//                Log.d("spinner1", " size" + toAgesArray.size() +"");
+//                if ((int)parent.getItemAtPosition(position) == 0){
+//
+//                }else{
+//                    from = (int) parent.getItemAtPosition(position);
+//                    toAgesArray.clear();
+//                    int i;
+//                    for (i = from; i < 121 ; i++) {
+//                        Integer age = i;
+//                        toAgesArray.add(age);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//
+//        ArrayAdapter<Integer> adapterTo = new ArrayAdapter<>(getContext(), R.layout.spinner_item, toAgesArray);
+//        spinnerAgeTo.setAdapter(adapterTo);
+//        spinnerAgeTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Log.d("spinner", "position" +position +"");
+//                Log.d("spinner", " to " +to +"");
+//                Log.d("spinner",  "from" +from +"");
+//                Log.d("spinner", " size" + toAgesArray.size() +"");
+//                if((int)parent.getItemAtPosition(position) == 0){
+//
+//                }else{
+//                    to = (int) parent.getItemAtPosition(position);
+//                    fromAgesArray.clear();
+//                    int i;
+//                    Log.d("aaa",to+"");
+//                    for (i = 1; i <= to ; i++) {
+//                        Integer age = i;
+//                        fromAgesArray.add(age);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
         Button buttonDone = root.findViewById(R.id.signUpDoneEditP);
 

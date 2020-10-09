@@ -31,8 +31,8 @@ public class SignUpVM extends ViewModel  {
     private String passwordConfirm;
     private String gender;
     private String runningLevel;
-    private int startAge =0 ;
-    private int endAge = 0;
+    private int startAge =1 ;
+    private int endAge = 120;
     private int year = 0;
     private int month = 0;
     private int dayOfMonth = 0;

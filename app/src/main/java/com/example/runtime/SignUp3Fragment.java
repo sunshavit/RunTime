@@ -21,6 +21,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.slider.RangeSlider;
+import com.google.android.material.slider.Slider;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
@@ -54,16 +57,6 @@ public class SignUp3Fragment extends Fragment {
 
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        int i;
-        for (i = 0; i < 121 ; i++) {
-            Integer age = i;
-           fromAgesArray.add(age);
-           toAgesArray.add(age);
-        }
-    }
 
     @Nullable
     @Override
@@ -75,6 +68,7 @@ public class SignUp3Fragment extends Fragment {
         final RadioGroup radioGroupGender = root.findViewById(R.id.genderGroupPartner);
         RadioGroup radioGroupLevel = root.findViewById(R.id.levelGroupPartner);
         Button buttonSignUp = root.findViewById(R.id.signUpDone);
+        RangeSlider slider = root.findViewById(R.id.slider_multiple_thumbs_signUp3);
 
         final ProgressBar progressBar = root.findViewById(R.id.signUp3_progressBar);
         viewModel.getProgressBar3LiveData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
@@ -89,64 +83,23 @@ public class SignUp3Fragment extends Fragment {
         });
 
 
-        ArrayAdapter<Integer> adapterFrom = new ArrayAdapter<>(getContext(), R.layout.spinner_item, fromAgesArray);
-        Spinner spinnerFrom = root.findViewById(R.id.spinnerFrom);
-        spinnerFrom.setAdapter(adapterFrom);
-        spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        slider.setValues(0f,120f);
+
+
+        slider.addOnSliderTouchListener(new RangeSlider.OnSliderTouchListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                if ((int)parent.getItemAtPosition(position) == 0){
-
-                }else{
-                    ageFrom = (int) parent.getItemAtPosition(position);
-                    viewModel.setStartAge(ageFrom);
-
-                    toAgesArray.clear();
-                    int i;
-                    for (i = ageFrom; i < 121 ; i++) {
-                        Integer age = i;
-                        toAgesArray.add(age);
-                    }
-                }
-
-
+            public void onStartTrackingTouch(@NonNull RangeSlider slider) {
 
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-        ArrayAdapter<Integer> adapterTo = new ArrayAdapter<>(getContext(), R.layout.spinner_item, toAgesArray);
-        final Spinner spinnerTo = root.findViewById(R.id.spinnerTo);
-        spinnerTo.setAdapter(adapterTo);
-        spinnerTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                if((int)parent.getItemAtPosition(position) == 0){
-
-                }else{
-                    ageTo = (int) parent.getItemAtPosition(position);
-                    viewModel.setEndAge(ageTo);
-                    fromAgesArray.clear();
-                    int i;
-                    for (i = 1; i < ageTo ; i++) {
-                        Integer age = i;
-                        fromAgesArray.add(age);
-                    }
-                }
-
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onStopTrackingTouch(@NonNull RangeSlider slider) {
+                float fromLocal = slider.getValues().get(0);
+                float toLocal = slider.getValues().get(1);
+                ageFrom = (int) fromLocal;
+                ageTo = (int) toLocal;
+                viewModel.setEndAge(ageTo);
+                viewModel.setStartAge(ageFrom);
             }
         });
 
