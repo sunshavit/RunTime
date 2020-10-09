@@ -131,10 +131,13 @@ public class CreateEventVM extends AndroidViewModel {
 
         final JSONObject rootObject = new JSONObject();
         rootObject.put("to", token);
-        JSONObject notificationObject = new JSONObject();
-        notificationObject.put("title", "New invitation to event!");
-        notificationObject.put("body", "don't  keep them waiting");
-        rootObject.put("notification", notificationObject);
+        JSONObject data = new JSONObject();
+        String title = getApplication().getString(R.string.new_invitation);
+        String body = getApplication().getString(R.string.see_in_invitations);
+        data.put("title", title);
+        data.put("body", body);
+        data.put("messageType", "eventRequest");
+        rootObject.put("data", data);
 
         String url = "https://fcm.googleapis.com/fcm/send";
 

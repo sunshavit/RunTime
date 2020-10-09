@@ -200,6 +200,13 @@ public class DataBaseClass {
         });
     }
 
+    public void deleteToken(String userId){
+        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference databaseReference1 = databaseReference.child("user");
+        DatabaseReference currentUser = databaseReference1.child(userId);
+        currentUser.child("userToken").removeValue();
+    }
+
     public void isUserExists(String userId, ValueEventListener listener) {
         databaseReference = firebaseDatabase.getReference();
         DatabaseReference user = databaseReference.child("user");

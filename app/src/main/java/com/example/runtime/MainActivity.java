@@ -148,12 +148,15 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                 }
 
                 else {
+
+
                     if (!sp.getBoolean("isChangingConfigurations", false)){
                         fragmentManager.beginTransaction().replace(R.id.rootLayout,new WelcomeFragment(),WELCOMEFRAGMENTTAG).commit();
                         toolBarFragment =getSupportFragmentManager().findFragmentByTag(TOOLBAR_TAG);
                         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                         RelativeLayout layout = findViewById(R.id.toolbarLayout);
                         layout.setVisibility(View.GONE);
+
                         if(toolBarFragment!=null) {
                             fragmentManager.beginTransaction().remove(toolBarFragment).commit();
                             fragmentManager.beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(NAV_TAG)).commit();
@@ -175,6 +178,8 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.signOutSidebar:
+
+
                         SharedPreferences.Editor editor=sp.edit();
                         editor.putBoolean("isChangingConfigurations",false);
                         editor.commit();
@@ -184,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
                             fragmentManager.beginTransaction().remove(fragment);
                         }
                         drawerLayout.closeDrawers();
+                        dataBaseClass.deleteToken(registerClass.getUserId());
                         registerClass.signOut();
                         break;
                     case R.id.editProfileSidebar:
@@ -376,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
             fragmentManager.beginTransaction().replace(R.id.rootLayout,new HomeFragment(),HOME_TAG).commit();
             fragmentManager.beginTransaction().replace(R.id.toolbarLayout,new ToolBarFragment(),TOOLBAR_TAG).commit();
             fragmentManager.beginTransaction().replace(R.id.layoutBottomNavgtionBar,new BottomNavBarFragment(),"nav").commit();
-
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         }
 

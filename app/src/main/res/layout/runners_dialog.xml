@@ -55,7 +55,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="Tali"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/managerImageView"
             android:textColor="@color/white"

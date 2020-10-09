@@ -85,6 +85,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String body = remoteMessage.getData().get("body");
                 createEventCanceledNotif(title, body);
             }
+            else if (remoteMessage.getData().get("messageType").equals("eventRequest")){
+                String title = remoteMessage.getData().get("title");
+                String body = remoteMessage.getData().get("body");
+                createEventCanceledNotif(title, body);
+            }
+
+
 
         }
 

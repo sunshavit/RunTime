@@ -26,8 +26,8 @@ public class FindEventsVM extends AndroidViewModel {
 
     public FindEventsVM(@NonNull Application application) {
         super(application);
-        retrieveEventsList();
-        setMyEvents();
+        //retrieveEventsList();
+        //setMyEvents();
     }
 
     //distance calculation
@@ -96,6 +96,8 @@ public class FindEventsVM extends AndroidViewModel {
     }
 
     private void findRelevantEvents(){
+
+        relevantEventsTemp.clear();
 
         double longitude = currentUser.getLongitude();
         double latitude = currentUser.getLatitude();

@@ -146,6 +146,8 @@
     <string name="edit_name">Edit name</string>
     <string name="enter_your_message">Enter your message</string>
     <string name="no_location_detected">No location detected</string>
+    <string name="new_invitation">New invitation to running event!</string>
+    <string name="see_in_invitations">See it on your invitations</string>
 
 
 </resources>

@@ -123,7 +123,7 @@
     <string name="user_already_exists">משתמש כבר קיים</string>
     <string name="failed_to_sign_up">הרשמה נכשלה</string>
     <string name="fill_all_details">השלם את כל הפרטים</string>
-    <string name="are_you_coming_for_a_run">אתה מוכן לריצה?</string>
+    <string name="are_you_coming_for_a_run">בואו נתחיל לרוץ!</string>
     <string name="find_runners_around_you">מצא רצים בסביבה</string>
     <string name="find_event_around_you">מצא אירועים בסביבה</string>
 
@@ -150,6 +150,8 @@
     <string name="edit_name">ערוך שם</string>
     <string name="enter_your_message">הקלד הודעה</string>
     <string name="no_location_detected">לא זוהה מיקום</string>
+    <string name="new_invitation">הזמנה חדשה לאירוע ריצה!</string>
+    <string name="see_in_invitations">היכנס לצפייה בכל ההזמנות שלך</string>
 
 
 </resources>
