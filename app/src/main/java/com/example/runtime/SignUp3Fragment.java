@@ -83,7 +83,7 @@ public class SignUp3Fragment extends Fragment {
         });
 
 
-        slider.setValues(0f,120f);
+        slider.setValues(1f,120f);
 
 
         slider.addOnSliderTouchListener(new RangeSlider.OnSliderTouchListener() {

@@ -41,11 +41,7 @@ public class MainActivity extends AppCompatActivity implements MessagesFragment.
         RegisterClass.SignInStatusListener,DataBaseClass.OnUserListsListener/*, HomeFragment.findPeopleListener*/, CreateEventFragment.OnMapListener,
         MapFragment.OnCreateEventListener, /*FindPeopleFragment.OnStrangerCellClickListener,*/ /*HomeFragment.findEventsListener,*/ CreateEventFragment.OnBackFromCreateEventListener{
 
-    // where to do the user authentication
-    // local time and local date require sdk 26
-//    FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
-//    FirebaseAuth.AuthStateListener authStateListener;
-//    String userName;
+
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     final String WELCOMEFRAGMENTTAG="welcomefregmenttag";
