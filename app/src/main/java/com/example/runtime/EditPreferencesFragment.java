@@ -20,6 +20,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.runtime.EditPreferencesVM;
+import com.example.runtime.R;
+import com.example.runtime.UserPreferences;
 import com.google.android.material.slider.RangeSlider;
 import com.google.android.material.slider.Slider;
 

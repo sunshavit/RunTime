@@ -7,6 +7,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.runtime.DataBaseClass;
+import com.example.runtime.User;
+import com.example.runtime.UserInstance;
+
 public class EditProfileVM extends ViewModel implements DataBaseClass.OnGetUserImage,DataBaseClass.OnSaveImageListener {
 
     private DataBaseClass dataBaseClass = DataBaseClass.getInstance();

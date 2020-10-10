@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.runtime.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BottomNavBarFragment extends Fragment {

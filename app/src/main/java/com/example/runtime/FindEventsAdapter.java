@@ -28,7 +28,7 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ev
     private Context context;
     private ArrayList<String> myEvents;
 
-    interface OnUpcomingEventListener {
+    public interface OnUpcomingEventListener {
         void onJoinEvent(String eventId,String userId);
         void onCancelJoinEvent(String eventId,String userId);
         void onSeeMembersClick(String eventId);

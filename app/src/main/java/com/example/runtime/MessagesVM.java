@@ -8,12 +8,15 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.runtime.model.LastMessage;
 import com.example.runtime.model.Message;
+import com.example.runtime.model.SortFriendMessage;
 import com.example.runtime.model.UserWithLastMessage;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class MessagesVM extends ViewModel {
     private MutableLiveData<ArrayList<UserWithLastMessage>> friends = new MutableLiveData<>();
@@ -34,9 +37,12 @@ public class MessagesVM extends ViewModel {
                 if (snapshot.exists()) {
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         String userId = snapshot1.getKey();
+                        usersIdFromDatabase.add(userId);
+                    }
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        String userId = snapshot1.getKey();
 
                         if(!userId.equals("false")){
-                            usersIdFromDatabase.add(userId);
                             getFriends(userId);
                         }
 
@@ -83,16 +89,21 @@ public class MessagesVM extends ViewModel {
                     if(snapshot.child("content").exists()){
                     LastMessage message = snapshot.getValue(LastMessage.class);
                     usersFromDatabase.add(new UserWithLastMessage(user,new Message(message.getContent(),message.getTime(),message.getId(),message.getUserIdSent()),message.isNew()));
-                    friends.setValue(usersFromDatabase);
                     }
                     else {                         {
                             usersFromDatabase.add(new UserWithLastMessage(user,new Message("","",-1,""),false));
-                            friends.setValue(usersFromDatabase);
                         }
                     }
                 }
                 else{
                     usersFromDatabase.add(new UserWithLastMessage(user,new Message("","",-1,""),false));
+                }
+
+                Log.d("aaa",usersFromDatabase.size()+"");
+                Log.d("aaa",usersIdFromDatabase.size()+"");
+                if(usersFromDatabase.size()==usersIdFromDatabase.size()-1)
+                {
+                    Collections.sort(usersFromDatabase,new SortFriendMessage());
                     friends.setValue(usersFromDatabase);
                 }
 

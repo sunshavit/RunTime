@@ -33,47 +33,47 @@ public class DataBaseClass {
 
     private static DataBaseClass dataBaseClass = null;
 
-    interface OnChangeUserListener {
+    public interface OnChangeUserListener {
         void onChangeUserSuccess();
 
         void onChangeUserFailed();
     }
 
-    interface OnLocationUpdateListener {
+    public interface OnLocationUpdateListener {
         void onLocationUpdate();
     }
 
-    interface OnGetUserImage {
+    public interface OnGetUserImage {
         void onSuccessGetImage(String uri);
 
         void onFailedGetImage();
     }
 
-    interface OnUserCreateListener {
+    public interface OnUserCreateListener {
         void onSuccessCreate();
 
         void onFailedCreate(String problem);
     }
 
-    interface OnUserPreferenceCreateListener {
+    public interface OnUserPreferenceCreateListener {
         void onSuccessPreferenceCreate();
 
         void onFailedPreferenceCreate();
     }
 
-    interface OnSaveImageListener {
+    public interface OnSaveImageListener {
         void onSuccessImage();
 
         void onFailedImage();
     }
 
-    interface OnUserListsListener {
+    public interface OnUserListsListener {
         void onSuccessUserLists();
 
         void onFailedUserLists();
     }
 
-    interface OnUpdateUserPreferences {
+    public interface OnUpdateUserPreferences {
         void onSuccessUpdatePreferences();
     }
 
@@ -95,7 +95,7 @@ public class DataBaseClass {
 
     }
 
-    static DataBaseClass getInstance() {
+   public static DataBaseClass getInstance() {
         if (dataBaseClass == null) {
             dataBaseClass = new DataBaseClass();
         }

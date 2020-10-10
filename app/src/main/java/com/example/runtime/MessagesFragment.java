@@ -67,7 +67,6 @@ public class MessagesFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<UserWithLastMessage> users) {
                 friends.clear();
-                Collections.sort(users,new SortFriendMessage());
                 friends.addAll(users);
                 adapter.notifyDataSetChanged();
             }

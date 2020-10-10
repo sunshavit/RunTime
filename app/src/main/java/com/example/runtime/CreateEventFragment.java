@@ -20,11 +20,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.runtime.CreateEventVM;
+import com.example.runtime.InviteFriendsDialog;
+import com.example.runtime.R;
+import com.example.runtime.UserInstance;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class CreateEventFragment extends Fragment implements InviteFriendsDialog.PassInvitedFriendsIdsToParentListener{
+public class CreateEventFragment extends Fragment implements InviteFriendsDialog.PassInvitedFriendsIdsToParentListener {
 
     private CreateEventVM viewModel;
     private static Bundle bundle;
