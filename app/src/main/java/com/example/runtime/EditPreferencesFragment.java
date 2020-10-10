@@ -147,8 +147,11 @@ public class EditPreferencesFragment extends Fragment {
                     level = "expert";
                 if(radioButtonMale.isChecked())
                     gender = "male";
-                else
+                else if(radioButtonFemale.isChecked())
                     gender = "female";
+                else
+                    gender= "both";
+
 
                 UserPreferences userPreferences = new UserPreferences(from,to,gender,level);
                 editPreferencesVM.updateLiveData(userPreferences);
