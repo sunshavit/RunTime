@@ -16,10 +16,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BottomNavBarFragment extends Fragment {
 
+
+
     interface OnNavigationListener{
         void onNavChange(String page);
     }
     private OnNavigationListener callBack;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
