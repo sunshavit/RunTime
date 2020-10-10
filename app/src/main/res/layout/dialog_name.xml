@@ -28,7 +28,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="74dp"
-        android:hint="@string/enter_full_name"
+        android:hint="@string/name"
         android:paddingHorizontal="5dp"
         app:boxCornerRadiusBottomEnd="22dp"
         app:boxCornerRadiusBottomStart="22dp"
