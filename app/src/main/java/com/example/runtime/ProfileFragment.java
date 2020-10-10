@@ -63,19 +63,24 @@ public class ProfileFragment extends Fragment {
         Observer<User> observerUser = new Observer<User>() {
             @Override
             public void onChanged(User user) {
+
+
                 switch (user.getRunningLevel()){
                     case "easy" :
+                        textViewLevel.setText(R.string.easy);
                         imageViewLevel.setImageResource(R.drawable.easy_orange);
                         break;
                     case "medium" :
+                        textViewLevel.setText(R.string.medium);
                         imageViewLevel.setImageResource(R.drawable.medium_orange);
                         break;
                     case "expert" :
-                        //imageViewLevel.setImageResource(R.drawable.);
+                        textViewLevel.setText(R.string.expert);
+                        imageViewLevel.setImageResource(R.drawable.hard_orange);
                         break;
                 }
                 //textViewAge.setText(profileVM.getAge(user.getYear(),user.getMonth(),user.getDayOfMonth())+"");
-                textViewLevel.setText(user.getRunningLevel());
+                //textViewLevel.setText(user.getRunningLevel());
                 textViewLocation.setText(profileVM.getAddress(context,user.getLatitude(),user.getLongitude()));
                 textViewName.setText(user.getFullName()+", " + profileVM.getAge(user.getYear(),user.getMonth(),user.getDayOfMonth()));
                 textViewGender.setText(user.getGender());
